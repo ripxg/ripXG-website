@@ -1,0 +1,95 @@
+---
+title: "[January] Observability Updates for SRE/Monitoring Teams"
+date: 2026-01-05
+tags: [observability, sre, monitoring, ai, security]
+summary: "Monthly update on observability trends, AI agent troubleshooting, and infrastructure monitoring insights"
+status: published
+series: "Observability Updates"
+linkedin: https://www.linkedin.com/pulse/january-observability-updates-sremonitoring-teams-jeff-chau-jituc
+newsletter: true
+---
+
+To my closest Observability enthusiasts,
+
+Happy New Year!
+
+I hope you've had a chance to rest and recharge. I'm back online with another update for you.
+
+### Recent Conversation Topics
+
+The conversations I've been having in the last month have centered on:
+
+- Real-time application security vulnerability detection and prioritization
+
+- Reducing release cycle times by shortening the feedback loop of static vulnerability scanning
+
+- Securing AI workloads and LLM-based applications (building on Observability for AI, which I shared previously - see below)
+
+### Observability for AI Agents/Infrastructure
+
+Troubleshooting agents is certainly a hot topic now. You might have seen the popular LLM platform engineering framework Langfuse was recently acquired by ClickHouse (https://langfuse.com/blog/joining-clickhouse). As agentic apps continue to be released, I will expect there to be growth and maturation of the Observability stack as built in Splunk.
+
+If you recall from my last update (November edition), the "State of Observability 2025" report ranked "Detecting application security vulnerabilities" as the #1 most important Observability capability to the business - yet it's the one I see teams overlooking most often when planning their initiatives.
+
+### Top priorities for Observability in 2026
+
+Now with AI-driven development, containerized deployments, and increasingly complex microservices architectures, the attack surface has grown exponentially. Security teams are overwhelmed, and development teams need real-time visibility into exploitable vulnerabilities without slowing down their release cycles.
+
+Some of my customers have had mature AppSec capabilities for years through "AppDynamics Secure Application", which provides runtime vulnerability detection, exploitation risk scoring, and automatic mapping to application services. Splunk will be releasing this same capability to O11y Cloud customers shortly (after a successful Preview period).
+
+### This means you can:
+
+- Detect vulnerabilities in production at runtime
+- Reduce vulnerability scanning feedback cycles by 60-80% by giving developers direct visibility in Dev/SIT/UAT
+- Automatically map vulnerabilities to specific services and business transactions
+
+### O11y Cloud Feature Updates
+
+#### 1. Secure Application for O11y Cloud (Preview)
+
+Runtime application vulnerability detection - Request Access
+
+**Outcomes and Benefits:**
+- Proactively identifies exploitable vulnerabilities in production environments
+- Reduces security team workload by auto-filtering non-exploitable CVEs
+- Accelerates remediation by mapping vulnerabilities directly to services and owners
+- Supports compliance requirements with continuous runtime monitoring
+- Integrates seamlessly with existing APM traces and metrics for unified visibility
+- No additional instrumentation required - uses existing OpenTelemetry agents
+
+#### 2. Database Monitoring (Generally Available)
+
+Deep query-level insights for SQL Server and Oracle databases
+
+**Outcomes and Benefits:**
+- Provides detailed query analytics including wait time, CPU usage, memory consumption, and execution plans
+- Correlates database performance with application services and infrastructure metrics
+- Built on OpenTelemetry for vendor-neutral instrumentation
+- Helps identify and resolve slow, inefficient queries faster
+- AI-powered recommendations accelerate fixes
+
+### AppDynamics Feature Updates
+
+#### 1. AI Agent Monitoring (Generally Available)
+
+Monitor health, performance, security, and cost of AI applications
+
+**Outcomes and Benefits:**
+- Tracks LLM and AI agent performance, error rates, and reliability
+- Integration with Cisco AI Defense for security risk visibility (prompt injection, data leakage)
+- Detailed insights into consumption, cost, performance, and quality measures
+- Enables AI SRE and MLSecOps teams to manage risk and operational efficiency
+
+#### 2. Combined AppDynamics Agent (Generally Available)
+
+Single agent for both AppDynamics and Observability Cloud
+
+**Outcomes and Benefits:**
+- Avoids costly and disruptive changes in deployment pipelines
+- Contains both AppDynamics and OpenTelemetry code in one agent
+- Enables evaluation or transition to O11y Cloud without instrumentation changes
+- Deploys like any other AppDynamics agent with simple update
+
+### Release Notes
+
+Speak soon.
