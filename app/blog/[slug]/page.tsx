@@ -3,6 +3,8 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { decodeHtmlEntities } from '@/lib/html-entities';
+import { markdownToHtml } from '@/lib/markdown';
 
 const blogDir = path.join(process.cwd(), 'content', 'blog');
 
@@ -25,9 +27,9 @@ function getBlogPost(slug: string) {
 
   return {
     slug,
-    title: data.title,
+    title: decodeHtmlEntities(data.title || ''),
     date: data.date,
-    summary: data.summary,
+    summary: data.summary ? decodeHtmlEntities(data.summary) : undefined,
     tags: data.tags || [],
     content,
     wordpressUrl: data.wordpressUrl,
@@ -48,8 +50,8 @@ export default async function BlogPostPage({
 
   return (
     <article className="min-h-screen bg-white dark:bg-purple-950">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <Link href="/blog" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mb-8 inline-block font-medium">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <Link href="/blog" className="text-purple-600 dark:text-purple-400 hover:text-gold-500 dark:hover:text-gold-400 mb-8 inline-block font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] inline-flex items-center">
           ← Back to articles
         </Link>
 
@@ -64,7 +66,7 @@ export default async function BlogPostPage({
               day: 'numeric',
             })}
           </time>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white leading-tight text-balance">
             {post.title}
           </h1>
 
@@ -86,15 +88,20 @@ export default async function BlogPostPage({
               href={post.wordpressUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium"
+              className="text-sm text-purple-600 dark:text-purple-400 hover:text-gold-500 dark:hover:text-gold-400 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] inline-flex items-center"
             >
               Original post on WordPress →
             </a>
           )}
         </header>
 
-        <div className="prose prose-lg prose-purple dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-purple-600 dark:prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline">
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="article-content prose prose-lg prose-purple dark:prose-invert max-w-none 
+          prose-headings:text-balance 
+          prose-p:text-pretty
+          prose-a:text-purple-600 dark:prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-gold-500 
+          prose-blockquote:border-l-gold-500 prose-blockquote:bg-purple-50 dark:prose-blockquote:bg-purple-900
+          prose-strong:font-bold">
+          <div dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }} />
         </div>
       </div>
     </article>
