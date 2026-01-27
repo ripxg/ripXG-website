@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   }));
 }
 
-async function getBlogPost(slug: string) {
+function getBlogPost(slug: string) {
   const filePath = path.join(blogDir, `${slug}.mdx`);
 
   if (!fs.existsSync(filePath)) {
@@ -34,8 +34,13 @@ async function getBlogPost(slug: string) {
   };
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug);
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = getBlogPost(slug);
 
   if (!post) {
     notFound();
