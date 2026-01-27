@@ -25,7 +25,7 @@ async function getBlogPosts() {
       title: data.title,
       date: data.date,
       summary: data.summary,
-      tags: data.tags || [],
+      tags: (data.tags as string[]) || [],
     };
   });
 
@@ -84,10 +84,10 @@ export default async function BlogPage() {
                   )}
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
+                      {post.tags.map((tag: string) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm rounded-full font-medium"
+                          className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-sm rounded-full font-medium"
                         >
                           {tag}
                         </span>
