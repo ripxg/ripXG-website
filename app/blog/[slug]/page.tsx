@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { decodeHtmlEntities } from '@/lib/html-entities';
 import { markdownToHtml } from '@/lib/markdown';
 
-const blogDir = path.join(process.cwd(), 'content', 'blog');
+const blogDir = path.join(process.cwd(), 'content', 'transforms', 'blog');
 
 export async function generateStaticParams() {
   const filenames = fs.readdirSync(blogDir);

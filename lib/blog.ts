@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { decodeHtmlEntities } from './html-entities';
 
-const blogDir = path.join(process.cwd(), 'content', 'blog');
+const blogDir = path.join(process.cwd(), 'content', 'transforms', 'blog');
 
 export interface BlogPost {
   slug: string;

@@ -19,15 +19,28 @@ if (!fs.existsSync(BLOG_TRANSFORM_DIR)) {
 }
 
 /**
+ * Extract original date from raw file content (before gray-matter parsing)
+ */
+function extractOriginalDate(fileContent: string): string | null {
+  // Find the YAML frontmatter section
+  const frontmatterMatch = fileContent.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) return null;
+
+  const yamlContent = frontmatterMatch[1];
+  const dateMatch = yamlContent.match(/^date:\s*(.+)$/m);
+  return dateMatch ? dateMatch[1].trim() : null;
+}
+
+/**
  * Convert unified frontmatter to blog-specific MDX format
  */
 function convertToBlogFrontmatter(
-  frontmatter: Record<string, any>
+  frontmatter: Record<string, any>,
+  originalDate: string | null
 ): string {
   const {
     id,
     title,
-    date,
     updated,
     tags = [],
     summary = '',
@@ -35,14 +48,25 @@ function convertToBlogFrontmatter(
     canonical_url,
   } = frontmatter;
 
+  // Use original date if available, otherwise fall back to parsed date
+  const dateValue = originalDate || frontmatter.date;
+
   // Build YAML frontmatter for blog MDX
+  const summaryLines = summary
+    .split('\n')
+    .map((line: string) => `  ${line.trim()}`)
+    .filter((line: string) => line.trim() !== '' || line.length > 2);
+
+  // Quote title to handle special characters like brackets, quotes, etc.
+  const quotedTitle = title.includes("'") ? `"${title}"` : `'${title}'`;
+
   const blogFrontmatter = [
     '---',
-    `title: ${title}`,
-    `date: '${date}'`,
+    `title: ${quotedTitle}`,
+    `date: '${dateValue}'`,
     `tags: [${tags.join(', ')}]`,
     `summary: >`,
-    ...summary.split('\n').map((line: string) => `  ${line.trim()}`),
+    ...summaryLines,
     '',
     `status: ${status}`,
     `canonical_url: ${canonical_url}`,
@@ -66,8 +90,13 @@ function transformForBlog(articlePath: string): void {
 
   console.log(`Transforming: ${filename} → blog MDX`);
 
-  // Read and parse article
+  // Read article content
   const fileContent = fs.readFileSync(articlePath, 'utf-8');
+
+  // Extract original date before gray-matter parsing
+  const originalDate = extractOriginalDate(fileContent);
+
+  // Parse article with gray-matter
   const { data: frontmatter, content } = matter(fileContent);
 
   // Skip if article is disabled for blog
@@ -77,7 +106,7 @@ function transformForBlog(articlePath: string): void {
   }
 
   // Convert frontmatter
-  const blogFrontmatter = convertToBlogFrontmatter(frontmatter);
+  const blogFrontmatter = convertToBlogFrontmatter(frontmatter, originalDate);
 
   // Content stays as-is (markdown is compatible with MDX)
   const mdxContent = blogFrontmatter + content;
