@@ -299,12 +299,24 @@ function parseArgs(): {
   const args = process.argv.slice(2);
   const command = args[0] || 'status';
 
+  // Parse flags
+  let url: string | undefined;
+  let notes: string | undefined;
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--url' && i + 1 < args.length) {
+      url = args[i + 1];
+    } else if (args[i] === '--notes' && i + 1 < args.length) {
+      notes = args[i + 1];
+    }
+  }
+
   return {
     command,
     articleId: args[1],
     platform: args[2] as Platform,
-    url: args['--url'],
-    notes: args['--notes'],
+    url,
+    notes,
   };
 }
 
