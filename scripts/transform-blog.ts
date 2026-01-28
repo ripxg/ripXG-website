@@ -3,7 +3,7 @@
  * Transform: MD → MDX for Blog
  *
  * Reads MD files from /content/articles/ and generates MDX files
- * for the Next.js blog in /content/transforms/blog/
+ * for Next.js blog in /content/blog/
  */
 
 import fs from 'fs';
@@ -11,50 +11,97 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
-const BLOG_TRANSFORM_DIR = path.join(process.cwd(), 'content', 'transforms', 'blog');
+const BLOG_OUTPUT_DIR = path.join(process.cwd(), 'content', 'blog');
 
-// Ensure transform directory exists
-if (!fs.existsSync(BLOG_TRANSFORM_DIR)) {
-  fs.mkdirSync(BLOG_TRANSFORM_DIR, { recursive: true });
+// Ensure blog directory exists
+if (!fs.existsSync(BLOG_OUTPUT_DIR)) {
+  fs.mkdirSync(BLOG_OUTPUT_DIR, { recursive: true });
+}
+
+/**
+ * Format date as YYYY-MM-DD for blog slugs and frontmatter
+ */
+function formatDateForBlog(dateStr: string): string {
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Generate blog slug from article id and date
+ * Format: YYYY-MM-DD-slug (matches existing blog naming)
+ *
+ * Article ID format: YYYY-MM-slug
+ * We extract YYYY-MM from the ID and add DD from date
+ */
+function generateBlogSlug(articleId: string, dateStr: string): string {
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  // Extract slug portion from article ID (remove YYYY-MM- prefix if present)
+  const slugMatch = articleId.match(/^\d{4}-\d{2}-(.+)$/);
+  const slugPart = slugMatch ? slugMatch[1] : articleId;
+
+  return `${year}-${month}-${day}-${slugPart}`;
+}
+
+/**
+ * Escape YAML special characters in strings
+ */
+function escapeYamlString(str: string): string {
+  return str
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, ' ');
 }
 
 /**
  * Convert unified frontmatter to blog-specific MDX format
  */
 function convertToBlogFrontmatter(
-  frontmatter: Record<string, any>
+  frontmatter: Record<string, any>,
+  slug: string
 ): string {
-  const {
-    id,
-    title,
-    date,
-    updated,
-    tags = [],
-    summary = '',
-    status,
-    canonical_url,
-  } = frontmatter;
+  const { title, date, tags = [], summary, status, canonical_url } = frontmatter;
+  const formattedDate = formatDateForBlog(date);
 
-  // Build YAML frontmatter for blog MDX
-  const blogFrontmatter = [
+  // Build YAML frontmatter for blog MDX - single block with no blank lines
+  const lines = [
     '---',
-    `title: ${title}`,
-    `date: '${date}'`,
-    `tags: [${tags.join(', ')}]`,
-    `summary: >`,
-    ...summary.split('\n').map((line: string) => `  ${line.trim()}`),
-    '',
-    `status: ${status}`,
-    `canonical_url: ${canonical_url}`,
-    '',
-    // Legacy fields for backward compatibility with existing blog code
-    `wordpressId: ${frontmatter.legacy?.wordpress_id || ''}`,
-    `wordpressUrl: '${frontmatter.legacy?.wordpress_url || ''}'`,
-    '---',
-    '',
+    `title: "${escapeYamlString(title)}"`,
+    `date: ${formattedDate}`,
   ];
 
-  return blogFrontmatter.join('\n');
+  // Only include tags if non-empty
+  if (tags && tags.length > 0) {
+    lines.push(`tags: [${tags.map((t: string) => `'${escapeYamlString(t)}'`).join(', ')}]`);
+  }
+
+  // Add summary if present (as single line, trimmed)
+  if (summary && summary.trim()) {
+    const escapedSummary = escapeYamlString(summary).trim();
+    // If summary is long, use folded scalar syntax >
+    if (escapedSummary.length > 100) {
+      lines.push('summary: >');
+      lines.push(`  ${escapedSummary}`);
+    } else {
+      lines.push(`summary: "${escapedSummary}"`);
+    }
+  }
+
+  lines.push(`status: ${status || 'published'}`);
+
+  if (canonical_url) {
+    lines.push(`canonical_url: ${canonical_url}`);
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  return lines.join('\n');
 }
 
 /**
@@ -62,9 +109,12 @@ function convertToBlogFrontmatter(
  */
 function transformForBlog(articlePath: string): void {
   const filename = path.basename(articlePath);
-  const outputPath = path.join(BLOG_TRANSFORM_DIR, filename.replace('.md', '.mdx'));
+  const { name: articleId, ext } = path.parse(filename);
 
-  console.log(`Transforming: ${filename} → blog MDX`);
+  if (ext !== '.md') {
+    console.log(`  ⏭ Skipped: ${filename} (not a markdown file)`);
+    return;
+  }
 
   // Read and parse article
   const fileContent = fs.readFileSync(articlePath, 'utf-8');
@@ -72,12 +122,19 @@ function transformForBlog(articlePath: string): void {
 
   // Skip if article is disabled for blog
   if (frontmatter.platforms?.blog?.enabled === false) {
-    console.log(`  ⏭ Skipped (blog disabled)`);
+    console.log(`  ⏭ Skipped: ${filename} (blog disabled)`);
     return;
   }
 
+  // Generate blog slug and output filename
+  const blogSlug = generateBlogSlug(articleId, frontmatter.date);
+  const outputFilename = `${blogSlug}.mdx`;
+  const outputPath = path.join(BLOG_OUTPUT_DIR, outputFilename);
+
+  console.log(`Transforming: ${filename} → ${outputFilename}`);
+
   // Convert frontmatter
-  const blogFrontmatter = convertToBlogFrontmatter(frontmatter);
+  const blogFrontmatter = convertToBlogFrontmatter(frontmatter, blogSlug);
 
   // Content stays as-is (markdown is compatible with MDX)
   const mdxContent = blogFrontmatter + content;
@@ -113,7 +170,7 @@ function transformAll(): void {
   }
 
   console.log('✅ Blog transformation complete!\n');
-  console.log(`📁 Output directory: ${BLOG_TRANSFORM_DIR}`);
+  console.log(`📁 Output directory: ${BLOG_OUTPUT_DIR}`);
 }
 
 // Run transformation
