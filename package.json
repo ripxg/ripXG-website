@@ -16,6 +16,7 @@
     "publish:status": "bun run scripts/publish-tracker.ts status",
     "publish:init": "bun run scripts/publish-tracker.ts init",
     "publish:mark": "bun run scripts/publish-tracker.ts mark",
+    "test:formatting": "bun run scripts/test-article-formatting.ts",
     "prebuild": "bun run transform:blog",
     "prepare": "husky"
   },

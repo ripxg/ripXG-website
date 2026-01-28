@@ -7,108 +7,84 @@ status: published
 canonical_url: https://ripxg.com/blog/2025-11-observability-updates
 ---
 
-It's been a little over a month since my last update but the chatter in this space has been **sky high** following high-profile incidents at AWS and Cloudflare. Really good to see both publish strong postmortems, in case you missed them.
+It's been a little over a month since my last update but the chatter in this space has been sky high following high-profile incidents at AWS and Cloudflare. Really good to see both publish strong postmortems, in case you missed them:
 
-## Recent Conversation Topics
+### Recent Conversation Topics
 
 The conversations at various levels in the last month have still been focused on:
 
-- **Business Workflow/Journey monitoring**
-- **Agentic Troubleshooting** (Splunk Alpha version)
-- **Observability for AI Workloads**
+- Business Workflow/Journey monitoring,
+- Agentic Troubleshooting (Splunk Alpha version) and
+- Observability for AI Workloads
 
-Many customers are starting to use **OOTB dashboards** for their AI infrastructure and LLM-based apps, with OpenLLMetry (https://github.com/traceloop/openllmetry) and I've been assisting quite a few get started here (without spending too much time or effort, that's the key).
+Many customers are starting to use OOTB dashboards for their AI infrastructure and LLM-based apps, with OpenLLMetry (https://github.com/traceloop/openllmetry) and I've been assisting quite a few get started here (without spending too much time or effort, that's the key). Whether you are using the Cisco AI pods, another commercial solution or have built your own tech stack for AI apps, consider how you'll integrate into your existing Observability solutions.
 
-Whether you are using the Cisco AI pods, another commercial solution or have built your own tech stack for AI apps, consider how you'll integrate into your existing Observability solutions.
-
-## State of Observability 2025
-
-I've had a skim of the recently published **"State of Observability 2025"** at: https://www.splunk.com/en_us/campaigns/state-of-observability.html
+I've had a skim of the recently published "State of Observability 2025" at: https://www.splunk.com/en_us/campaigns/state-of-observability.html
 
 There are some great insights in the report, like this table of Observability capabilities to the business, ranked by importance:
 
 ![Observability capabilities table](https://www.splunk.com/en_us/campaigns/state-of-observability.html)
 
-### The Missing Priorities
+I find it interesting as most conversations I've had in the last month centre around AI for Observability and Observability for AI (what's the difference between these?), but have often missed the top two in this list:
 
-I find it interesting as most conversations I've had in the last month centre around **AI for Observability** and **Observability for AI** (what's the difference between these?), but have often missed the top two in this list:
+- Detecting application security vulnerabilities, and
+- Monitoring critical business processes
 
-- **Detecting application security vulnerabilities**
-- **Monitoring critical business processes**
-
-> If you find that the business is struggling to support Observability initiatives, bring these capabilities to the front and centre.
-
-## How Splunk Addresses These Priorities
+If you find that the business is struggling to support Observability initiatives, bring these capabilities to the front and centre.
 
 The way Splunk addresses these is relatively straightforward and mature. Let me know if you'd like to dive into either of these:
 
-### Application Runtime Vulnerability Detection with SecureApp
-
-Lighten workload for application teams by providing direct visibility into runtime exploitable vulnerabilities and automatically mapping them to their corresponding application services. This allows teams to proactively address critical risks and safely de-prioritize non-exploitable ones.
+**Application runtime vulnerability detection with SecureApp** - lighten workload for application teams by providing direct visibility into runtime exploitable vulnerabilities and automatically mapping them to their corresponding application services. This allows teams to proactively address critical risks and safely de-prioritize non-exploitable ones.
 
 **Detect application vulnerabilities in real-time**
 
-### Monitor Critical Business Processes with APM/AIOPs
-
-Provide real-time visibility into how application performance impacts business outcomes. Use dynamic baselining, business journey mapping, and segment health insights to prioritize troubleshooting.
+**Monitor critical business processes with APM/AIOPs** - provide real-time visibility into how application performance impacts business outcomes. Use dynamic baselining, business journey mapping, and segment health insights to prioritize troubleshooting.
 
 **Business process monitoring from RUM/APM data**
 
-## November Feature Updates
+You can check my [last post](https://www.linkedin.com/pulse/october-observability-updates-sremonitoring-teams-jeff-chau-00xcc?trk=article-ssr-frontend-pulse_little-text-block) in this series in October, where I highlight many of the Alpha/Preview features of last month. Huge kudos to the Splunk product teams cooking up a storm, bringing many of these into General Availability - I've highlighted the most impactful feature updates in the November releases here:
 
-You can check my [last post](https://www.linkedin.com/pulse/october-observability-updates-sremonitoring-teams-jeff-chau-00xcc?trk=article-ssr-frontend-pulse_little-text-block) in this series in October, where I highlight many of the Alpha/Preview features of last month.
+### O11y Cloud Metrics Usage Analytics
 
-> Huge kudos to the Splunk product teams cooking up a storm, bringing many of these into General Availability.
+- Optimize telemetry volume with analytical views
 
-I've highlighted the most impactful feature updates in the November releases here:
+- Individual metrics: identify potential areas to optimize data consumption, specifically high-cardinality metrics that are not actively used.
 
-### O11y Cloud: Metrics Usage Analytics
+- Individual dimensions: provides detailed insight into dimensional statistics, their utilization, and lists all the components where they are used. Unused dimensions can be removed from specific metrics with Metric Pipeline Management
 
-Optimize telemetry volume with analytical views:
-
-- **Individual metrics:** identify potential areas to optimize data consumption, specifically high-cardinality metrics that are not actively used
-- **Individual dimensions:** provides detailed insight into dimensional statistics, their utilization, and lists all the components where they are used. Unused dimensions can be removed from specific metrics with Metric Pipeline Management
-
-### O11y Cloud: Observability for AI
-
-**Benefits:**
+### O11y Cloud Observability for AI
 
 - OOTB Dashboards for your AI Infra and Apps
-- Enables cost control and budgeting for AI workloads
-- Improves application performance and user satisfaction
-- Supports adoption of AI technologies with operational confidence
+- Enables cost control and budgeting for AI workloads.
+- Improves application performance and user satisfaction.
+- Supports adoption of AI technologies with operational confidence.
 
-### O11y Cloud: SSL Certificate Tests
+### O11y Cloud SSL Certificate Tests
 
-**Avoid SSL certificate expiry incidents!**
+- Avoid SSL certificate expiry incidents!
+- New test type that lets you verify the validity, expiration, and configuration of your SSL/TLS certificates.
+- Monitor certificates proactively and get alerted about issues such as upcoming expirations, misconfigurations, or revocations before they impact your users.
 
-- New test type that lets you verify the validity, expiration, and configuration of your SSL/TLS certificates
-- Monitor certificates proactively and get alerted about issues such as upcoming expirations, misconfigurations, or revocations before they impact your users
+### AppDynamics AI-Directed Troubleshooting
 
-### AppDynamics: AI-Directed Troubleshooting
+- Add LLM-generated summaries of your critical events
+- Simplifies and accelerates troubleshooting by making root cause analysis insights easy to interpret.
+- Enhances troubleshooting efficiency with guided explanations reducing Mean Time to detect and resolve issues.
+- Improves operational confidence with consistent and explainable results.
 
-Add **LLM-generated summaries** of your critical events:
-
-- Simplifies and accelerates troubleshooting by making root cause analysis insights easy to interpret
-- Enhances troubleshooting efficiency with guided explanations reducing Mean Time to detect and resolve issues
-- Improves operational confidence with consistent and explainable results
-
-### AppDynamics: Observability for AI
-
-**Benefits:**
+### AppDynamics Observability for AI
 
 - OOTB Dashboards for your AI Infra and Apps
-- Enables cost control and budgeting for AI workloads
-- Improves application performance and user satisfaction
-- Supports adoption of AI technologies with operational confidence
+- Enables cost control and budgeting for AI workloads.
+- Improves application performance and user satisfaction.
+- Supports adoption of AI technologies with operational confidence.
 
-### AppDynamics: Mobile Session Replay
+### AppDynamics Mobile Session Replay
 
-High-demand feature that allows you to **replay user Mobile Sessions**:
-
-- Reduces guesswork and troubleshooting time, improving developer productivity
-- Enhances user experience optimization by allowing UI/UX teams to observe real user behavior and identify design flaws
-- Supports performance analysis by correlating user actions with app metrics such as crashes and response times
-- Strengthens cross-team collaboration through shared visual insights
+- High-demand feature that allows you to replay user Mobile Sessions
+- Reduces guesswork and troubleshooting time, improving developer productivity.
+- Enhances user experience optimization by allowing UI/UX teams to observe real user behavior and identify design flaws.
+- Supports performance analysis by correlating user actions with app metrics such as crashes and response times.
+- Strengthens cross-team collaboration through shared visual insights.
 
 Speak soon.
