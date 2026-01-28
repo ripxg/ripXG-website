@@ -175,23 +175,43 @@ export function markdownToHtml(markdown: string): string {
  * Order matters - process links first, then bold, then italic
  */
 function processInlineMarkdown(text: string): string {
-  // Links: [text](url) - must be processed first
-  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  // Placeholder to protect URLs from being mangled by other regex
+  const urlPlaceholders: string[] = [];
   
-  // Handle plain URLs (not in markdown link format) - convert to links
-  text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  // First, extract and protect all markdown links [text](url)
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+    const placeholder = `__LINK_${urlPlaceholders.length}__`;
+    urlPlaceholders.push(`<a href="${url}" target="_blank" rel="noopener noreferrer">${linkText}</a>`);
+    return placeholder;
+  });
+  
+  // Then, extract and protect plain URLs (only those not already in a link)
+  text = text.replace(/(?<!href="|">)(https?:\/\/[^\s<>]+)/g, (match, url) => {
+    // Clean up any trailing punctuation that shouldn't be part of URL
+    const cleanUrl = url.replace(/[.,;:!?)]+$/, '');
+    const trailing = url.slice(cleanUrl.length);
+    const placeholder = `__LINK_${urlPlaceholders.length}__`;
+    urlPlaceholders.push(`<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a>`);
+    return placeholder + trailing;
+  });
   
   // Bold: **text** or __text__
   text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
   
-  // Italic: *text* or _text_ (avoid matching if part of bold)
-  // Simple approach: match single asterisks/underscores
+  // Italic: *text* or _text_ (avoid matching if part of bold or in URLs)
+  // Only match underscore italic if surrounded by spaces or at word boundaries
   text = text.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>');
-  text = text.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
+  // For underscores, be more conservative - require word boundaries
+  text = text.replace(/(?<=\s|^)_([^_\n]+?)_(?=\s|$|[.,!?])/g, '<em>$1</em>');
   
   // Code: `text`
   text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+  
+  // Restore protected links
+  for (let i = 0; i < urlPlaceholders.length; i++) {
+    text = text.replace(`__LINK_${i}__`, urlPlaceholders[i]);
+  }
   
   return text;
 }
@@ -249,9 +269,10 @@ function decodeHtmlEntities(text: string): string {
   });
 
   // Clean up any remaining formatting artifacts
+  // IMPORTANT: Preserve newlines for markdown parsing!
   decoded = decoded
-    .replace(/\s+/g, ' ') // Multiple spaces to single
-    .replace(/\n\s*\n\s*\n/g, '\n\n') // Multiple newlines to double
+    .replace(/[^\S\n]+/g, ' ') // Multiple spaces to single (but preserve newlines)
+    .replace(/\n{3,}/g, '\n\n') // 3+ newlines to double
     .trim();
 
   return decoded;
