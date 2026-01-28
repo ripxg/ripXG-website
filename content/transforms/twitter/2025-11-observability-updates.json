@@ -1,0 +1,147 @@
+{
+  "article_id": "2025-11-observability-updates",
+  "thread": [
+    {
+      "index": 1,
+      "text": "Monthly update on observability trends, AI agent development, and industry insights\n 🧵",
+      "image": null
+    },
+    {
+      "index": 2,
+      "text": "It's been a little over a month since my last update but the chatter in this space has been sky high following high-profile incidents at AWS and Cloudflare. Really good to see both publish strong postmortems, in case you missed them:\n\nRecent Conversation Topics",
+      "image": null
+    },
+    {
+      "index": 3,
+      "text": "The conversations at various levels in the last month have still been focused on:\n• Business Workflow/Journey monitoring,\n• Agentic Troubleshooting (Splunk Alpha version) and\n• Observability for AI Workloads",
+      "image": null
+    },
+    {
+      "index": 4,
+      "text": "Many customers are starting to use OOTB dashboards for their AI infrastructure and LLM-based apps, with OpenLLMetry (https://github.com/traceloop/openllmetry) and I've been assisting quite a few get started here (without spending too much time or effort, that's the key).",
+      "image": null
+    },
+    {
+      "index": 5,
+      "text": "Whether you are using the Cisco AI pods, another commercial solution or have built your own tech stack for AI apps, consider how you'll integrate into your existing Observability solutions.",
+      "image": null
+    },
+    {
+      "index": 6,
+      "text": "I've had a skim of the recently published \"State of Observability 2025\" at: https://www.splunk.com/en_us/campaigns/state-of-observability.html",
+      "image": null
+    },
+    {
+      "index": 7,
+      "text": "There are some great insights in the report, like this table of Observability capabilities to the business, ranked by importance:\n\n!Observability capabilities table https://www.splunk.com/en_us/campaigns/state-of-observability.html",
+      "image": null
+    },
+    {
+      "index": 8,
+      "text": "I find it interesting as most conversations I've had in the last month centre around AI for Observability and Observability for AI (what's the difference between these?), but have often missed the top two in this list:\n• Detecting application security vulnerabilities, and\n• Moni-",
+      "image": null
+    },
+    {
+      "index": 9,
+      "text": "toring critical business processes-\n\nIf you find that the business is struggling to support Observability initiatives, bring these capabilities to the front and centre.",
+      "image": null
+    },
+    {
+      "index": 10,
+      "text": "The way Splunk addresses these is relatively straightforward and mature. Let me know if you'd like to dive into either of these:",
+      "image": null
+    },
+    {
+      "index": 11,
+      "text": "Application runtime vulnerability detection with SecureApp - lighten workload for application teams by providing direct visibility into runtime exploitable vulnerabilities and automatically mapping them to their corresponding application services.",
+      "image": null
+    },
+    {
+      "index": 12,
+      "text": "This allows teams to proactively address critical risks and safely de-prioritize non-exploitable ones.\n\nDetect application vulnerabilities in real-time",
+      "image": null
+    },
+    {
+      "index": 13,
+      "text": "Monitor critical business processes with APM/AIOPs - provide real-time visibility into how application performance impacts business outcomes. Use dynamic baselining, business journey mapping, and segment health insights to prioritize troubleshooting.",
+      "image": null
+    },
+    {
+      "index": 14,
+      "text": "Business process monitoring from RUM/APM data",
+      "image": null
+    },
+    {
+      "index": 15,
+      "text": "You can check my last post https://www.linkedin.com/pulse/october-observability-updates-sremonitoring-teams-jeff-chau-00xcc?trk=article-ssr-frontend-pulse_little-text-block in this series in October, where I highlight many of the Alpha/Preview features of last month.",
+      "image": null
+    },
+    {
+      "index": 16,
+      "text": "Huge kudos to the Splunk product teams cooking up a storm, bringing many of these into General Availability - I've highlighted the most impactful feature updates in the November releases here:",
+      "image": null
+    },
+    {
+      "index": 17,
+      "text": "O11y Cloud Metrics Usage Analytics\n• Optimize telemetry volume with analytical views\n• Individual metrics: identify potential areas to optimize data consumption, specifically high-cardinality metrics that are not actively used.",
+      "image": null
+    },
+    {
+      "index": 18,
+      "text": "• Individual dimensions: provides detailed insight into dimensional statistics, their utilization, and lists all the components where they are used. Unused dimensions can be removed from specific metrics with Metric Pipeline Management",
+      "image": null
+    },
+    {
+      "index": 19,
+      "text": "O11y Cloud Observability for AI\n• OOTB Dashboards for your AI Infra and Apps\n• Enables cost control and budgeting for AI workloads.\n• Improves application performance and user satisfaction.\n• Supports adoption of AI technologies with operational confidence.",
+      "image": null
+    },
+    {
+      "index": 20,
+      "text": "O11y Cloud SSL Certificate Tests\n• Avoid SSL certificate expiry incidents! • New test type that lets you verify the validity, expiration, and configuration of your SSL/TLS certificates.",
+      "image": null
+    },
+    {
+      "index": 21,
+      "text": "• Monitor certificates proactively and get alerted about issues such as upcoming expirations, misconfigurations, or revocations before they impact your users.",
+      "image": null
+    },
+    {
+      "index": 22,
+      "text": "AppDynamics AI-Directed Troubleshooting\n• Add LLM-generated summaries of your critical events\n• Simplifies and accelerates troubleshooting by making root cause analysis insights easy to interpret.",
+      "image": null
+    },
+    {
+      "index": 23,
+      "text": "• Enhances troubleshooting efficiency with guided explanations reducing Mean Time to detect and resolve issues. • Improves operational confidence with consistent and explainable results.",
+      "image": null
+    },
+    {
+      "index": 24,
+      "text": "AppDynamics Observability for AI\n• OOTB Dashboards for your AI Infra and Apps\n• Enables cost control and budgeting for AI workloads.\n• Improves application performance and user satisfaction.\n• Supports adoption of AI technologies with operational confidence.",
+      "image": null
+    },
+    {
+      "index": 25,
+      "text": "AppDynamics Mobile Session Replay\n• High-demand feature that allows you to replay user Mobile Sessions\n• Reduces guesswork and troubleshooting time, improving developer productivity.",
+      "image": null
+    },
+    {
+      "index": 26,
+      "text": "• Enhances user experience optimization by allowing UI/UX teams to observe real user behavior and identify design flaws. • Supports performance analysis by correlating user actions with app metrics such as crashes and response times.",
+      "image": null
+    },
+    {
+      "index": 27,
+      "text": "• Strengthens cross-team collaboration through shared visual insights.\n\nSpeak soon.",
+      "image": null
+    },
+    {
+      "index": 28,
+      "text": "Read the full article:\nhttps://ripxg.com/blog/2025-11-observability-updates",
+      "image": null
+    }
+  ],
+  "total_tweets": 28,
+  "canonical_url": "https://ripxg.com/blog/2025-11-observability-updates"
+}

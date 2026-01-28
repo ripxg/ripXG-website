@@ -6,7 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "transform:all": "tsx scripts/transform-all.ts",
+    "transform:blog": "tsx scripts/transform-blog.ts",
+    "transform:linkedin": "tsx scripts/transform-linkedin.ts",
+    "transform:twitter": "tsx scripts/transform-twitter.ts",
+    "transform:substack": "tsx scripts/transform-substack.ts",
+    "migrate": "tsx scripts/migrate-mdx.ts",
+    "publish:status": "tsx scripts/publish-tracker.ts status",
+    "publish:init": "tsx scripts/publish-tracker.ts init",
+    "publish:mark": "tsx scripts/publish-tracker.ts mark",
+    "prebuild": "npm run transform:blog"
   },
   "dependencies": {
     "next": "^15.1.0",
@@ -22,9 +32,10 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.7.2",
-    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0",
-    "autoprefixer": "^10.4.0"
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2"
   }
 }

@@ -1,0 +1,142 @@
+{
+  "article_id": "2023-07-how-to-optimise-world-boss-hunting-in-mmorpgs",
+  "thread": [
+    {
+      "index": 1,
+      "text": "Playing an MMORPG competitively 🧵",
+      "image": null
+    },
+    {
+      "index": 2,
+      "text": "Playing an MMORPG competitively? Looking to dominate the open world boss but starting casual? Let’s get you there with my own story and some specific tips to manage the hardest part of the game: people.",
+      "image": null
+    },
+    {
+      "index": 3,
+      "text": "Part one of my guild leading memoir covers this topic specifically, read the full story at https://docs.google.com/document/d/19INsv8xt7gnrY7kD5d8db88KtuJ26uNnGxrv0acHTV4 https://docs.google.com/document/d/19INsv8xt7gnrY7kD5d8db88KtuJ26uNnGxrv0acHTV4",
+      "image": null
+    },
+    {
+      "index": 4,
+      "text": "I didn’t want to run a guild (or at least I didn’t think I wanted to) because I thought that my chance had already passed.",
+      "image": null
+    },
+    {
+      "index": 5,
+      "text": "I played on a Ragnarok Online (RO) server called Project Zero casually, stayed in touch with the community and with my brother Brian and that was fun enough for me.",
+      "image": null
+    },
+    {
+      "index": 6,
+      "text": "The player VS monster (PvM) aspect of the game was more than engaging enough for me and was the primary time spent in the game. I had played competitively in the PvM scene a number of times in my gaming career and the challenge was mostly solved but still enjoyable.",
+      "image": null
+    },
+    {
+      "index": 7,
+      "text": "Specifically, end-game PvM content/hunting bosses was also a perfect match for my gaming schedule as a working parent; 5-10 minute sessions every couple of hours as opposed to individual longer sessions.",
+      "image": null
+    },
+    {
+      "index": 8,
+      "text": "In RO, boss monsters can be killed competitively against other contenders and the rewards are generally split between the winning team. This particular server created the conditions for 2-3 competitive groups of which mine (met on Project Zero) was one.",
+      "image": null
+    },
+    {
+      "index": 9,
+      "text": "“LexLife” as we were proudly called (pun on sex life and an in-game skill “Lex Aeterna”) gave birth to a number of solvable challenges including:\n• Communications via Discord https://discord.com/ \n• Timezone coordination for boss coverage \n• Loot sharing system despite complex s-",
+      "image": null
+    },
+    {
+      "index": 10,
+      "text": "ales cycle\n• Role mapping and shared accounts\n• Agreements with other parties-\n\nDiscord is the go-to choice for communications in games as it rocks persistent chat channels, voice channels and a huge supply of add-ons like a boss kill timer.",
+      "image": null
+    },
+    {
+      "index": 11,
+      "text": "For effective coverage of bosses around the clock, we knew that we needed at least a couple of dedicated players from SEA and EU, NA if possible. A simple spreadsheet with global time coverage + shared accounts works well—then you can figure out if more people/roles are needed.",
+      "image": null
+    },
+    {
+      "index": 12,
+      "text": "Loot sharing became complex as boss drops are best shared as currency when sold into the market.",
+      "image": null
+    },
+    {
+      "index": 13,
+      "text": "The rate of sale also differs from the rate of loot collection, so the first challenge arose out of the need to track individual contributions evenly and distributions done fairly for each sale:\n• Each kill is divided into the number of participants to give weighted attendance p-",
+      "image": null
+    },
+    {
+      "index": 14,
+      "text": "oint measure\n• Each sale’s earnings will be distributed based on the weighted attendance points across total global attendance points\n• Excess loot is added to the group shared gear/distribution-\n\nGoogle sheets used extensively! Perhaps not optimally…",
+      "image": null
+    },
+    {
+      "index": 15,
+      "text": "The calculation of profit distributable per member is calculated as:\nPayment = (Revenue — Expenses) * Individual Weighted Attendance / Total Weighted Attendance + Reimbursement",
+      "image": null
+    },
+    {
+      "index": 16,
+      "text": "Where:\n\nRevenue = Sale Price\n\nExpenses = Total agreed value of supplies used\n\nIndividual Weighted Attendance = Sum(1/number of attendees)  for as many relevant kills as possible, using a spreadsheet enables a running total",
+      "image": null
+    },
+    {
+      "index": 17,
+      "text": "Total Weighted Attendance = Sum(Individual Weighted Attendance)",
+      "image": null
+    },
+    {
+      "index": 18,
+      "text": "Reimbursement = Individual contribution of supplies to the Expenses amount",
+      "image": null
+    },
+    {
+      "index": 19,
+      "text": "This simple tracked calculation enabled the team to be transparent about all distributions, thus building trust on a system and each other over time.",
+      "image": null
+    },
+    {
+      "index": 20,
+      "text": "Errors are sometimes picked up in data entry and luckily with GSheets there is edit history that allows you to go back and remediate.",
+      "image": null
+    },
+    {
+      "index": 21,
+      "text": "The only thing missing in the equation then is to have a team of dedicated players—which is supported by the sheer bang for buck of being a contributor and relying on the system to reward each contribution.",
+      "image": null
+    },
+    {
+      "index": 22,
+      "text": "This system combined with a democratic approach to make changes ensured that the team avoided conflict and misunderstanding in the long term.",
+      "image": null
+    },
+    {
+      "index": 23,
+      "text": "The development of micro-level strategy differs per boss and letting the team maintain a competitive mindset allowed natural development over time through discord to the point of being able to take bosses down in silence (communication on a higher plane!).",
+      "image": null
+    },
+    {
+      "index": 24,
+      "text": "The strategy in competitive boss hunting in Ragnarok revolves around guaranteeing the most damage dealt while staying alive as a first priority.",
+      "image": null
+    },
+    {
+      "index": 25,
+      "text": "This breaks the strategy down to building a monk and supporting that monk’s damage in every way possible including party buffs from blacksmith, bard, dancer and priest.",
+      "image": null
+    },
+    {
+      "index": 26,
+      "text": "Once those roles have developed into shared accounts, the team can maintain a consistent presence around the clock.\n\nIn hindsight, the development of “LexLife” was a sign that I wanted to do more",
+      "image": null
+    },
+    {
+      "index": 27,
+      "text": "Read the full article:\nhttps://ripxg.com/blog/2023-07-how-to-optimise-world-boss-hunting-in-mmorpgs",
+      "image": null
+    }
+  ],
+  "total_tweets": 27,
+  "canonical_url": "https://ripxg.com/blog/2023-07-how-to-optimise-world-boss-hunting-in-mmorpgs"
+}

@@ -1,0 +1,127 @@
+{
+  "article_id": "2026-01-observability-updates",
+  "thread": [
+    {
+      "index": 1,
+      "text": "Monthly update on observability trends, AI agent troubleshooting, and infrastructure monitoring insights\n 🧵",
+      "image": null
+    },
+    {
+      "index": 2,
+      "text": "To my closest Observability enthusiasts,\n\nHappy New Year!\n\nI hope you've had a chance to rest and recharge. I'm back online with another update for you.\n\nRecent Conversation Topics",
+      "image": null
+    },
+    {
+      "index": 3,
+      "text": "The conversations I've been having in the last month have centered on:\n• Real-time application security vulnerability detection and prioritization\n• Reducing release cycle times by shortening the feedback loop of static vulnerability scanning\n• Securing AI workloads and LLM-base-",
+      "image": null
+    },
+    {
+      "index": 4,
+      "text": "d applications (building on Observability for AI, which I shared previously - see below)-\n\nObservability for AI Agents/Infrastructure",
+      "image": null
+    },
+    {
+      "index": 5,
+      "text": "Troubleshooting agents is certainly a hot topic now. You might have seen the popular LLM platform engineering framework Langfuse was recently acquired by ClickHouse (https://langfuse.com/blog/joining-clickhouse).",
+      "image": null
+    },
+    {
+      "index": 6,
+      "text": "As agentic apps continue to be released, I will expect there to be growth and maturation of the Observability stack as built in Splunk.",
+      "image": null
+    },
+    {
+      "index": 7,
+      "text": "If you recall from my last update (November edition), the \"State of Observability 2025\" report ranked \"Detecting application security vulnerabilities\" as the #1 most important Observability capability to the business - yet it's the one I see teams overlooking most often when pla-",
+      "image": null
+    },
+    {
+      "index": 8,
+      "text": "nning their initiatives.-\n\nTop priorities for Observability in 2026",
+      "image": null
+    },
+    {
+      "index": 9,
+      "text": "Now with AI-driven development, containerized deployments, and increasingly complex microservices architectures, the attack surface has grown exponentially.",
+      "image": null
+    },
+    {
+      "index": 10,
+      "text": "Security teams are overwhelmed, and development teams need real-time visibility into exploitable vulnerabilities without slowing down their release cycles.",
+      "image": null
+    },
+    {
+      "index": 11,
+      "text": "Some of my customers have had mature AppSec capabilities for years through \"AppDynamics Secure Application\", which provides runtime vulnerability detection, exploitation risk scoring, and automatic mapping to application services.",
+      "image": null
+    },
+    {
+      "index": 12,
+      "text": "Splunk will be releasing this same capability to O11y Cloud customers shortly (after a successful Preview period).",
+      "image": null
+    },
+    {
+      "index": 13,
+      "text": "This means you can:\n• Detect vulnerabilities in production at runtime\n• Reduce vulnerability scanning feedback cycles by 60-80% by giving developers direct visibility in Dev/SIT/UAT\n• Automatically map vulnerabilities to specific services and business transactions",
+      "image": null
+    },
+    {
+      "index": 14,
+      "text": "O11y Cloud Feature Updates\n• Secure Application for O11y Cloud (Preview)\n\nRuntime application vulnerability detection - Request Access",
+      "image": null
+    },
+    {
+      "index": 15,
+      "text": "Outcomes and Benefits:\n• Proactively identifies exploitable vulnerabilities in production environments\n• Reduces security team workload by auto-filtering non-exploitable CVEs\n• Accelerates remediation by mapping vulnerabilities directly to services and owners\n• Supports complian-",
+      "image": null
+    },
+    {
+      "index": 16,
+      "text": "ce requirements with continuous runtime monitoring\n• Integrates seamlessly with existing APM traces and metrics for unified visibility\n• No additional instrumentation required - uses existing OpenTelemetry agents\n• Database Monitoring (Generally Available)-",
+      "image": null
+    },
+    {
+      "index": 17,
+      "text": "Deep query-level insights for SQL Server and Oracle databases",
+      "image": null
+    },
+    {
+      "index": 18,
+      "text": "Outcomes and Benefits:\n• Provides detailed query analytics including wait time, CPU usage, memory consumption, and execution plans\n• Correlates database performance with application services and infrastructure metrics\n• Built on OpenTelemetry for vendor-neutral instrumentation\n•-",
+      "image": null
+    },
+    {
+      "index": 19,
+      "text": "Helps identify and resolve slow, inefficient queries faster\n• AI-powered recommendations accelerate fixes-\n\nAppDynamics Feature Updates\n• AI Agent Monitoring (Generally Available)\n\nMonitor health, performance, security, and cost of AI applications",
+      "image": null
+    },
+    {
+      "index": 20,
+      "text": "Outcomes and Benefits:\n• Tracks LLM and AI agent performance, error rates, and reliability\n• Integration with Cisco AI Defense for security risk visibility (prompt injection, data leakage)\n• Detailed insights into consumption, cost, performance, and quality measures\n• Enables AI-",
+      "image": null
+    },
+    {
+      "index": 21,
+      "text": "SRE and MLSecOps teams to manage risk and operational efficiency\n• Combined AppDynamics Agent (Generally Available)-\n\nSingle agent for both AppDynamics and Observability Cloud",
+      "image": null
+    },
+    {
+      "index": 22,
+      "text": "Outcomes and Benefits:\n• Avoids costly and disruptive changes in deployment pipelines\n• Contains both AppDynamics and OpenTelemetry code in one agent\n• Enables evaluation or transition to O11y Cloud without instrumentation changes\n• Deploys like any other AppDynamics agent with -",
+      "image": null
+    },
+    {
+      "index": 23,
+      "text": "simple update-\n\nRelease Notes\n\nSpeak soon.",
+      "image": null
+    },
+    {
+      "index": 24,
+      "text": "Read the full article:\nhttps://ripxg.com/blog/2026-01-observability-updates",
+      "image": null
+    }
+  ],
+  "total_tweets": 24,
+  "canonical_url": "https://ripxg.com/blog/2026-01-observability-updates"
+}

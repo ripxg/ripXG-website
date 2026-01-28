@@ -1,0 +1,107 @@
+{
+  "article_id": "2025-10-observability-updates",
+  "thread": [
+    {
+      "index": 1,
+      "text": "Monthly update on observability trends, AI agent troubleshooting, and infrastructure monitoring insights\n 🧵",
+      "image": null
+    },
+    {
+      "index": 2,
+      "text": "Hello again to my closest Observability enthusiasts,\n\nI've come back from some holiday time and there were certainly a few stories to share, next time we meet.\n\nRecent Conversation Topics",
+      "image": null
+    },
+    {
+      "index": 3,
+      "text": "The conversations I've had since my return from holiday have been focused on:\n• Troubleshooting of AI agents themselves, now that services and applications are being built with AI agents, transaction flows can heavily depend on agent-to-agent communication as well as agent perfo-",
+      "image": null
+    },
+    {
+      "index": 4,
+      "text": "rmance and accuracy\n• Continued interest in AI directed troubleshooting, for which I have further updates below\n• Observability for AI infrastructure, LLM usage and cost analysis\n• Real user monitoring and analytics, especially for mobile applications\n• Data residency for SaaS s-",
+      "image": null
+    },
+    {
+      "index": 5,
+      "text": "olutions (especially for SG-based companies)-\n\n.conf25 Key Highlights",
+      "image": null
+    },
+    {
+      "index": 6,
+      "text": "Splunk's annual conference .conf25 went ahead in Boston and major announcements were made on the progress of Splunk in the Observability space. I promised that I would share key highlights of .conf25 and I've summarized them below for you and your teams.",
+      "image": null
+    },
+    {
+      "index": 7,
+      "text": "FIRST - The most exciting to me is the Alpha release of the AI Troubleshooting Agent. Check out this screenshot of the agent in action:\n\n!Alpha: Agentic Troubleshooting https://drive.google.com/file/d/1NUQrx6R5UAHXaqEb1HprV62_cxc2_Mmn/view",
+      "image": null
+    },
+    {
+      "index": 8,
+      "text": "You can see that the agent is taking a structured approach to responding to a performance alert, looking through metrics and traces for root cause analysis and determining end-user impact.",
+      "image": null
+    },
+    {
+      "index": 9,
+      "text": "This solves two major challenges for both small and large teams alike:\n• Alert fatigue, by allowing an agent to respond to all critical alerts within a minute\n• Slow troubleshooting, by giving humans an automated workflow with AI assistance",
+      "image": null
+    },
+    {
+      "index": 10,
+      "text": "This capability will be in Alpha for both O11y Cloud and AppDynamics customers.",
+      "image": null
+    },
+    {
+      "index": 11,
+      "text": "Speak to me to get started on it - or you can see a video of it in action, in this 1min45sec demo: https://drive.google.com/file/d/1NUQrx6R5UAHXaqEb1HprV62_cxc2_Mmn/view https://drive.google.com/file/d/1NUQrx6R5UAHXaqEb1HprV62_cxc2_Mmn/view?trk=article-ssr-frontend-pulse_little--",
+      "image": null
+    },
+    {
+      "index": 12,
+      "text": "text-block-",
+      "image": null
+    },
+    {
+      "index": 13,
+      "text": "SECOND - The adoption of AI models and growth of infrastructure among many of my customers has driven conversations on Observability of AI consumption and performance.",
+      "image": null
+    },
+    {
+      "index": 14,
+      "text": "The latest Observability for AI release is already generally available for both O11y Cloud and AppDynamics customers. Work with me on getting this built into your environment.",
+      "image": null
+    },
+    {
+      "index": 15,
+      "text": "THIRD - I see user journey monitoring come up as a key ask from FSI and Telco customers a lot.",
+      "image": null
+    },
+    {
+      "index": 16,
+      "text": "They may be teams relying on the basic capabilities of Google Analytics or Firebase today that would benefit greatly from having application-level visibility and tracing without needing your teams to manually stitch these together from logs.",
+      "image": null
+    },
+    {
+      "index": 17,
+      "text": "This upcoming release will give you the ability to enable business insights for key customer journeys. Another one to get started ASAP if it's a focus for you. This capability is extremely powerful when combined with recent GA of Business Transactions.",
+      "image": null
+    },
+    {
+      "index": 18,
+      "text": "FOURTH - Alpha release: Digital Experience Monitoring Business Insights",
+      "image": null
+    },
+    {
+      "index": 19,
+      "text": "Exciting times as we see local enterprises and services partners already working on getting these set up in the region. Speak soon.\n\n---\n\nMore by Jeff Chau\n\nOthers also viewed\n\nExplore content categories",
+      "image": null
+    },
+    {
+      "index": 20,
+      "text": "Read the full article:\nhttps://ripxg.com/blog/2025-10-observability-updates",
+      "image": null
+    }
+  ],
+  "total_tweets": 20,
+  "canonical_url": "https://ripxg.com/blog/2025-10-observability-updates"
+}
