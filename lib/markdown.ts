@@ -176,11 +176,12 @@ export function markdownToHtml(markdown: string): string {
  */
 function processInlineMarkdown(text: string): string {
   // Placeholder to protect URLs from being mangled by other regex
+  // Use a format that won't be matched by bold (__text__) pattern
   const urlPlaceholders: string[] = [];
   
   // First, extract and protect all markdown links [text](url)
   text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
-    const placeholder = `__LINK_${urlPlaceholders.length}__`;
+    const placeholder = `{{LINK_PLACEHOLDER_${urlPlaceholders.length}}}`;
     urlPlaceholders.push(`<a href="${url}" target="_blank" rel="noopener noreferrer">${linkText}</a>`);
     return placeholder;
   });
@@ -190,7 +191,7 @@ function processInlineMarkdown(text: string): string {
     // Clean up any trailing punctuation that shouldn't be part of URL
     const cleanUrl = url.replace(/[.,;:!?)]+$/, '');
     const trailing = url.slice(cleanUrl.length);
-    const placeholder = `__LINK_${urlPlaceholders.length}__`;
+    const placeholder = `{{LINK_PLACEHOLDER_${urlPlaceholders.length}}}`;
     urlPlaceholders.push(`<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a>`);
     return placeholder + trailing;
   });
@@ -210,7 +211,7 @@ function processInlineMarkdown(text: string): string {
   
   // Restore protected links
   for (let i = 0; i < urlPlaceholders.length; i++) {
-    text = text.replace(`__LINK_${i}__`, urlPlaceholders[i]);
+    text = text.replace(`{{LINK_PLACEHOLDER_${i}}}`, urlPlaceholders[i]);
   }
   
   return text;
