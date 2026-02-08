@@ -1,0 +1,42 @@
+---
+title: "Choosing AI models without burning cash"
+date: 2026-02-08
+summary: >
+  When I first started running AI agents on my own server, I made an expensive mistake. I used Claude Opus for everything. Every chat message, every code review, every routine check. The logic seemed sound: use the best model for the best results. Then I got the bill. $500 in tokens for a single weekend of development work. That's when I learned that picking the right model isn't about capability. It's about knowing what each task actually needs. [&hellip;]
+status: draft
+canonical_url: https://ripxg.com/blog/2026-02-choosing-ai-models-without-burning-cash
+---
+
+When I first started running AI agents on my own server, I made an expensive mistake.
+
+I used Claude Opus for everything.
+
+Every chat message, every code review, every routine check. The logic seemed sound: use the best model for the best results.
+
+Then I got the bill.
+
+$500 in tokens for a single weekend of development work.
+
+That's when I learned that picking the right model isn't about capability. It's about knowing what each task actually needs.
+
+Most coordination work doesn't need Opus. Reading files, checking status, spawning subagents. These are straightforward operations. Sonnet handles them just fine at a fraction of the cost.
+
+I reserve Opus for the hard stuff. Writing product requirement documents. Making architectural decisions. Security reviews. Anything where thinking depth matters more than speed.
+
+For basic coding tasks, I use GLM (a smaller, faster model). Building UI components, fixing bugs, implementing features from clear specs. GLM is cheap and surprisingly capable when the task is well-defined.
+
+The pattern that emerged: match the model to the cognitive load of the task.
+
+Here's what that looks like in practice. When I coordinate my agent team (I call it Orion), it defaults to Sonnet. When Orion spawns a subagent to write a product spec, it uses Opus. When that subagent spawns a frontend engineer to build the UI, it uses GLM.
+
+The cost dropped from $500 per weekend to around $50. Same amount of work. Same quality output. Just smarter allocation.
+
+The trap most people fall into is thinking they need the best model for everything. You don't. You need the right model for each thing.
+
+Start with a mid-tier model like Sonnet as your default. Use the expensive models only when complexity demands it. Use the cheap models when the task is clear and well-scoped.
+
+Track your token usage daily. I built a simple report that shows me which models I'm burning through. That visibility alone cut my costs by another 30%.
+
+Your AI budget shouldn't scale linearly with usage. It should scale with complexity.
+
+**[OpenClaw on GitHub](https://github.com/openclaw/openclaw)** · **[Model pricing comparison](https://openrouter.ai/models)**

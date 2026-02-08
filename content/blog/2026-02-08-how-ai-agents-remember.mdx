@@ -1,0 +1,56 @@
+---
+title: "How AI agents remember"
+date: 2026-02-08
+summary: >
+  Every time my AI agent started a new session, it woke up blank. No memory of yesterday's work. No context about ongoing projects. No awareness of decisions we'd made together. I'd spend the first ten minutes of every session catching it up. Explaining what we were building, what had already been tried, what didn't work. It was exhausting. The agent was capable, but it had no continuity. Every conversation was like meeting for the first time. [&hellip;]
+status: draft
+canonical_url: https://ripxg.com/blog/2026-02-how-ai-agents-remember
+---
+
+Every time my AI agent started a new session, it woke up blank.
+
+No memory of yesterday's work. No context about ongoing projects. No awareness of decisions we'd made together.
+
+I'd spend the first ten minutes of every session catching it up.
+
+Explaining what we were building, what had already been tried, what didn't work.
+
+It was exhausting.
+
+The agent was capable, but it had no continuity. Every conversation was like meeting for the first time.
+
+So I built a memory system. Not a database. Not a vector store. Just simple markdown files.
+
+MEMORY.md for long-term curated memories. Things that matter over weeks and months. Decisions, lessons learned, important context.
+
+Then daily files in a memory folder: 2026-02-08.md for today's raw notes. What happened, what was built, what broke, what was fixed.
+
+Now every session starts the same way. The agent reads MEMORY.md. It reads yesterday's file. It reads today's file if one exists.
+
+Three files. Maybe five minutes of reading. Then it's caught up.
+
+The difference is subtle but profound.
+
+Instead of explaining context, I reference it. "Remember PBI-45? Same pattern here." The agent knows exactly what I mean because it read the notes from PBI-45 last session.
+
+Instead of repeating mistakes, we compound progress. When something didn't work last week, it's documented. The agent reads it and tries a different approach automatically.
+
+The memory files do something else too. They force clarity.
+
+When I tell the agent to remember something, it writes it down. That act of documentation makes decisions explicit. No fuzzy handwaving. No assuming we're on the same page.
+
+Over time, MEMORY.md becomes a living history of the project. Not a timeline of commits, but a narrative of thinking. Why we chose this architecture. What we learned from that failure. What patterns emerged.
+
+Some people try to solve this with embeddings and retrieval systems. Fancy vector databases that search through conversation history.
+
+I tried that. It's overcomplicated for most cases.
+
+Markdown files work better because they're human-readable. I can edit them directly. Add structure as patterns emerge. Remove outdated context when it's no longer relevant.
+
+Your AI agent doesn't need perfect memory. It needs continuity.
+
+Give it simple files to read at the start of each session. Write down what matters. Skip the secrets unless you need them later.
+
+Text beats brain. Every time.
+
+**[Memory system in OpenClaw](https://github.com/openclaw/openclaw)** · **[AGENTS.md memory guidance](https://docs.openclaw.ai)**

@@ -1,0 +1,62 @@
+---
+title: "What I actually automate with AI"
+date: 2026-02-08
+summary: >
+  People ask me what I use my AI agent setup for. They expect exotic use cases. Autonomous companies running themselves. Agents negotiating contracts. Sci-fi stuff. The reality is more boring and more useful. I use AI agents for the repetitive work that eats up development time. Code reviews that catch the same mistakes. E2E testing that validates features. Coordinating work across frontend and backend. The stuff that's necessary but doesn't require creativity. [&hellip;]
+status: draft
+canonical_url: https://ripxg.com/blog/2026-02-what-i-actually-automate-with-ai
+---
+
+People ask me what I use my AI agent setup for.
+
+They expect exotic use cases. Autonomous companies running themselves. Agents negotiating contracts. Sci-fi stuff.
+
+The reality is more boring and more useful.
+
+I use AI agents for the repetitive work that eats up development time.
+
+Code reviews that catch the same mistakes. E2E testing that validates features. Coordinating work across frontend and backend.
+
+The stuff that's necessary but doesn't require creativity.
+
+My main project right now is bag-hunter, a marketplace aggregator for luxury handbags. Every feature follows the same workflow.
+
+I tell Orion (my coordinator agent) what I want. He writes a product spec. Breaks it into tasks. Spawns frontend and backend engineers to build it in parallel.
+
+They push branches. Orion spawns a code reviewer to check for quality issues and security problems. Then an E2E test runner validates everything works end-to-end.
+
+If it all passes, Orion recommends approval. I review the PR and merge to production.
+
+This workflow used to take me days. Now it takes hours, sometimes less.
+
+The agents aren't smarter than me at any individual task. But they're faster at execution and they don't get tired of repetition.
+
+I also use agents for daily maintenance. Every afternoon at 3pm, a heartbeat job polls Orion. He checks if anything needs attention. Unread emails, upcoming calendar events, project status.
+
+Most of the time, nothing needs action. He replies with HEARTBEAT_OK and goes back to sleep.
+
+But when something does need attention, he tells me. A build failed. A PR is waiting for review. Someone mentioned me on social media.
+
+It's like having a personal assistant who only bothers you when there's actually something to handle.
+
+The other automation I rely on is memory. Every session, Orion logs what happened to daily markdown files. Decisions made, bugs fixed, features built.
+
+Over time, those files become a living project history. When I forget why we made a certain architectural choice, the memory files remember.
+
+The pattern here: automate the mechanical, preserve the cognitive.
+
+AI agents excel at tasks with clear success criteria. Write code that passes these tests. Review code against this checklist. Run this workflow when this event happens.
+
+They struggle with ambiguity and judgment calls. When to pivot strategy. Whether a feature is actually needed. If a design feels right.
+
+I stay focused on product direction and architectural decisions. The agents handle implementation and validation.
+
+This is what AI automation looks like in practice. Not replacing developers. Not building products autonomously.
+
+Just accelerating the boring parts so you can focus on the interesting ones.
+
+Start with one workflow that you repeat often. Code review. Testing. Deployment checks. Whatever eats your time without requiring deep thought.
+
+Automate that. Then move to the next one.
+
+**[bag-hunter on GitHub](https://github.com/your-username/bag-hunter)** · **[OpenClaw automation patterns](https://docs.openclaw.ai)**
