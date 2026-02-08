@@ -41,16 +41,14 @@ When I tell the agent to remember something, it writes it down. That act of docu
 
 Over time, MEMORY.md becomes a living history of the project. Not a timeline of commits, but a narrative of thinking. Why we chose this architecture. What we learned from that failure. What patterns emerged.
 
-Some people try to solve this with embeddings and retrieval systems. Fancy vector databases that search through conversation history.
+I tried embeddings and retrieval systems first. Fancy vector databases that search through conversation history.
 
-I tried that. It's overcomplicated for most cases.
+Overcomplicated for what I needed.
 
-Markdown files work better because they're human-readable. I can edit them directly. Add structure as patterns emerge. Remove outdated context when it's no longer relevant.
+Markdown files worked better for me because they're human-readable. I can edit them directly. Add structure as patterns emerge. Remove outdated context when it's no longer relevant.
 
-Your AI agent doesn't need perfect memory. It needs continuity.
+My agents don't have perfect memory. They have continuity. That turned out to be enough.
 
-Give it simple files to read at the start of each session. Write down what matters. Skip the secrets unless you need them later.
-
-Text beats brain. Every time.
+If you're fighting the same context battle every session, simple files at session start might help. Worked for me.
 
 **[Memory system in OpenClaw](https://github.com/openclaw/openclaw)** · **[AGENTS.md memory guidance](https://docs.openclaw.ai)**

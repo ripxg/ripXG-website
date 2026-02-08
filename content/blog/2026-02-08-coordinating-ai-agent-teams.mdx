@@ -45,14 +45,14 @@ Coordination also means knowing when NOT to spawn agents.
 
 I limit myself to six concurrent subagents. More than that and tracking them becomes overhead. Better to finish tasks sequentially than spawn dozens of agents and lose control.
 
-The pattern that works: execute one feature at a time, but parallelize work within that feature. Backend and frontend agents can work simultaneously on the same feature. Just not on different features.
+The pattern that works for me: execute one feature at a time, but parallelize work within that feature. Backend and frontend agents can work simultaneously on the same feature. Just not on different features.
 
-This mimics how good software teams operate. Focus on one thing, but divide the work intelligently.
+Turned out to mimic how good software teams operate. Focus on one thing, divide the work intelligently.
 
-The hardest part isn't technical. It's trust.
+The hardest part for me wasn't technical. It was trust.
 
-You have to trust your agents to do their job without micromanaging. Orion doesn't watch every line of code the subagents write. He checks in after 30 minutes if there's no update. Otherwise, he lets them work.
+I had to learn to trust my agents to do their job without micromanaging. Orion doesn't watch every line of code the subagents write. He checks in after 30 minutes if there's no update. Otherwise, he lets them work.
 
-Give your agents clear roles, isolated workspaces, and contracts to follow. Then get out of the way.
+Clear roles, isolated workspaces, and contracts to follow. That's what made the difference for me.
 
 **[OpenClaw agent coordination](https://github.com/openclaw/openclaw)** · **[Spawning subagents guide](https://docs.openclaw.ai)**

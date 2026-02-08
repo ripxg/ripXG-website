@@ -2,41 +2,41 @@
 title: "Choosing AI models without burning cash"
 date: 2026-02-08
 summary: >
-  When I first started running AI agents on my own server, I made an expensive mistake. I used Claude Opus for everything. Every chat message, every code review, every routine check. The logic seemed sound: use the best model for the best results. Then I got the bill. $500 in tokens for a single weekend of development work. That's when I learned that picking the right model isn't about capability. It's about knowing what each task actually needs. [&hellip;]
+  I burned through my Claude Pro subscription in three days. Then my Cursor Pro subscription the week after. Both $20/month, both gone before I'd even built half the features I wanted. The problem wasn't the subscriptions. It was that I treated every task the same. Used the premium models for everything, even when simpler models would work fine. Learning to match models to tasks changed how I build with AI. [&hellip;]
 status: draft
 canonical_url: https://ripxg.com/blog/2026-02-choosing-ai-models-without-burning-cash
 ---
 
-When I first started running AI agents on my own server, I made an expensive mistake.
+I burned through my Claude Pro subscription in three days.
 
-I used Claude Opus for everything.
+Then my Cursor Pro subscription the week after.
 
-Every chat message, every code review, every routine check. The logic seemed sound: use the best model for the best results.
+Both $20/month. Both gone before I'd even built half the features I wanted.
 
-Then I got the bill.
+The problem wasn't the subscriptions. It was that I treated every task the same.
 
-$500 in tokens for a single weekend of development work.
+Used the premium models for everything, even when simpler models would work fine.
 
-That's when I learned that picking the right model isn't about capability. It's about knowing what each task actually needs.
+Once you start coding with AI at speed, those monthly token limits vanish fast. You need a strategy beyond "use the best model."
+
+I learned to match models to cognitive load.
 
 Most coordination work doesn't need Opus. Reading files, checking status, spawning subagents. These are straightforward operations. Sonnet handles them just fine at a fraction of the cost.
 
-I reserve Opus for the hard stuff. Writing product requirement documents. Making architectural decisions. Security reviews. Anything where thinking depth matters more than speed.
+I reserve Opus for work that benefits from deep thinking. Writing product requirement documents. Making architectural decisions. Security reviews.
 
-For basic coding tasks, I use GLM (a smaller, faster model). Building UI components, fixing bugs, implementing features from clear specs. GLM is cheap and surprisingly capable when the task is well-defined.
+For routine coding tasks, I use GLM. It's dramatically cheaper than Claude models while being surprisingly capable for well-defined work. Building UI components, fixing bugs, implementing features from clear specs.
 
-The pattern that emerged: match the model to the cognitive load of the task.
+GLM costs roughly 10x less per token than Sonnet, and 50x less than Opus. For straightforward implementation work, that difference compounds fast.
 
-Here's what that looks like in practice. When I coordinate my agent team (I call it Orion), it defaults to Sonnet. When Orion spawns a subagent to write a product spec, it uses Opus. When that subagent spawns a frontend engineer to build the UI, it uses GLM.
+Here's what that looks like in my setup. My coordinator agent (Orion) defaults to Sonnet. When Orion needs to write a product spec, it switches to Opus. When it spawns a frontend engineer to build UI, that subagent uses GLM.
 
-The cost dropped from $500 per weekend to around $50. Same amount of work. Same quality output. Just smarter allocation.
+Same work gets done. Quality stays high. Token burn drops dramatically.
 
-The trap most people fall into is thinking they need the best model for everything. You don't. You need the right model for each thing.
+I also built daily token usage reporting. Shows me which models I'm using and how much they're costing. That visibility alone changed my behavior. I stopped defaulting to expensive models out of habit.
 
-Start with a mid-tier model like Sonnet as your default. Use the expensive models only when complexity demands it. Use the cheap models when the task is clear and well-scoped.
+If you're hitting subscription limits or burning through API credits, try this approach. Default to mid-tier models. Use premium models only when complexity genuinely demands them. Use cheap models for clear, well-scoped implementation.
 
-Track your token usage daily. I built a simple report that shows me which models I'm burning through. That visibility alone cut my costs by another 30%.
-
-Your AI budget shouldn't scale linearly with usage. It should scale with complexity.
+Your token budget should scale with task complexity, not task volume.
 
 **[OpenClaw on GitHub](https://github.com/openclaw/openclaw)** · **[Model pricing comparison](https://openrouter.ai/models)**
