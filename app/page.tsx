@@ -12,8 +12,61 @@ export default async function HomePage() {
             ripXG
           </h1>
           <p className="text-2xl md:text-3xl text-purple-600 dark:text-purple-400 mb-6 font-medium text-pretty">
-            AI for everyone. Do more (and fast) with tech hacks.
+            AI for everyone. Do more (and fast) with tech.
           </p>
+
+          {/* AI Agent Services — hero section */}
+          <div className="bg-purple-900 dark:bg-purple-950 rounded-xl p-8 mb-6 shadow-xl border-2 border-gold-500">
+            <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mb-3">
+              Services
+            </p>
+            <h2 className="text-3xl font-bold mb-3 text-white text-balance">
+              I build AI agents for you.
+            </h2>
+            <p className="text-purple-200 mb-6 text-lg leading-relaxed text-pretty">
+              Stop doing repetitive work manually. I design, build, and manage
+              custom AI agents that automate your workflows — so you can focus
+              on what matters.
+            </p>
+
+            <div className="grid gap-4 md:grid-cols-3 mb-8">
+              {[
+                {
+                  emoji: "🤖",
+                  title: "Build",
+                  desc: "Custom AI agents tailored to your business",
+                },
+                {
+                  emoji: "⚡",
+                  title: "Automate",
+                  desc: "Connect your tools and eliminate manual tasks",
+                },
+                {
+                  emoji: "🛠️",
+                  title: "Manage",
+                  desc: "Ongoing support so your agents stay sharp",
+                },
+              ].map(({ emoji, title, desc }) => (
+                <div
+                  key={title}
+                  className="bg-purple-800/50 rounded-lg p-4 border border-purple-700/50"
+                >
+                  <div className="text-2xl mb-2">{emoji}</div>
+                  <div className="text-white font-semibold mb-1">{title}</div>
+                  <div className="text-purple-300 text-sm leading-relaxed">
+                    {desc}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Link
+              href="/get-started"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
+            >
+              Get Started →
+            </Link>
+          </div>
 
           {/* Newsletter CTA */}
           <div className="bg-white dark:bg-purple-900 rounded-xl p-8 mb-12 shadow-lg border-2 border-purple-200 dark:border-purple-800">
@@ -21,11 +74,12 @@ export default async function HomePage() {
               Join the newsletter
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6 text-lg leading-relaxed text-pretty">
-              Weekly insights on observability, AI agents, and what I'm building. Exploring observability, AI agents, and systems that scale. Building in public and sharing what I learn along the way. No spam, just signal.
+              Weekly insights on observability, AI agents, and what I&apos;m
+              building. No spam, just signal.
             </p>
             <Link
               href="/newsletter"
-              className="inline-block bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px]"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px]"
             >
               Subscribe →
             </Link>
@@ -39,7 +93,7 @@ export default async function HomePage() {
           <li>
             <Link
               href="/blog"
-              className="inline-block bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+              className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px]"
             >
               Articles
             </Link>
@@ -47,7 +101,7 @@ export default async function HomePage() {
           <li>
             <Link
               href="/about"
-              className="inline-block bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+              className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px]"
             >
               About
             </Link>
@@ -76,10 +130,10 @@ export default async function HomePage() {
                   dateTime={post.date}
                   className="text-sm text-purple-500 dark:text-purple-400 mb-3 block font-medium"
                 >
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </time>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 transition-colors leading-tight mb-2 text-balance">
