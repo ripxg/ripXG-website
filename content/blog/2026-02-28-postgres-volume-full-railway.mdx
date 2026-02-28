@@ -1,0 +1,69 @@
+---
+title: "When your Postgres volume fills up and a resize doesn't fix it"
+date: 2026-02-28
+summary: >
+  I ran a large backfill on a Railway-hosted Postgres instance and
+  the database crashed. Railway's volume resize UI said 5GB. The
+  filesystem still said 500MB. Here's what actually happened and
+  how I got 43,000+ rows back. [&hellip;]
+status: published
+canonical_url: https://ripxg.com/blog/2026-02-28-postgres-volume-full-railway
+---
+
+The database went down mid-backfill. Not a graceful error. Just: gone.
+
+I was running a country backfill across 43,698 listings on bag-hunter. A big
+`UPDATE` that tagged every row with a country of origin. The write-ahead log
+(WAL) Postgres generates during a bulk update is enormous, and I hadn't
+thought about disk space. The volume was 500MB. The WAL filled it.
+
+Fine. I went to Railway's dashboard and resized the volume from 500MB to 5GB.
+Easy. Problem solved.
+
+Except Postgres kept crashing. `df -h` inside the container still showed
+500MB. Railway had allocated the block storage, but never expanded the ext4
+filesystem inside the volume. The OS had no idea the disk was bigger.
+
+That gap exists because resizing the block device and resizing the filesystem
+are two separate operations. ext4 doesn't automatically expand to fill newly
+allocated space. Postgres boots, checks available disk, and crashes
+immediately before accepting a single connection. The first fix was a startup
+script that runs `resize2fs` before Postgres starts, forcing the filesystem
+to claim the full volume. That got the service starting again, but the WAL was
+already corrupted from the original crash, so there was still more work to do.
+
+Here's what actually fixed it.
+
+**Step 1: Free enough space to breathe.** I spun up a rescue container
+attached to the same volume and deleted old WAL segment files manually.
+That freed ~96MB, enough to get Postgres to start again temporarily.
+
+**Step 2: Clear the corrupted WAL state.** With Postgres up in single-user
+mode, I ran `pg_resetwal` to wipe the broken write-ahead log. This is a
+nuclear option: you lose any uncommitted transactions. But when the
+alternative is permanent data loss, it's the right call.
+
+**Step 3: Start fresh, migrate properly.** Instead of fighting the old
+volume, I created a new Postgres service on Railway with a proper 5GB volume
+from the start. No resize, no hidden filesystem mismatch.
+
+**Step 4: Restore the data.** With the old instance running in rescue mode,
+I piped a `pg_dump` directly into `pg_restore` on the new service over the
+network. About 43,000 rows transferred cleanly.
+
+**Step 5: Repoint the app.** Updated `DATABASE_URL` in bag-hunter to the new
+service, redeployed, ran the pending migration, and reran the backfill.
+Everything came back intact.
+
+The lesson I took from this: cloud volume resizes are not always what they
+look like. The UI can say 5GB while the filesystem still sees 500MB. If you're
+on Railway (or any managed platform) and a resize doesn't fix a full-disk
+crash, verify the actual available space inside the container before
+troubleshooting anything else. It will save you hours.
+
+If you're running bulk writes on a small Postgres instance, do the math on
+WAL size first. A large `UPDATE` or `INSERT` can generate WAL several times
+the size of the data itself. Either size the disk generously upfront, or
+process in smaller batches with `COMMIT` between them.
+
+**[bag-hunter](https://bag-hunter.ripxg.com)**

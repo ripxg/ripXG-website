@@ -30,7 +30,7 @@
     "next-mdx-remote": "^6.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "resend": "^6.9.2"
+    "resend": "^6.9.3"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
