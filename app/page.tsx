@@ -60,12 +60,20 @@ export default async function HomePage() {
               ))}
             </div>
 
-            <Link
-              href="/get-started"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
-            >
-              Get Started →
-            </Link>
+            <div className="flex gap-4 flex-wrap">
+              <Link
+                href="/get-started"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
+              >
+                Get Started →
+              </Link>
+              <Link
+                href="/orion-ai"
+                className="inline-flex items-center justify-center border-2 border-gold-400 hover:bg-gold-400/10 text-gold-300 hover:text-gold-200 px-8 py-4 rounded-lg font-bold text-lg transition-all min-h-[44px]"
+              >
+                Orion AI →
+              </Link>
+            </div>
           </div>
 
           {/* Newsletter CTA */}
