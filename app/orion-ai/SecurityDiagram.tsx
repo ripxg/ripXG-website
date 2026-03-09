@@ -18,6 +18,9 @@ export default function SecurityDiagram() {
         <marker id="arrow-indigo-dash" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
           <path d="M0,0 L0,6 L8,3 z" fill="#6366f1" />
         </marker>
+        <marker id="arrow-telegram" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8" />
+        </marker>
       </defs>
 
       {/* ── VPS outer boundary ── */}
@@ -156,6 +159,21 @@ export default function SecurityDiagram() {
       </text>
       <text x="695" y="408" textAnchor="middle" fill="#c4b5fd" fontSize="11">
         Escalation target
+      </text>
+
+      {/* ── Telegram paired auth channel: User ↔ OpenClaw (sky dotted) ── */}
+      <line
+        x1="110" y1="335" x2="110" y2="262"
+        stroke="#38bdf8"
+        strokeWidth="1.5"
+        strokeDasharray="4,3"
+        markerEnd="url(#arrow-telegram)"
+      />
+      <text x="116" y="308" fill="#38bdf8" fontSize="10" fontStyle="italic" fontFamily="sans-serif">
+        Telegram
+      </text>
+      <text x="116" y="320" fill="#38bdf8" fontSize="10" fontStyle="italic" fontFamily="sans-serif">
+        paired auth
       </text>
 
       {/* ── Arrow 1: User → Tailscale (gold) ── */}
