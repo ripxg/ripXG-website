@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SecurityDiagram from "./SecurityDiagram";
 
 const integrations = [
   { slug: "gmail", label: "Gmail" },
@@ -253,6 +254,22 @@ export default function OrionAIPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Security Architecture Diagram */}
+      <section className="max-w-4xl mx-auto px-6 py-12">
+        <h2 className="text-3xl font-bold mb-3 text-gray-900 dark:text-white text-balance">
+          How the security works.
+        </h2>
+        <p className="text-lg text-gray-600 dark:text-purple-300 mb-8 text-pretty">
+          Every component has a defined role. Every connection is explicit. Nothing operates outside its boundary.
+        </p>
+        <div className="bg-purple-950 rounded-2xl p-4 md:p-6 border border-purple-800 shadow-xl overflow-x-auto">
+          <SecurityDiagram />
+        </div>
+        <p className="mt-4 text-xs text-gray-400 dark:text-purple-500 italic text-center text-pretty">
+          The Isolated Agent has no access to your tools or data — its only function is escalating technical blockers to IT.
+        </p>
       </section>
 
       {/* CTA Section */}
