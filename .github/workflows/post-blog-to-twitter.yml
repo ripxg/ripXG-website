@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -27,9 +27,16 @@ jobs:
       - name: Get new/modified blog files
         id: changed
         run: |
-          FILES=$(git diff --name-only HEAD~1 HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' 2>/dev/null || \
-                  git diff --name-only HEAD^ HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' 2>/dev/null || \
-                  git show --name-only --pretty=format: HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' | tail -n +2)
+          # For merge commits, compare against the merge base of both parents
+          if git rev-parse HEAD^2 >/dev/null 2>&1; then
+            # It's a merge commit — diff between the two parents
+            BASE=$(git merge-base HEAD^1 HEAD^2)
+            FILES=$(git diff --name-only "$BASE" HEAD -- 'content/blog/*.mdx' 'content/blog/*.md' 'content/blog/**/*.mdx' 'content/blog/**/*.md')
+          else
+            # Regular commit
+            FILES=$(git diff --name-only HEAD~1 HEAD -- 'content/blog/*.mdx' 'content/blog/*.md' 'content/blog/**/*.mdx' 'content/blog/**/*.md')
+          fi
+          echo "Detected files: $FILES"
           echo "files=$FILES" >> $GITHUB_OUTPUT
 
       - name: Post to Twitter/X
@@ -42,5 +49,5 @@ jobs:
         run: |
           for FILE in ${{ steps.changed.outputs.files }}; do
             echo "Posting $FILE..."
-            node scripts/post-to-twitter.js "$FILE" || echo "Failed for $FILE, continuing..."
+            npx ts-node scripts/post-to-twitter.ts "$FILE" || echo "Failed for $FILE, continuing..."
           done
