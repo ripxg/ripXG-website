@@ -4,12 +4,17 @@
  *
  * Reads frontmatter directly from an MDX blog file and composes a tweet.
  * Tracks posted slugs in content/twitter-posted.json to prevent double-posting.
+ * Fetches the OG image from ripxg.com and attaches it to the tweet via
+ * Twitter's v1.1 media upload endpoint.
  *
  * Required env vars (OAuth 1.0a with Read+Write permissions):
  *   TWITTER_API_KEY
  *   TWITTER_API_SECRET
  *   TWITTER_ACCESS_TOKEN
  *   TWITTER_ACCESS_SECRET
+ *
+ * Optional env vars:
+ *   SKIP_IMAGE=1   — skip OG image fetch/upload, post text-only
  *
  * Usage:
  *   npx tsx scripts/post-to-twitter.ts content/blog/2026-03-10-my-post.mdx
@@ -22,8 +27,11 @@ import matter from 'gray-matter';
 import crypto from 'crypto';
 
 const DRY_RUN = process.argv.includes('--dry-run');
+const SKIP_IMAGE = !!process.env.SKIP_IMAGE;
 const POSTED_FILE = path.join(process.cwd(), 'content', 'twitter-posted.json');
 const MAX_TWEET_LENGTH = 280;
+const OG_BASE_URL = 'https://ripxg.com/og';
+const MEDIA_UPLOAD_URL = 'https://upload.twitter.com/1/media/upload.json';
 
 // ─── Twitter OAuth 1.0a ──────────────────────────────────────────────────────
 
@@ -71,9 +79,92 @@ function oauthSign(method: string, url: string, params: Record<string, string>):
   );
 }
 
-async function postTweet(text: string): Promise<string> {
+// ─── OG Image: fetch + upload ────────────────────────────────────────────────
+
+/**
+ * Fetch the OG image for a blog post from ripxg.com/og.
+ * Returns the image buffer and content type on success, or null on failure.
+ */
+async function fetchOgImage(
+  title: string,
+  summary: string,
+): Promise<{ buffer: Buffer; contentType: string } | null> {
+  const ogUrl =
+    OG_BASE_URL +
+    '?title=' +
+    encodeURIComponent(title) +
+    '&description=' +
+    encodeURIComponent(summary);
+
+  console.log(`🖼  Fetching OG image: ${ogUrl}`);
+
+  try {
+    const res = await fetch(ogUrl, { signal: AbortSignal.timeout(15_000) });
+    if (!res.ok) {
+      console.warn(`⚠️  OG image fetch failed (HTTP ${res.status}) — will post without image`);
+      return null;
+    }
+    const contentType = res.headers.get('content-type') ?? 'image/png';
+    const arrayBuffer = await res.arrayBuffer();
+    return { buffer: Buffer.from(arrayBuffer), contentType };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`⚠️  OG image fetch error: ${msg} — will post without image`);
+    return null;
+  }
+}
+
+/**
+ * Upload binary image data to Twitter's v1.1 media upload endpoint.
+ * OAuth signing uses an EMPTY params object (multipart body is excluded
+ * from the OAuth signature base string per spec).
+ * Returns the media_id_string on success, or null on failure.
+ */
+async function uploadMediaToTwitter(
+  buffer: Buffer,
+  contentType: string,
+): Promise<string | null> {
+  // Sign with empty params — multipart body must NOT be included in signature
+  const authHeader = oauthSign('POST', MEDIA_UPLOAD_URL, {});
+
+  const formData = new FormData();
+  // Convert Buffer to Uint8Array for Blob compatibility across TS targets
+  formData.append('media', new Blob([new Uint8Array(buffer)], { type: contentType }), 'og-image.png');
+
+  try {
+    const res = await fetch(MEDIA_UPLOAD_URL, {
+      method: 'POST',
+      headers: { Authorization: authHeader },
+      body: formData,
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.warn(`⚠️  Media upload failed (HTTP ${res.status}): ${err} — will post without image`);
+      return null;
+    }
+
+    const json = (await res.json()) as { media_id_string: string };
+    console.log(`✅ Media uploaded — id: ${json.media_id_string}`);
+    return json.media_id_string;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`⚠️  Media upload error: ${msg} — will post without image`);
+    return null;
+  }
+}
+
+// ─── Tweet posting ───────────────────────────────────────────────────────────
+
+async function postTweet(text: string, mediaId?: string): Promise<string> {
   const url = 'https://api.twitter.com/2/tweets';
   const authHeader = oauthSign('POST', url, {});
+
+  const body: Record<string, unknown> = { text };
+  if (mediaId) {
+    body.media = { media_ids: [mediaId] };
+  }
 
   const res = await fetch(url, {
     method: 'POST',
@@ -81,7 +172,7 @@ async function postTweet(text: string): Promise<string> {
       Authorization: authHeader,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -138,6 +229,7 @@ function composeTweet(summary: string, canonicalUrl: string): string {
 async function main(): Promise<void> {
   console.log('🐦 Twitter/X Blog Poster\n');
   if (DRY_RUN) console.log('  [DRY RUN — no tweets will be posted]\n');
+  if (SKIP_IMAGE) console.log('  [SKIP_IMAGE set — OG image upload disabled]\n');
 
   // Get file path from args (first non-flag arg)
   const filePath = process.argv.slice(2).find((a) => !a.startsWith('--'));
@@ -168,6 +260,7 @@ async function main(): Promise<void> {
   const raw = fs.readFileSync(absPath, 'utf-8');
   const { data: fm } = matter(raw);
 
+  const title: string | undefined = fm.title;
   const summary: string | undefined = fm.summary;
   const canonicalUrl: string | undefined = fm.canonical_url;
 
@@ -197,15 +290,48 @@ async function main(): Promise<void> {
   console.log(tweetText);
   console.log('─'.repeat(60) + '\n');
 
+  // OG image
+  const ogTitle = title ?? slug;
+  const ogDescription = summary;
+  const ogUrl =
+    OG_BASE_URL +
+    '?title=' +
+    encodeURIComponent(ogTitle) +
+    '&description=' +
+    encodeURIComponent(ogDescription);
+
+  if (SKIP_IMAGE) {
+    console.log('🖼  OG image: skipped (SKIP_IMAGE set)');
+  } else if (DRY_RUN) {
+    console.log(`🖼  OG image (dry run — would fetch): ${ogUrl}`);
+    console.log('📤 Media upload (dry run — would upload to Twitter v1.1 media endpoint)');
+  }
+
   if (DRY_RUN) {
-    console.log('⏭ Dry run — not posted');
+    console.log('\n⏭ Dry run — not posted');
     return;
   }
 
+  // Fetch and upload OG image (best-effort — falls back to text-only on error)
+  let mediaId: string | undefined;
+  if (!SKIP_IMAGE) {
+    const image = await fetchOgImage(ogTitle, ogDescription);
+    if (image) {
+      const id = await uploadMediaToTwitter(image.buffer, image.contentType);
+      if (id) mediaId = id;
+    }
+  }
+
+  if (mediaId) {
+    console.log(`📎 Attaching media_id: ${mediaId}`);
+  } else if (!SKIP_IMAGE) {
+    console.log('📎 No media attached — posting text-only');
+  }
+
   // Post
-  const tweetId = await postTweet(tweetText);
+  const tweetId = await postTweet(tweetText, mediaId);
   const tweetUrl = `https://x.com/rip_xg/status/${tweetId}`;
-  console.log(`✅ Posted: ${tweetUrl}`);
+  console.log(`\n✅ Posted: ${tweetUrl}`);
 
   // Track
   markPosted(slug);
