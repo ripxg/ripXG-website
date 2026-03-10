@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * Post to Twitter/X: Publish generated thread JSONs via Twitter API v2
+ * Post to Twitter/X: Publish article promo tweets via Twitter API v2
  *
- * Reads thread JSONs from /content/transforms/twitter/
+ * Reads tweet JSONs from /content/transforms/twitter/
  * Posts any article that has twitter.enabled = true and twitter.published_at = null
  * Updates publish-status.json after successful posting
  *
- * Required env vars:
+ * Required env vars (OAuth 1.0a with Read+Write permissions):
  *   TWITTER_API_KEY
  *   TWITTER_API_SECRET
  *   TWITTER_ACCESS_TOKEN
@@ -15,7 +15,7 @@
  * Usage:
  *   bun run scripts/post-to-twitter.ts
  *   bun run scripts/post-to-twitter.ts --dry-run
- *   bun run scripts/post-to-twitter.ts --slug 2026-03-my-article
+ *   bun run scripts/post-to-twitter.ts --slug 2026-02-my-article
  */
 
 import fs from 'fs';
@@ -79,13 +79,8 @@ function oauthSign(method: string, url: string, params: Record<string, string>):
   );
 }
 
-async function postTweet(text: string, replyToId?: string): Promise<string> {
+async function postTweet(text: string): Promise<string> {
   const url = 'https://api.twitter.com/2/tweets';
-  const body: Record<string, unknown> = { text };
-  if (replyToId) {
-    body.reply = { in_reply_to_tweet_id: replyToId };
-  }
-
   const authHeader = oauthSign('POST', url, {});
 
   const res = await fetch(url, {
@@ -94,7 +89,7 @@ async function postTweet(text: string, replyToId?: string): Promise<string> {
       Authorization: authHeader,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ text }),
   });
 
   if (!res.ok) {
@@ -131,69 +126,48 @@ function markPublished(status: Record<string, unknown>, slug: string, tweetUrl: 
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
-async function postThread(slug: string, threadPath: string): Promise<void> {
-  const threadData = JSON.parse(fs.readFileSync(threadPath, 'utf-8'));
-  const tweets: Array<{ text: string }> = threadData.thread;
+async function postArticleTweet(slug: string, tweetPath: string): Promise<void> {
+  const tweetData = JSON.parse(fs.readFileSync(tweetPath, 'utf-8'));
+  const tweetText: string = tweetData.tweet;
 
-  console.log(`\n📤 Posting thread: ${slug}`);
-  console.log(`   ${tweets.length} tweets`);
+  console.log(`\n📤 Posting: ${slug}`);
+  console.log(`   ${tweetData.char_count} chars`);
+  console.log(`\n   ${tweetText}\n`);
 
   if (DRY_RUN) {
-    tweets.forEach((t, i) => {
-      console.log(`\n  [Tweet ${i + 1}/${tweets.length}]`);
-      console.log(`  ${t.text.replace(/\n/g, '\n  ')}`);
-    });
-    console.log('\n  ⏭ Dry run — not posted');
+    console.log('   ⏭ Dry run — not posted');
     return;
   }
 
-  let lastTweetId: string | undefined;
-  for (let i = 0; i < tweets.length; i++) {
-    const tweet = tweets[i];
-    console.log(`  Posting tweet ${i + 1}/${tweets.length}...`);
-    lastTweetId = await postTweet(tweet.text, lastTweetId);
-    console.log(`  ✅ Posted: https://x.com/i/status/${lastTweetId}`);
+  const tweetId = await postTweet(tweetText);
+  const tweetUrl = `https://x.com/rip_xg/status/${tweetId}`;
+  console.log(`   ✅ Posted: ${tweetUrl}`);
 
-    // Respect rate limits — short delay between tweets in a thread
-    if (i < tweets.length - 1) {
-      await new Promise((r) => setTimeout(r, 1500));
-    }
-  }
-
-  const firstTweetUrl = `https://x.com/rip_xg/status/${lastTweetId}`;
   const status = readStatus();
-  markPublished(status, slug, firstTweetUrl);
-  console.log(`  📝 Status updated → published`);
+  markPublished(status, slug, tweetUrl);
+  console.log(`   📝 Status updated`);
 }
 
 async function main(): Promise<void> {
-  console.log('🐦 Twitter/X Auto-Poster\n');
+  console.log('🐦 Twitter/X Article Poster\n');
+  if (DRY_RUN) console.log('  [DRY RUN — no tweets will be posted]\n');
 
-  if (DRY_RUN) console.log('  [DRY RUN MODE — no tweets will be posted]\n');
-
-  // Validate credentials (skip in dry-run)
   if (!DRY_RUN) {
     const required = ['TWITTER_API_KEY', 'TWITTER_API_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'];
     const missing = required.filter((k) => !process.env[k]);
     if (missing.length > 0) {
       console.error(`❌ Missing OAuth 1.0a credentials: ${missing.join(', ')}`);
-      console.error('');
-      console.error('   Posting tweets requires user-context OAuth 1.0a credentials.');
-      console.error('   Your Bearer Token (app-only auth) is stored but only works for reading.');
-      console.error('');
-      console.error('   Get these from: https://developer.x.com → Apps → rip_xg → Keys and tokens');
-      console.error('   Then add them to: ~/.clawdbot/credentials/twitter.env');
+      console.error('   App needs Read+Write permissions. Regenerate access tokens after changing permissions.');
+      console.error('   Store in: ~/.clawdbot/credentials/twitter.env');
       process.exit(1);
     }
   }
 
   if (!fs.existsSync(TWITTER_DIR)) {
-    console.error(`❌ Twitter transforms dir not found: ${TWITTER_DIR}`);
-    console.error('   Run: bun run scripts/transform-twitter.ts first');
+    console.error(`❌ Twitter transforms not found. Run: bun run transform:twitter`);
     process.exit(1);
   }
 
-  // Get list of articles to post
   const articleFiles = fs
     .readdirSync(ARTICLES_DIR)
     .filter((f) => f.endsWith('.md'))
@@ -205,37 +179,34 @@ async function main(): Promise<void> {
   for (const file of articleFiles) {
     const slug = file.replace('.md', '');
     const articlePath = path.join(ARTICLES_DIR, file);
-    const threadPath = path.join(TWITTER_DIR, `${slug}.json`);
+    const tweetPath = path.join(TWITTER_DIR, `${slug}.json`);
 
     const { data: fm } = matter(fs.readFileSync(articlePath, 'utf-8'));
 
-    // Skip if Twitter disabled in frontmatter
     if (fm.platforms?.twitter?.enabled === false) {
       console.log(`⏭ ${slug} — Twitter disabled`);
       skipped++;
       continue;
     }
 
-    // Skip if already published
     if (fm.platforms?.twitter?.published_at) {
-      console.log(`⏭ ${slug} — already published`);
+      console.log(`⏭ ${slug} — already posted`);
       skipped++;
       continue;
     }
 
-    // Skip if no transform generated yet
-    if (!fs.existsSync(threadPath)) {
-      console.log(`⚠️  ${slug} — no thread JSON (run transform-twitter.ts first)`);
+    if (!fs.existsSync(tweetPath)) {
+      console.log(`⚠️  ${slug} — no tweet JSON (run transform:twitter first)`);
       skipped++;
       continue;
     }
 
-    await postThread(slug, threadPath);
+    await postArticleTweet(slug, tweetPath);
     posted++;
 
-    // Delay between articles to respect rate limits
+    // Small delay between posts
     if (posted < articleFiles.length) {
-      await new Promise((r) => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, 2000));
     }
   }
 
