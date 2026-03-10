@@ -1,0 +1,62 @@
+name: Post new blog posts to Twitter
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/blog/**.mdx'
+
+jobs:
+  post-to-twitter:
+    runs-on: ubuntu-latest
+    # Skip commits made by this workflow itself
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    steps:
+      - name: Checkout (full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Find newly added blog posts
+        id: find-posts
+        run: |
+          NEW_FILES=$(git diff --name-status HEAD~1 HEAD -- content/blog/ \
+            | grep '^A' \
+            | awk '{print $2}' \
+            | grep '\.mdx$' \
+            | tr '\n' ' ')
+          echo "files=$NEW_FILES" >> $GITHUB_OUTPUT
+          if [ -z "$NEW_FILES" ]; then
+            echo "No new blog posts found."
+          else
+            echo "New posts: $NEW_FILES"
+          fi
+
+      - name: Post to Twitter
+        if: steps.find-posts.outputs.files != ''
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+        run: |
+          bun run scripts/post-blog-to-twitter.ts ${{ steps.find-posts.outputs.files }}
+
+      - name: Commit tracker update
+        if: steps.find-posts.outputs.files != ''
+        run: |
+          git config user.name "ripxg-bot"
+          git config user.email "jeff@ripxg.com"
+          git add content/twitter-posted.json
+          git diff --cached --quiet || git commit -m "chore: update twitter-posted tracker [skip ci]"
+          git push

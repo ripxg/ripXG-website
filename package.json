@@ -21,7 +21,8 @@
     "test:formatting": "bun run scripts/test-article-formatting.ts",
     "validate:blog": "bun run scripts/validate-blog-content.ts",
     "prebuild": "bun run validate:blog && bun run transform:blog",
-    "prepare": "husky"
+    "prepare": "husky",
+    "post:twitter": "tsx scripts/post-blog-to-twitter.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -43,6 +44,7 @@
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
     "tsx": "^4.21.0",
+    "twitter-api-v2": "^1.29.0",
     "typescript": "^5.7.2"
   }
 }
