@@ -1,10 +1,9 @@
 #!/usr/bin/env tsx
 /**
- * Post to Twitter/X: Publish article promo tweets via Twitter API v2
+ * Post to Twitter/X: Auto-post new blog posts via Twitter API v2
  *
- * Reads tweet JSONs from /content/transforms/twitter/
- * Posts any article that has twitter.enabled = true and twitter.published_at = null
- * Updates publish-status.json after successful posting
+ * Reads frontmatter directly from an MDX blog file and composes a tweet.
+ * Tracks posted slugs in content/twitter-posted.json to prevent double-posting.
  *
  * Required env vars (OAuth 1.0a with Read+Write permissions):
  *   TWITTER_API_KEY
@@ -13,9 +12,8 @@
  *   TWITTER_ACCESS_SECRET
  *
  * Usage:
- *   bun run scripts/post-to-twitter.ts
- *   bun run scripts/post-to-twitter.ts --dry-run
- *   bun run scripts/post-to-twitter.ts --slug 2026-02-my-article
+ *   npx tsx scripts/post-to-twitter.ts content/blog/2026-03-10-my-post.mdx
+ *   npx tsx scripts/post-to-twitter.ts content/blog/2026-03-10-my-post.mdx --dry-run
  */
 
 import fs from 'fs';
@@ -23,15 +21,9 @@ import path from 'path';
 import matter from 'gray-matter';
 import crypto from 'crypto';
 
-const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
-const TWITTER_DIR = path.join(process.cwd(), 'content', 'transforms', 'twitter');
-const STATUS_FILE = path.join(process.cwd(), 'content', 'publish-status.json');
-
 const DRY_RUN = process.argv.includes('--dry-run');
-const SLUG_FILTER = (() => {
-  const idx = process.argv.indexOf('--slug');
-  return idx !== -1 ? process.argv[idx + 1] : null;
-})();
+const POSTED_FILE = path.join(process.cwd(), 'content', 'twitter-posted.json');
+const MAX_TWEET_LENGTH = 280;
 
 // ─── Twitter OAuth 1.0a ──────────────────────────────────────────────────────
 
@@ -101,116 +93,123 @@ async function postTweet(text: string): Promise<string> {
   return json.data.id;
 }
 
-// ─── Status tracking ─────────────────────────────────────────────────────────
+// ─── Slug tracking ───────────────────────────────────────────────────────────
 
-function readStatus(): Record<string, unknown> {
-  if (!fs.existsSync(STATUS_FILE)) return { articles: {}, stats: {} };
-  return JSON.parse(fs.readFileSync(STATUS_FILE, 'utf-8'));
+function readPosted(): string[] {
+  if (!fs.existsSync(POSTED_FILE)) return [];
+  return JSON.parse(fs.readFileSync(POSTED_FILE, 'utf-8'));
 }
 
-function markPublished(status: Record<string, unknown>, slug: string, tweetUrl: string): void {
-  const articles = (status.articles as Record<string, unknown>) || {};
-  const article = (articles[slug] as Record<string, unknown>) || {};
-  const platforms = (article.platforms as Record<string, unknown>) || {};
-  platforms.twitter = {
-    status: 'published',
-    published_at: new Date().toISOString(),
-    url: tweetUrl,
-    notes: 'Auto-posted via post-to-twitter.ts',
-  };
-  article.platforms = platforms;
-  articles[slug] = article;
-  status.articles = articles;
-  fs.writeFileSync(STATUS_FILE, JSON.stringify(status, null, 2), 'utf-8');
+function markPosted(slug: string): void {
+  const posted = readPosted();
+  if (!posted.includes(slug)) {
+    posted.push(slug);
+    fs.writeFileSync(POSTED_FILE, JSON.stringify(posted, null, 2) + '\n', 'utf-8');
+  }
+}
+
+// ─── Tweet composition ───────────────────────────────────────────────────────
+
+function composeTweet(summary: string, canonicalUrl: string): string {
+  // Strip HTML entities and trailing ellipsis markers
+  const cleanSummary = summary
+    .replace(/\[&hellip;\]/g, '')
+    .replace(/&hellip;/g, '…')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const url = canonicalUrl.trim();
+  const separator = '\n\n';
+  const maxSummaryLength = MAX_TWEET_LENGTH - url.length - separator.length;
+
+  let truncated = cleanSummary;
+  if (truncated.length > maxSummaryLength) {
+    truncated = truncated.slice(0, maxSummaryLength - 1).trimEnd() + '…';
+  }
+
+  return `${truncated}${separator}${url}`;
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
-async function postArticleTweet(slug: string, tweetPath: string): Promise<void> {
-  const tweetData = JSON.parse(fs.readFileSync(tweetPath, 'utf-8'));
-  const tweetText: string = tweetData.tweet;
-
-  console.log(`\n📤 Posting: ${slug}`);
-  console.log(`   ${tweetData.char_count} chars`);
-  console.log(`\n   ${tweetText}\n`);
-
-  if (DRY_RUN) {
-    console.log('   ⏭ Dry run — not posted');
-    return;
-  }
-
-  const tweetId = await postTweet(tweetText);
-  const tweetUrl = `https://x.com/rip_xg/status/${tweetId}`;
-  console.log(`   ✅ Posted: ${tweetUrl}`);
-
-  const status = readStatus();
-  markPublished(status, slug, tweetUrl);
-  console.log(`   📝 Status updated`);
-}
-
 async function main(): Promise<void> {
-  console.log('🐦 Twitter/X Article Poster\n');
+  console.log('🐦 Twitter/X Blog Poster\n');
   if (DRY_RUN) console.log('  [DRY RUN — no tweets will be posted]\n');
 
+  // Get file path from args (first non-flag arg)
+  const filePath = process.argv.slice(2).find((a) => !a.startsWith('--'));
+  if (!filePath) {
+    console.error('❌ Usage: npx tsx scripts/post-to-twitter.ts <path-to-mdx> [--dry-run]');
+    process.exit(1);
+  }
+
+  const absPath = path.resolve(process.cwd(), filePath);
+  if (!fs.existsSync(absPath)) {
+    console.error(`❌ File not found: ${absPath}`);
+    process.exit(1);
+  }
+
+  // Derive slug from filename (strip date prefix and extension)
+  const slug = path.basename(absPath, path.extname(absPath));
+  console.log(`📄 File: ${filePath}`);
+  console.log(`🔖 Slug: ${slug}\n`);
+
+  // Check for double-posting
+  const posted = readPosted();
+  if (posted.includes(slug)) {
+    console.log(`⏭ Already posted — skipping (${slug})`);
+    process.exit(0);
+  }
+
+  // Read frontmatter
+  const raw = fs.readFileSync(absPath, 'utf-8');
+  const { data: fm } = matter(raw);
+
+  const summary: string | undefined = fm.summary;
+  const canonicalUrl: string | undefined = fm.canonical_url;
+
+  if (!summary) {
+    console.error('❌ Missing frontmatter field: summary');
+    process.exit(1);
+  }
+  if (!canonicalUrl) {
+    console.error('❌ Missing frontmatter field: canonical_url');
+    process.exit(1);
+  }
+
+  // Check credentials (skip for dry run)
   if (!DRY_RUN) {
     const required = ['TWITTER_API_KEY', 'TWITTER_API_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'];
     const missing = required.filter((k) => !process.env[k]);
     if (missing.length > 0) {
-      console.error(`❌ Missing OAuth 1.0a credentials: ${missing.join(', ')}`);
-      console.error('   App needs Read+Write permissions. Regenerate access tokens after changing permissions.');
-      console.error('   Store in: ~/.clawdbot/credentials/twitter.env');
+      console.error(`❌ Missing OAuth credentials: ${missing.join(', ')}`);
       process.exit(1);
     }
   }
 
-  if (!fs.existsSync(TWITTER_DIR)) {
-    console.error(`❌ Twitter transforms not found. Run: bun run transform:twitter`);
-    process.exit(1);
+  // Compose tweet
+  const tweetText = composeTweet(summary, canonicalUrl);
+  console.log(`📝 Tweet (${tweetText.length} chars):\n`);
+  console.log('─'.repeat(60));
+  console.log(tweetText);
+  console.log('─'.repeat(60) + '\n');
+
+  if (DRY_RUN) {
+    console.log('⏭ Dry run — not posted');
+    return;
   }
 
-  const articleFiles = fs
-    .readdirSync(ARTICLES_DIR)
-    .filter((f) => f.endsWith('.md'))
-    .filter((f) => !SLUG_FILTER || f.includes(SLUG_FILTER));
+  // Post
+  const tweetId = await postTweet(tweetText);
+  const tweetUrl = `https://x.com/rip_xg/status/${tweetId}`;
+  console.log(`✅ Posted: ${tweetUrl}`);
 
-  let posted = 0;
-  let skipped = 0;
-
-  for (const file of articleFiles) {
-    const slug = file.replace('.md', '');
-    const articlePath = path.join(ARTICLES_DIR, file);
-    const tweetPath = path.join(TWITTER_DIR, `${slug}.json`);
-
-    const { data: fm } = matter(fs.readFileSync(articlePath, 'utf-8'));
-
-    if (fm.platforms?.twitter?.enabled === false) {
-      console.log(`⏭ ${slug} — Twitter disabled`);
-      skipped++;
-      continue;
-    }
-
-    if (fm.platforms?.twitter?.published_at) {
-      console.log(`⏭ ${slug} — already posted`);
-      skipped++;
-      continue;
-    }
-
-    if (!fs.existsSync(tweetPath)) {
-      console.log(`⚠️  ${slug} — no tweet JSON (run transform:twitter first)`);
-      skipped++;
-      continue;
-    }
-
-    await postArticleTweet(slug, tweetPath);
-    posted++;
-
-    // Small delay between posts
-    if (posted < articleFiles.length) {
-      await new Promise((r) => setTimeout(r, 2000));
-    }
-  }
-
-  console.log(`\n✅ Done. Posted: ${posted} | Skipped: ${skipped}`);
+  // Track
+  markPosted(slug);
+  console.log(`📝 Slug recorded in ${POSTED_FILE}`);
 }
 
 main().catch((err) => {
