@@ -176,8 +176,13 @@ async function main(): Promise<void> {
     const required = ['TWITTER_API_KEY', 'TWITTER_API_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'];
     const missing = required.filter((k) => !process.env[k]);
     if (missing.length > 0) {
-      console.error(`❌ Missing env vars: ${missing.join(', ')}`);
-      console.error('   Set these in Railway/Vercel or your .env file.');
+      console.error(`❌ Missing OAuth 1.0a credentials: ${missing.join(', ')}`);
+      console.error('');
+      console.error('   Posting tweets requires user-context OAuth 1.0a credentials.');
+      console.error('   Your Bearer Token (app-only auth) is stored but only works for reading.');
+      console.error('');
+      console.error('   Get these from: https://developer.x.com → Apps → rip_xg → Keys and tokens');
+      console.error('   Then add them to: ~/.clawdbot/credentials/twitter.env');
       process.exit(1);
     }
   }
