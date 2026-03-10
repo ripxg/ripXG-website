@@ -10,13 +10,13 @@ summary: >
 
 featured_image: null
 status: published
-canonical_url: https://ripxg.com/blog/2026-02-coordinating-ai-agent-teams
+canonical_url: https://ripxg.com/blog/2026-02-08-coordinating-ai-agent-teams
 
 platforms:
   blog:
     enabled: true
     published_at: 2026-02-08
-    url: https://ripxg.com/blog/2026-02-coordinating-ai-agent-teams
+    url: https://ripxg.com/blog/2026-02-08-coordinating-ai-agent-teams
   linkedin:
     enabled: true
     published_at: null

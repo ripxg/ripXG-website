@@ -3,10 +3,64 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { decodeHtmlEntities } from '@/lib/html-entities';
 import { markdownToHtml } from '@/lib/markdown';
 
 const blogDir = path.join(process.cwd(), 'content', 'blog');
+const SITE_URL = 'https://ripxg.com';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getBlogPost(slug);
+  if (!post) return {};
+
+  const description = post.summary
+    ? post.summary.replace(/\[&hellip;\]/g, '…').trim()
+    : `${post.title} — ripXG`;
+
+  const ogImageUrl = post.featuredImage
+    ? post.featuredImage.startsWith('http')
+      ? post.featuredImage
+      : `${SITE_URL}${post.featuredImage}`
+    : `${SITE_URL}/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(description.substring(0, 120))}`;
+
+  return {
+    title: `${post.title} | ripXG`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      url: `${SITE_URL}/blog/${slug}`,
+      type: 'article',
+      publishedTime: post.date,
+      authors: ['Jeff'],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: [ogImageUrl],
+      site: '@rip_xg',
+      creator: '@rip_xg',
+    },
+    alternates: {
+      canonical: `${SITE_URL}/blog/${slug}`,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const filenames = fs.readdirSync(blogDir);
@@ -30,6 +84,7 @@ function getBlogPost(slug: string) {
     title: decodeHtmlEntities(data.title || ''),
     date: data.date,
     summary: data.summary ? decodeHtmlEntities(data.summary) : undefined,
+    featuredImage: data.featured_image || null,
     tags: data.tags || [],
     content,
     wordpressUrl: data.wordpressUrl,
