@@ -1,0 +1,46 @@
+name: Post new blog posts to Twitter/X
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/blog/**/*.mdx'
+      - 'content/blog/**/*.md'
+
+jobs:
+  post-to-twitter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get new/modified blog files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' 2>/dev/null || \
+                  git diff --name-only HEAD^ HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' 2>/dev/null || \
+                  git show --name-only --pretty=format: HEAD -- 'content/blog/**/*.mdx' 'content/blog/**/*.md' | tail -n +2)
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+
+      - name: Post to Twitter/X
+        if: steps.changed.outputs.files != ''
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+        run: |
+          for FILE in ${{ steps.changed.outputs.files }}; do
+            echo "Posting $FILE..."
+            node scripts/post-to-twitter.js "$FILE" || echo "Failed for $FILE, continuing..."
+          done
