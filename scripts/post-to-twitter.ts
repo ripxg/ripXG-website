@@ -3,8 +3,9 @@
  * Post to Twitter/X: Publish article promo tweets via Twitter API v2
  *
  * Reads tweet JSONs from /content/transforms/twitter/
- * Posts any article that has twitter.enabled = true and twitter.published_at = null
- * Updates publish-status.json after successful posting
+ * Posts any article that has twitter.enabled = true in frontmatter
+ * and has not yet been marked published in publish-status.json (source of truth)
+ * Updates publish-status.json after successful posting — frontmatter is never modified
  *
  * Required env vars (OAuth 1.0a with Read+Write permissions):
  *   TWITTER_API_KEY
@@ -189,8 +190,12 @@ async function main(): Promise<void> {
       continue;
     }
 
-    if (fm.platforms?.twitter?.published_at) {
-      console.log(`⏭ ${slug} — already posted`);
+    // Check publish-status.json (source of truth) — not frontmatter
+    const statusData = readStatus();
+    const articleStatus = ((statusData.articles as Record<string, unknown>)?.[slug] as Record<string, unknown>) || {};
+    const twitterStatus = (articleStatus.platforms as Record<string, unknown>)?.twitter as Record<string, unknown> | undefined;
+    if (twitterStatus?.status === 'published') {
+      console.log(`⏭ ${slug} — already posted (${twitterStatus.published_at})`);
       skipped++;
       continue;
     }
