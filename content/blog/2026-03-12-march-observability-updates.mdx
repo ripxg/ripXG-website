@@ -1,0 +1,63 @@
+---
+title: "[March] Observability Updates for SRE/Monitoring Teams"
+date: 2026-03-12
+tags: ['observability', 'sre', 'monitoring', 'ai', 'security', 'agentic']
+summary: >
+  AI-generated code is showing up as a contributing factor in incidents. The safety net needs to move closer to runtime. This month: AI Agent Monitoring, runtime security, and why the knee reflex matters for observability.
+status: published
+canonical_url: https://ripxg.com/blog/2026-03-march-observability-updates
+tweet: >
+  What does agentic coding have to do with the human knee reflex?
+
+  End to end apps can now be built with a prompt.
+
+  This means millions of lines of code are being generated and put into production daily. We are seeing a spike in incidents caused by AI generated code and though the first instinct is to human review all code as a response, counterintuitively, this negates the benefits of the speed of development with AI.
+
+  I used the knee reflex analogy recently to describe how operations generally rely on central command (the brain), but for true automatic response, guardrails with detection and resolution need to work at the edge (knee to spine) where the magic happens. In the same way you expect your body to respond automatically to movement and to attack, these biological concepts will start to apply to the tech around us.
+---
+
+We're a couple of months into 2026 and the conversations I'm having with security, platform, and SRE teams across the region have a clear common thread: massive, widespread shift in application development and its consequences including runtime application security. In this edition I will share why that shift is happening so fast, what Splunk is doing about it, and a few highlights from the January and February platform releases worth putting on your radar.
+
+## Observability for AI and General AI for App Developers
+
+In the last 24 hours, news has been circulating about Amazon's internal note on post-incident review making a point that I've seen land hard in conversations with platform and risk teams across the region: AI-generated code is showing up as a contributing factor in incidents with wide blast radius. Code that ships faster, reviewed less carefully, and at higher volume introduces risk that pre-production tooling was not designed to catch at this scale. The implication for enterprise controls isn't that AI-assisted development should slow down. It's that the safety net needs to move closer to runtime.
+
+And the pace of that shift is only accelerating. Andrej Karpathy and others have been direct about where this is heading: most production code will be written by AI within a few years. That's a genuinely exciting change for engineering velocity, and I think it's the right read. But it makes runtime observability and security more important, not less. When the human review layer thins out, your enterprise controls, agentic harnesses and detection+response layer must mature.
+
+This is also why AI observability has moved to the top of the priority list. Teams need visibility into:
+
+- AI infrastructure, agentic apps, LLM call traces
+- Inference latency, token consumption, model cost per transaction
+- Prompt-level error rates
+
+Not in a separate tool, but alongside the rest of their service visibility.
+
+Splunk now covers this end-to-end: AI Agent Monitoring gives you performance, cost, and security observability for AI workloads in the same platform you already use for the rest of your stack.
+
+## Runtime Security as an Observability Capability
+
+We've seen AI and LLM vendors in the market suggest that agent-based scanning will kill the Cybersecurity market. But this misses the key point that those approaches are still based on static code scanning only, and misses everything other critical capability like data normalisation, SIEM, XDR and real-time visibility. If you do not have real-time application vulnerability scanning, you will always be playing catchup and reactive to real security incidents.
+
+I've positioned runtime security with SecureApp and the response has been strong:
+
+- **Runtime vulnerability detection:** identifies exploitable vulnerabilities in running code, not just potential weaknesses in static analysis, with severity scores that factor in whether the vulnerability is reachable and being targeted
+- **Business transaction context:** correlates security events to the specific business flows they affect, so a payment processing endpoint at risk shows up differently than a low-traffic internal API
+- **Exploitability scoring:** prioritises findings by actual exploitation likelihood rather than raw CVSS scores, which cuts through the noise that burns out security triage teams
+- **Zero-touch instrumentation for existing customers:** if your application is already sending APM telemetry to Splunk Observability Cloud or AppD, enabling SecureApp is a configuration change
+
+The teams I've walked through a live demo of SecureApp have consistently flagged the same thing: the exploitability context is what makes it actionable. A list of 300 CVEs ranked only by CVSS is noise. A list of 8 CVEs that are currently being probed against services handling real transactions is a to-do list.
+
+## Jan/Feb 2026 Selected Highlights
+
+- **AI Agent Monitoring (GA):** Real-time health, performance, security, and cost visibility for LLM-based and AI agent workloads. Integrated with Cisco AI Defense for prompt injection and data leakage risk. Relevant for any team running AI-assisted features in production. This closes a genuine blind spot in AI operational reliability.
+
+- **Combined AppDynamics Agent (GA):** A single agent that runs AppDynamics and OpenTelemetry instrumentation together. This removes the blocker that has stopped several teams I work with from evaluating Observability Cloud. No re-instrumentation required, no deployment pipeline disruption.
+
+- **Enhanced Tag Spotlight for RUM:** Deeper slicing of real-user monitoring data by custom attributes, making it significantly easier to isolate user cohorts experiencing degraded experience. Useful when a performance issue is affecting a specific region, device class, or account tier.
+
+- **Detector and Alert Improvements:** Expanded auto-detect thresholds and cleaner alert grouping reduce alert fatigue on high-cardinality environments. Several customers I've spoken to have flagged alert fatigue as their top barrier to trusting their monitoring setup.
+
+## Full Release Notes
+
+- [What's New in Splunk Observability Cloud — January 2026](https://community.splunk.com/t5/Product-News-Announcements/What-s-New-in-Splunk-Observability-Cloud-January-Feature/ba-p/757988)
+- [What's New in Splunk Observability Cloud — February 2026](https://community.splunk.com/t5/Product-News-Announcements/What-s-New-in-Splunk-Observability-February-2026/ba-p/758908)

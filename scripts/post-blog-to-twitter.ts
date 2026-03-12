@@ -42,7 +42,13 @@ function writeTracker(posted: Set<string>): void {
 
 // ─── Tweet composition ───────────────────────────────────────────────────────
 
-function composeTweet(summary: string, canonicalUrl: string): string {
+function composeTweet(summary: string, canonicalUrl: string, customTweet?: string): string {
+  // If custom tweet provided, use it directly (supports X Premium long posts)
+  if (customTweet) {
+    const text = customTweet.trim();
+    return `${text}\n\n${canonicalUrl}`;
+  }
+
   // Strip [&hellip;] / [...] trailing markers
   let text = summary.replace(/\s*\[(&hellip;|\.\.\.)\]\s*$/i, '').trim();
 
@@ -89,7 +95,7 @@ async function postFile(filePath: string, client: TwitterApi, tracker: Set<strin
     return false;
   }
 
-  const tweet = composeTweet(fm.summary, fm.canonical_url);
+  const tweet = composeTweet(fm.summary, fm.canonical_url, fm.tweet);
 
   console.log(`  📝 Tweet preview (${tweet.length} chars):`);
   console.log(`     ${tweet.replace(/\n/g, '\n     ')}`);
