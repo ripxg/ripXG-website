@@ -54,6 +54,19 @@ function validateBlogPost(filePath: string): void {
       });
     }
 
+    // Check canonical_url matches filename
+    if (frontmatter.canonical_url) {
+      const slug = filename.replace(/\.mdx?$/, '');
+      const expectedUrl = `https://ripxg.com/blog/${slug}`;
+      if (frontmatter.canonical_url !== expectedUrl) {
+        errors.push({
+          file: filename,
+          issue: `canonical_url mismatch: got "${frontmatter.canonical_url}", expected "${expectedUrl}"`,
+          severity: 'error',
+        });
+      }
+    }
+
     // Check for broken link placeholders (the bug we're fixing)
     const linkPlaceholderPattern = /__LINK_\d+__/g;
     const brokenLinks = body.match(linkPlaceholderPattern);
