@@ -188,14 +188,17 @@ async function postTweet(text: string, mediaId?: string): Promise<string> {
 
 function readPosted(): string[] {
   if (!fs.existsSync(POSTED_FILE)) return [];
-  return JSON.parse(fs.readFileSync(POSTED_FILE, 'utf-8'));
+  const data = JSON.parse(fs.readFileSync(POSTED_FILE, 'utf-8'));
+  // Handle both formats: plain array or {posted: [...]}
+  return Array.isArray(data) ? data : (data.posted ?? []);
 }
 
 function markPosted(slug: string): void {
   const posted = readPosted();
   if (!posted.includes(slug)) {
     posted.push(slug);
-    fs.writeFileSync(POSTED_FILE, JSON.stringify(posted, null, 2) + '\n', 'utf-8');
+    const data = { posted, updated_at: new Date().toISOString() };
+    fs.writeFileSync(POSTED_FILE, JSON.stringify(data, null, 2) + '\n', 'utf-8');
   }
 }
 
@@ -283,9 +286,12 @@ async function main(): Promise<void> {
     }
   }
 
-  // Compose tweet
-  const tweetText = composeTweet(summary, canonicalUrl);
-  console.log(`📝 Tweet (${tweetText.length} chars):\n`);
+  // Compose tweet - use custom tweet field if present, otherwise auto-compose
+  const customTweet: string | undefined = fm.tweet;
+  const tweetText = customTweet
+    ? `${customTweet.trim()}\n\n${canonicalUrl}`
+    : composeTweet(summary, canonicalUrl);
+  console.log(`📝 Tweet (${tweetText.length} chars)${customTweet ? ' [custom]' : ''}:\n`);
   console.log('─'.repeat(60));
   console.log(tweetText);
   console.log('─'.repeat(60) + '\n');
