@@ -94,9 +94,9 @@ function convertToBlogFrontmatter(
 
   lines.push(`status: ${status || 'published'}`);
 
-  if (canonical_url) {
-    lines.push(`canonical_url: ${canonical_url}`);
-  }
+  // Always derive canonical_url from the output slug (YYYY-MM-DD-slug) to ensure correctness
+  const resolvedCanonical = `https://ripxg.com/blog/${slug}`;
+  lines.push(`canonical_url: ${resolvedCanonical}`);
 
   lines.push('---');
   lines.push('');

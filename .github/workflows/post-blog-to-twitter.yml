@@ -37,7 +37,12 @@ jobs:
             FILES=$(git diff --name-only HEAD~1 HEAD -- 'content/blog/*.mdx' 'content/blog/*.md' 'content/blog/**/*.mdx' 'content/blog/**/*.md')
           fi
           echo "Detected files: $FILES"
-          echo "files=$FILES" >> $GITHUB_OUTPUT
+          # Use heredoc syntax for multiline-safe output
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Post to Twitter/X
         if: steps.changed.outputs.files != ''
@@ -47,7 +52,8 @@ jobs:
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
-          for FILE in ${{ steps.changed.outputs.files }}; do
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
             echo "Posting $FILE..."
             npx tsx scripts/post-to-twitter.ts "$FILE" || echo "Failed for $FILE, continuing..."
-          done
+          done <<< "${{ steps.changed.outputs.files }}"

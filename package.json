@@ -20,7 +20,7 @@
     "publish:twitter:dry": "bun run scripts/post-to-twitter.ts --dry-run",
     "test:formatting": "bun run scripts/test-article-formatting.ts",
     "validate:blog": "bun run scripts/validate-blog-content.ts",
-    "prebuild": "bun run validate:blog && bun run transform:blog",
+    "prebuild": "bun run transform:blog && bun run validate:blog",
     "prepare": "husky",
     "post:twitter": "tsx scripts/post-blog-to-twitter.ts"
   },
