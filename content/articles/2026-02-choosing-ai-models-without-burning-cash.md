@@ -1,11 +1,31 @@
 ---
+id: 2026-02-choosing-ai-models-without-burning-cash
 title: "Choosing AI models without burning cash"
+author: Jeff
 date: 2026-02-08
-tags: ['ai', 'cost', 'models', 'automation']
+updated: 2026-02-08
+tags: [ai, cost, models, automation]
 summary: >
   I burned through my Claude Pro subscription in three days. Then my Cursor Pro subscription the week after. Both $20/month, both gone before I'd even built half the features I wanted. The problem wasn't the subscriptions. It was that I treated every task the same. Used the premium models for everything, even when simpler models would work fine. Learning to match models to tasks changed how I build with AI.
+
+featured_image: null
 status: published
 canonical_url: https://ripxg.com/blog/2026-02-08-choosing-ai-models-without-burning-cash
+
+platforms:
+  blog:
+    enabled: true
+    published_at: 2026-02-08
+    url: https://ripxg.com/blog/2026-02-08-choosing-ai-models-without-burning-cash
+  linkedin:
+    enabled: true
+    published_at: null
+  twitter:
+    enabled: true
+    published_at: null
+  substack:
+    enabled: true
+    published_at: null
 ---
 
 I burned through my Claude Pro subscription in three days.

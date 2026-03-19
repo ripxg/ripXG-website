@@ -1,0 +1,48 @@
+---
+title: "We built a real app with AI agents instead of hiring a dev team. Here's the honest breakdown."
+date: 2026-03-19
+summary: >
+  Bag Hunter started as a question: could we ship a real product with a database, live UI,
+  scraping logic, and price alerts without a traditional dev team? The answer is yes,
+  with some asterisks that nobody in the AI content space wants to talk about. [&hellip;]
+status: published
+canonical_url: https://ripxg.com/blog/2026-03-19-built-bag-hunter-with-ai-agents
+---
+
+Not every tool that gets hype is worth keeping. Over the course of building [Bag Hunter](https://baghunter.app), I cycled through four meaningfully different setups before landing on something that actually worked at scale. Each switch had a reason.
+
+**The progression**
+
+It started with Cursor. The IDE-embedded agent was genuinely fast for writing new code, especially early in the project when I was laying down structure. As long as the tasks were self-contained, it was enough.
+
+When the project got larger, individual file edits stopped being the bottleneck. I needed something that could reason across the full codebase and run tasks end to end. Cursor's agent mode covered that for a while, but it was still tied to the editor and to me being present.
+
+The switch to Claude Code happened when customisation and infrastructure work became the main job. Cursor was built for developers inside an editor. Claude Code was built for running complex, multi-step work from the terminal, on any machine, with full access to the tools your stack already uses. That access was the difference.
+
+Claude Code Remote extended that to infrastructure that doesn't run locally. Deployments, scheduled jobs, anything that needed to happen outside a laptop. The work was no longer tied to a single machine or session.
+
+OpenClaw was the layer that connected everything. Vercel has a CLI. Railway has a CLI. Apify has an API. Individual scraping tools had their own interfaces. OpenClaw made it possible to coordinate all of those through a single agent that could reason across them, chain operations together, and run autonomously without me directing each step. That freedom, being able to hand a task to an agent that could use all these tools without me holding it by the hand, is where the actual productivity gains came from.
+
+**Tools we tried and stopped using**
+
+**AutoGPT.** The first serious attempt at agent-based automation. The concept was right but the models in 2023 weren't capable enough to complete multi-step tasks without looping or losing the thread entirely.
+
+**RAG pipelines.** Built a few small retrieval apps. The setup complexity (chunking, embeddings, retrieval tuning) wasn't worth the output quality unless you had proprietary data that justified all of it. For most tasks, a capable model with good context management did the same job with less overhead.
+
+**Ollama with DeepSeek running locally.** Useful for proving the technology worked without cloud costs. CPU-only mode meant it wasn't viable for anything time-sensitive, and the model quality gap versus frontier models was too wide once the work got complex.
+
+**ChatGPT 4o and Claude Sonnet 3.** Fine for isolated tasks, which is what led to using Cursor more seriously. The gap showed up once the work got into real multi-step development: when Opus 4.5 came out, the accuracy on complex technical tasks was meaningfully different. That's what pushed the move to multi-model orchestration and the rest of the progression that followed.
+
+**What the build actually looked like**
+
+By the time the stack was settled, agents were handling the majority of the implementation. The backend API, the 19 marketplace scrapers, the React frontend, the price alert system. I described what I wanted. The agents built it. I reviewed the output, caught the mistakes, and made the calls that required actual judgment.
+
+Three things consistently needed a human: security review, architecture decisions when a choice in week two would cause problems in week six, and the gap between "this passes tests" and "this is good enough to ship." No prompt fully specifies that last one.
+
+The tools available now are genuinely capable. The time savings on implementation work are significant. The part nobody tells you is that you still need to be able to read the output. Not write it from scratch. But understand it well enough to catch the subtle mistakes and make the calls that agents can't.
+
+If you can do that, the leverage is real.
+
+---
+
+*[Bag Hunter](https://baghunter.app) aggregates pre-owned luxury bag listings from 19 resale platforms and scores each listing against current market pricing.*
