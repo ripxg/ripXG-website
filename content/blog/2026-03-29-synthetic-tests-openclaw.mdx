@@ -1,0 +1,56 @@
+---
+title: "I told OpenClaw to set up synthetic tests for my web app. I had to fix it."
+date: 2026-03-29
+summary: >
+  I asked my agent to monitor baghunter.app with synthetic checks every five minutes. It worked, technically. Then I looked at what it was actually doing and realised I'd built something expensive and fragile. Here's what I changed. [&hellip;]
+status: published
+canonical_url: https://ripxg.com/blog/2026-03-29-synthetic-tests-openclaw
+---
+
+I asked Orion to set up synthetic health checks for baghunter.app.
+
+The brief was straightforward: run a set of API checks every five minutes, alert me on Telegram if anything fails, go quiet when everything's fine.
+
+Orion built it. Two cron jobs in OpenClaw, each spawning an isolated agent on a five-minute timer. Each agent ran a bash script, parsed the results, and sent an alert if something was down.
+
+It worked. For about a day I thought it was solid.
+
+Then I looked at the numbers.
+
+## The problem
+
+Two cron jobs firing every five minutes, each spinning up an isolated agent turn. That's 576 agent invocations per day. At steady state, when everything is healthy, every single one of those does exactly one thing: confirms that nothing is wrong, and exits.
+
+576 paid agent turns a day to send zero messages. That's not monitoring. That's burning money to feel like you have monitoring.
+
+There was a second problem. One of the checks was hitting `https://baghunter.app` directly. From a datacenter IP, Vercel's bot protection returns 403 on every request, regardless of whether the site is actually up. So the check was permanently broken by design, and the only reason it wasn't spamming alerts was because the agent was also handling the false positive logic.
+
+A third problem surfaced during testing. The response shape parser assumed all list endpoints returned a JSON array. Some return `{"data": [...]}`. Others return `{"brands": [...]}`. The count check was silently returning zero for half the endpoints, meaning the minimum-result threshold was always failing and getting swallowed somewhere in the logic.
+
+## What I built instead
+
+The fix was to stop using agents for the steady-state loop entirely.
+
+A bash daemon runs in a loop with a five-minute sleep. It fires curl checks in parallel, collects results into a temp directory, compares against a state file, and only calls out to OpenClaw when the state changes: new failure, or recovery from failure.
+
+At steady state, the cost is zero. No agent is spawned. No token is burned. The shell just loops.
+
+When something actually fails, one message gets sent. When it recovers, one more. That's it.
+
+The second change was fixing the Vercel check. Datacenter IPs will always get bot-protected. The right fix is to check the API directly and infer frontend health from there. The API going down is the failure that matters.
+
+The third change was making the response count extractor handle the shapes that actually exist in production: `data`, `listings`, `results`, `brands` as nested keys, and bare arrays at the root. A simple priority list covers the common cases without guessing.
+
+The daemon runs as a systemd service with `Restart=always`. If it dies, it restarts in 30 seconds automatically. One OpenClaw watchdog cron fires every 30 minutes, does a single `systemctl is-active` check, and restarts and alerts if the daemon is down. That's the only agent-driven work left in the monitoring stack.
+
+## What it cost to fix
+
+A few hours of back-and-forth. The initial design was reasonable on paper — agents are flexible, cron is familiar, five minutes is a sensible interval. The failures were in the details: the Vercel IP assumption, the response shape assumptions, and the fundamental mismatch between "agent turn" and "tight polling loop."
+
+An agent turn has overhead. That overhead is worth it when the agent is doing something agents are good at: reasoning about failures, investigating, taking action. It's not worth it when the "agent" is just running a bash script and printing "OK."
+
+The pattern that works: shell does the polling, agent handles the exceptions.
+
+I wrote up the full implementation as a reusable skill if you want to apply the same pattern to your own stack.
+
+**[synthetic-tests skill on GitHub](https://github.com/ripxg/ripxg-skills/tree/main/skills/synthetic-tests)**
