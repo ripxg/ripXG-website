@@ -2,33 +2,37 @@
 title: "Stop hitting your Claude limits, optimise now"
 date: 2026-03-29
 summary: >
-  Claude's popularity has exploded, and so has the frustration with hitting usage limits. The fix isn't a bigger plan. It's using fewer tokens to get the same result. Here's how structured prompts and reusable skills cut my usage significantly without losing any output quality. [&hellip;]
+  Most people burn through Claude's limits doing the same thinking twice. Here is a skill you can add today that tells Claude when to compact context — one of the fastest ways to cut token usage without changing how you work. [&hellip;]
 status: published
 canonical_url: https://ripxg.com/blog/2026-03-29-stop-hitting-your-claude-limits
 ---
 
-If you've been hitting Claude's usage limits lately, you're not alone.
+The fastest way to burn through Claude's usage limit is letting context bloat unchecked.
 
-Since Claude Code launched and Claude's popularity took off, the complaints are everywhere: hitting the weekly cap after two prompts, burning through Pro limits in a day, macOS apps built just to monitor how much headroom you have left. People are working around limits rather than fixing what's actually burning through them.
+Every session accumulates tokens: earlier messages, tool outputs, reasoning steps. By the time you're deep in a task, a large chunk of your allocation is just history. Most of it irrelevant to what you're doing right now.
 
-The problem usually isn't volume. It's waste.
+Here's a skill you can add to Claude Code today that fixes this.
 
-Most people hit limits because they're doing the same thinking multiple times. Vague prompt, mediocre output, refine, retry. Each loop costs tokens. A prompt that should have taken one call takes four. Multiply that across a day of work and you've burned through your allocation before lunch.
+## Strategic Compact
 
-The fix is front-loading your context. Not shorter prompts. Better ones.
+The [Strategic Compact skill](https://github.com/openclaw/openclaw/tree/main/skills/strategic-compact) tracks your tool call count and suggests running `/compact` at natural breakpoints. After 50 tool calls, Claude will prompt you to compact the session. Every 25 calls after that, it reminds you again.
 
-When I started including everything upfront — the specific constraint, the code context, what I'd already tried, the exact output format I needed — the number of calls dropped immediately. One well-structured prompt produces something usable. Four vague ones produce the same result at four times the cost.
+Drop the skill into `~/.claude/skills/strategic-compact/` and register it in `~/.claude/settings.json` under `hooks.PreToolUse` with a matcher for `Edit` and `Write` tool calls, pointing to `suggest-compact.sh` as the command. The [full config is in the repo](https://github.com/openclaw/openclaw/tree/main/skills/strategic-compact).
 
-The other big drain is prompting Claude for things that don't require it. Boilerplate, simple formatting, obvious CRUD. These eat tokens for work you could do yourself in minutes. Where Claude actually earns its cost is where thinking is expensive: non-obvious bugs, unfamiliar codebases, architectural decisions with downstream consequences. Reserve it for that.
+Running `/compact` summarises the current session and clears the context window. You keep the plan. The noise disappears.
 
-The second layer of optimisation is skills and reusable context. This is where most people leave money on the table.
+The key is timing. Compact after finishing a debugging session, before starting a new feature. After exploration, before implementation. Not mid-task — you'll lose context you still need. At natural transition points, you drop the stale history and move forward clean.
 
-Every time you open a new chat and re-explain your stack, your conventions, your preferences, you're burning tokens to reconstruct context that should already exist. In OpenClaw, I handle this with skills: structured instructions that define how a task should be approached, what context is needed, and what format the output should take. The agent reads the skill once and works from there. No re-explanation, no drift, no repeated reasoning.
+## Why this matters
 
-The result is fewer tokens per task, more consistent output, and no hitting limits by mid-week.
+Context is not the enemy. Stale context is.
 
-The prompts that cost the most aren't the complex ones. They're the ones that needed three follow-ups because the first one was incomplete. Fix the prompt structure, add reusable skills for recurring tasks, and stop explaining yourself from scratch every session. That's the optimisation.
+Most people try to keep prompts short to save tokens, which usually backfires. You leave out constraints, get an incomplete answer, and go back to clarify. Three calls instead of one. The fix is better-structured prompts with full context up front — but that only works if you're not carrying 80k tokens of old conversation into each new call.
 
-If you want to get your AI setup working this way, I can help get you configured with the agent setup and skills I use.
+Compact at boundaries. Front-load context in each prompt. Stop re-explaining your stack from scratch each session.
+
+Those three habits cut usage more than any plan upgrade will.
+
+If you want the full setup with reusable skills, agent configuration, and structured prompts ready to use, I can get you started.
 
 **[Get started](https://www.ripxg.com/get-started)**
