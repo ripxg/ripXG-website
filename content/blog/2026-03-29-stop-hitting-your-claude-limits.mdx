@@ -1,0 +1,34 @@
+---
+title: "Stop hitting your Claude limits, optimise now"
+date: 2026-03-29
+summary: >
+  Claude's popularity has exploded, and so has the frustration with hitting usage limits. The fix isn't a bigger plan. It's using fewer tokens to get the same result. Here's how structured prompts and reusable skills cut my usage significantly without losing any output quality. [&hellip;]
+status: published
+canonical_url: https://ripxg.com/blog/2026-03-29-stop-hitting-your-claude-limits
+---
+
+If you've been hitting Claude's usage limits lately, you're not alone.
+
+Since Claude Code launched and Claude's popularity took off, the complaints are everywhere: hitting the weekly cap after two prompts, burning through Pro limits in a day, macOS apps built just to monitor how much headroom you have left. People are working around limits rather than fixing what's actually burning through them.
+
+The problem usually isn't volume. It's waste.
+
+Most people hit limits because they're doing the same thinking multiple times. Vague prompt, mediocre output, refine, retry. Each loop costs tokens. A prompt that should have taken one call takes four. Multiply that across a day of work and you've burned through your allocation before lunch.
+
+The fix is front-loading your context. Not shorter prompts. Better ones.
+
+When I started including everything upfront — the specific constraint, the code context, what I'd already tried, the exact output format I needed — the number of calls dropped immediately. One well-structured prompt produces something usable. Four vague ones produce the same result at four times the cost.
+
+The other big drain is prompting Claude for things that don't require it. Boilerplate, simple formatting, obvious CRUD. These eat tokens for work you could do yourself in minutes. Where Claude actually earns its cost is where thinking is expensive: non-obvious bugs, unfamiliar codebases, architectural decisions with downstream consequences. Reserve it for that.
+
+The second layer of optimisation is skills and reusable context. This is where most people leave money on the table.
+
+Every time you open a new chat and re-explain your stack, your conventions, your preferences, you're burning tokens to reconstruct context that should already exist. In OpenClaw, I handle this with skills: structured instructions that define how a task should be approached, what context is needed, and what format the output should take. The agent reads the skill once and works from there. No re-explanation, no drift, no repeated reasoning.
+
+The result is fewer tokens per task, more consistent output, and no hitting limits by mid-week.
+
+The prompts that cost the most aren't the complex ones. They're the ones that needed three follow-ups because the first one was incomplete. Fix the prompt structure, add reusable skills for recurring tasks, and stop explaining yourself from scratch every session. That's the optimisation.
+
+If you want to get your AI setup working this way, I can help get you configured with the agent setup and skills I use.
+
+**[Get started](https://www.ripxg.com/get-started)**
