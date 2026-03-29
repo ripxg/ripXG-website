@@ -2,37 +2,56 @@
 title: "Stop hitting your Claude limits, optimise now"
 date: 2026-03-29
 summary: >
-  Most people burn through Claude's limits doing the same thinking twice. Here is a skill you can add today that tells Claude when to compact context — one of the fastest ways to cut token usage without changing how you work. [&hellip;]
+  Most people burn through Claude's limits re-explaining the same context every session. There is a built-in fix that Anthropic ships with Claude Code. Takes five minutes to set up and it carries everything forward automatically. [&hellip;]
 status: published
 canonical_url: https://ripxg.com/blog/2026-03-29-stop-hitting-your-claude-limits
 ---
 
-The fastest way to burn through Claude's usage limit is letting context bloat unchecked.
+Every session you open in Claude Code starts empty.
 
-Every session accumulates tokens: earlier messages, tool outputs, reasoning steps. By the time you're deep in a task, a large chunk of your allocation is just history. Most of it irrelevant to what you're doing right now.
+No memory of your stack. No knowledge of your conventions. No idea what you tried last time. So you explain it again. And again. Those tokens add up fast, and you hit your limit before you've done anything interesting.
 
-Here's a skill you can add to Claude Code today that fixes this.
+There's a built-in fix for this. Anthropic ships it with Claude Code. Most people haven't set it up.
 
-## Strategic Compact
+## CLAUDE.md: persistent context for every session
 
-The [Strategic Compact skill](https://github.com/openclaw/openclaw/tree/main/skills/strategic-compact) tracks your tool call count and suggests running `/compact` at natural breakpoints. After 50 tool calls, Claude will prompt you to compact the session. Every 25 calls after that, it reminds you again.
+Create a file at `~/.claude/CLAUDE.md`. Whatever you put in this file gets loaded into every session, automatically, before anything else. You write it once and stop re-explaining yourself.
 
-Drop the skill into `~/.claude/skills/strategic-compact/` and register it in `~/.claude/settings.json` under `hooks.PreToolUse` with a matcher for `Edit` and `Write` tool calls, pointing to `suggest-compact.sh` as the command. The [full config is in the repo](https://github.com/openclaw/openclaw/tree/main/skills/strategic-compact).
+A useful starting point:
 
-Running `/compact` summarises the current session and clears the context window. You keep the plan. The noise disappears.
+```
+# My setup
+- Stack: Next.js, TypeScript, Postgres
+- Package manager: pnpm (not npm or yarn)
+- Testing: Vitest for unit, Playwright for E2E
+- Commits: conventional commits, imperative mood
 
-The key is timing. Compact after finishing a debugging session, before starting a new feature. After exploration, before implementation. Not mid-task — you'll lose context you still need. At natural transition points, you drop the stale history and move forward clean.
+# How I work
+- Always write tests before implementation
+- Prefer explicit error handling over silent failures
+- Keep functions small and single-purpose
+```
 
-## Why this matters
+This is your personal CLAUDE.md. It applies across every project on your machine. You can also add a project-level CLAUDE.md at `./CLAUDE.md` in any repo — that one gets committed and shared with your team.
 
-Context is not the enemy. Stale context is.
+Anthropic recommends keeping it under 200 lines. Longer files consume more context and Claude follows them less reliably. Specific, concrete instructions work better than general principles.
 
-Most people try to keep prompts short to save tokens, which usually backfires. You leave out constraints, get an incomplete answer, and go back to clarify. Three calls instead of one. The fix is better-structured prompts with full context up front — but that only works if you're not carrying 80k tokens of old conversation into each new call.
+## Auto memory: Claude learns as you go
 
-Compact at boundaries. Front-load context in each prompt. Stop re-explaining your stack from scratch each session.
+Claude Code has a second mechanism called auto memory. As you work, Claude takes notes on things worth remembering: build commands it discovers, debugging patterns that worked, preferences you've expressed. At the start of your next session, those notes load automatically.
 
-Those three habits cut usage more than any plan upgrade will.
+It's on by default. Run `/memory` in any session to see what Claude has saved, edit it, or toggle it off if you want manual control.
 
-If you want the full setup with reusable skills, agent configuration, and structured prompts ready to use, I can get you started.
+When you want Claude to remember something specific, just tell it: "remember that the API tests need a local Redis instance running." It saves that to memory and it's there next time.
+
+## What this changes
+
+Before: every session starts from zero. You explain your stack, your conventions, your context. That's overhead on every call before you've done any real work.
+
+After: Claude starts each session knowing who you are and how you work. Prompts get shorter. Follow-up calls drop. You stop burning your allocation on setup.
+
+The limits don't feel as tight when you're not spending half your tokens on context you've already provided ten times.
+
+If you want a more complete setup with structured skills and agent configuration beyond the basics, I can help get you there.
 
 **[Get started](https://www.ripxg.com/get-started)**
