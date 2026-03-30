@@ -25,6 +25,7 @@
     "post:twitter": "tsx scripts/post-blog-to-twitter.ts"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "date-fns": "^4.1.0",
