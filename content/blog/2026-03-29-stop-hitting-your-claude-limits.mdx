@@ -9,49 +9,42 @@ canonical_url: https://ripxg.com/blog/2026-03-29-stop-hitting-your-claude-limits
 
 Every session you open in Claude Code starts empty.
 
-No memory of your stack. No knowledge of your conventions. No idea what you tried last time. So you explain it again. And again. Those tokens add up fast, and you hit your limit before you've done anything interesting.
+No memory of your stack. No idea what you tried last time. No knowledge of how you like to work. So you explain it again. And again. Those tokens add up fast, and you hit your limit before you've done anything interesting.
 
-There's a built-in fix for this. Anthropic ships it with Claude Code. Most people haven't set it up.
+There's a built-in fix for this. Anthropic ships it with Claude Code. Most people haven't found it yet.
 
-## CLAUDE.md: persistent context for every session
+## CLAUDE.md: write it once, stop explaining yourself
 
-Create a file at `~/.claude/CLAUDE.md`. Whatever you put in this file gets loaded into every session, automatically, before anything else. You write it once and stop re-explaining yourself.
+Create a file at `~/.claude/CLAUDE.md`. Whatever you put in this file loads into every session automatically, before anything else runs. One file. Set it once. Claude remembers.
 
-A useful starting point:
+For most new users, even a few lines makes a noticeable difference. Something like what you're working on, how you prefer to communicate, and whether you're technical or not. The more specific you are, the more Claude can skip the guessing.
 
-```
-# My setup
-- Stack: Next.js, TypeScript, Postgres
-- Package manager: pnpm (not npm or yarn)
-- Testing: Vitest for unit, Playwright for E2E
-- Commits: conventional commits, imperative mood
+My own CLAUDE.md describes my setup: I run a blog and site on GitHub, deployed through Vercel, with a backend on Railway. I mostly use Claude Sonnet. One of the things I actually rely on day-to-day is being able to push updates from my phone using Claude dispatch or OpenClaw, without needing to sit at a laptop. That's in the file. Claude knows it. I don't re-explain it every time.
 
-# How I work
-- Always write tests before implementation
-- Prefer explicit error handling over silent failures
-- Keep functions small and single-purpose
-```
+If you have a technical background, this is where it gets interesting. The more you tell Claude about your stack, preferences, and patterns, the less overhead you carry into every session. One well-written CLAUDE.md can save hundreds of tokens per call. Over a week of heavy use, that's a meaningful chunk of your limit back.
 
-This is your personal CLAUDE.md. It applies across every project on your machine. You can also add a project-level CLAUDE.md at `./CLAUDE.md` in any repo — that one gets committed and shared with your team.
+If you're not technical and don't know where to start, that's fine too. A plain-language description of what you're trying to do and how you like to be helped is still useful.
 
-Anthropic recommends keeping it under 200 lines. Longer files consume more context and Claude follows them less reliably. Specific, concrete instructions work better than general principles.
+You can also add a project-level CLAUDE.md at `./CLAUDE.md` inside any repository. That one travels with the project and gets shared with anyone else working on it.
+
+Anthropic recommends keeping it under 200 lines. Specific, concrete instructions work better than general principles.
 
 ## Auto memory: Claude learns as you go
 
-Claude Code has a second mechanism called auto memory. As you work, Claude takes notes on things worth remembering: build commands it discovers, debugging patterns that worked, preferences you've expressed. At the start of your next session, those notes load automatically.
+There's a second mechanism called auto memory. As you work, Claude takes notes on things worth remembering: commands it discovers, patterns that worked, preferences you've expressed. Those notes load at the start of your next session automatically.
 
-It's on by default. Run `/memory` in any session to see what Claude has saved, edit it, or toggle it off if you want manual control.
+It's on by default. Run `/memory` in any session to see what Claude has saved, edit it, or turn it off if you'd rather keep manual control.
 
-When you want Claude to remember something specific, just tell it: "remember that the API tests need a local Redis instance running." It saves that to memory and it's there next time.
+When you want Claude to remember something specific, just tell it directly. It saves it and it's there next time.
 
-## What this changes
+## What this actually changes
 
-Before: every session starts from zero. You explain your stack, your conventions, your context. That's overhead on every call before you've done any real work.
+Before: every session starts from scratch. You explain who you are, what you're building, how you like to work. That's overhead before you've done anything real.
 
-After: Claude starts each session knowing who you are and how you work. Prompts get shorter. Follow-up calls drop. You stop burning your allocation on setup.
+After: Claude starts already knowing. Prompts get shorter. Conversations stay focused. You stop burning your allocation on context you've already given ten times.
 
-The limits don't feel as tight when you're not spending half your tokens on context you've already provided ten times.
+The limits don't feel as tight when you're not wasting half of them on setup.
 
-If you want a more complete setup with structured skills and agent configuration beyond the basics, I can help get you there.
+If you're not sure how to put your CLAUDE.md together, or you want a more complete configuration with structured skills and agent setup beyond the basics, get in touch.
 
 **[Get started](https://www.ripxg.com/get-started)**
