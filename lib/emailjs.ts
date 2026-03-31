@@ -16,11 +16,10 @@ export async function sendLeadEmail(params: LeadEmailParams): Promise<void> {
     SERVICE_ID,
     TEMPLATE_ID,
     {
-      from_name: params.name || 'Anonymous',
-      from_email: params.email,
+      name: params.name || 'Anonymous',
+      email: params.email,
       use_cases: params.useCases.join(', '),
       message: params.message || '',
-      to_email: 'jeff@ripxg.com',
     },
     PUBLIC_KEY
   );
