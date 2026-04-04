@@ -215,7 +215,8 @@ function composeTweet(summary: string, canonicalUrl: string): string {
     .replace(/\s+/g, ' ')
     .trim();
 
-  const url = canonicalUrl.trim();
+  // Normalize to www. — Twitter's card crawler may not follow the non-www 307 redirect
+  const url = canonicalUrl.trim().replace('https://ripxg.com/', 'https://www.ripxg.com/');
   const separator = '\n\n';
   const maxSummaryLength = MAX_TWEET_LENGTH - url.length - separator.length;
 
