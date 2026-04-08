@@ -5,103 +5,120 @@ export default async function HomePage() {
   const recentPosts = getRecentPosts(3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-white dark:from-purple-950 dark:via-purple-900 dark:to-purple-950">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <section className="max-w-4xl mx-auto px-6 py-20 md:py-32">
         <div className="max-w-2xl">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-gray-900 dark:text-white text-balance">
-            ripXG
-          </h1>
-          <p className="text-2xl md:text-3xl text-purple-600 dark:text-purple-400 mb-6 font-medium text-pretty">
-            AI for everyone. Do more (and fast) with tech.
+          <div className="inline-block mb-6">
+            <span className="text-8xl md:text-9xl font-black tracking-tighter text-neutral-900 dark:text-white">
+              ripXG
+            </span>
+          </div>
+          <p className="text-2xl md:text-3xl text-neutral-600 dark:text-neutral-400 mb-8 font-medium leading-tight text-pretty">
+            AI that works for you.
+            <br />
+            <span className="text-amber-600 dark:text-amber-500">Not the other way around.</span>
           </p>
 
-          {/* AI Agent Services — hero section */}
-          <div className="bg-purple-900 dark:bg-purple-950 rounded-xl p-8 mb-6 shadow-xl border-2 border-gold-500">
-            <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mb-3">
-              Services
-            </p>
-            <h2 className="text-3xl font-bold mb-3 text-white text-balance">
-              I build AI agents for you.
+          {/* Services Section */}
+          <div className="bg-neutral-900 dark:bg-neutral-900 rounded-2xl p-8 md:p-10 mb-8 border border-neutral-800">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-8 bg-amber-500 rounded-full"></div>
+              <p className="text-neutral-400 text-sm font-semibold tracking-wide uppercase">
+                What I do
+              </p>
+            </div>
+            
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-balance">
+              You tell me what needs doing.
+              <br />
+              <span className="text-amber-500">I make AI do it.</span>
             </h2>
-            <p className="text-purple-200 mb-6 text-lg leading-relaxed text-pretty">
-              Stop doing repetitive work manually. I design, build, and manage
-              custom AI agents that automate your workflows — so you can focus
-              on what matters.
+            
+            <p className="text-neutral-300 mb-10 text-lg leading-relaxed max-w-2xl text-pretty">
+              Most AI tools are overpriced chatbots. I build actual systems —
+              agents that connect to your tools, automate your workflows,
+              and run on your own infrastructure. No vendor lock-in, no data leakage.
             </p>
 
-            <div className="grid gap-4 md:grid-cols-3 mb-8">
+            <div className="grid gap-5 md:grid-cols-3 mb-10">
               {[
                 {
-                  emoji: "🤖",
-                  title: "Build",
-                  desc: "Custom AI agents tailored to your business",
+                  emoji: "🏗️",
+                  title: "Custom Agents",
+                  desc: "Built for your specific workflows, not generic templates",
                 },
                 {
-                  emoji: "⚡",
-                  title: "Automate",
-                  desc: "Connect your tools and eliminate manual tasks",
+                  emoji: "🔐",
+                  title: "Zero-Trust",
+                  desc: "Your data, your servers, your control",
                 },
                 {
-                  emoji: "🛠️",
-                  title: "Manage",
-                  desc: "Ongoing support so your agents stay sharp",
+                  emoji: "⚙️",
+                  title: "Fully Managed",
+                  desc: "I handle setup, updates, and support",
                 },
               ].map(({ emoji, title, desc }) => (
                 <div
                   key={title}
-                  className="bg-purple-800/50 rounded-lg p-4 border border-purple-700/50"
+                  className="bg-neutral-800/50 rounded-xl p-6 border border-neutral-700 hover:border-amber-500/50 transition-colors"
                 >
-                  <div className="text-2xl mb-2">{emoji}</div>
-                  <div className="text-white font-semibold mb-1">{title}</div>
-                  <div className="text-purple-300 text-sm leading-relaxed">
+                  <div className="text-3xl mb-3">{emoji}</div>
+                  <div className="text-white font-bold text-lg mb-2">{title}</div>
+                  <div className="text-neutral-400 text-sm leading-relaxed">
                     {desc}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/get-started"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
+                className="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-400 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[52px]"
               >
-                Get Started →
+                Let's talk →
               </Link>
               <Link
                 href="/orion-ai"
-                className="inline-flex items-center justify-center border-2 border-gold-400 hover:bg-gold-400/10 text-gold-300 hover:text-gold-200 px-8 py-4 rounded-lg font-bold text-lg transition-all min-h-[44px]"
+                className="inline-flex items-center justify-center border-2 border-neutral-600 hover:border-neutral-500 text-neutral-300 hover:text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-neutral-800 min-h-[52px]"
               >
-                Orion AI →
+                See Orion AI
               </Link>
             </div>
           </div>
 
-          {/* Newsletter CTA */}
-          <div className="bg-white dark:bg-purple-900 rounded-xl p-8 mb-12 shadow-lg border-2 border-purple-200 dark:border-purple-800">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white text-balance">
-              Join the newsletter
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 text-lg leading-relaxed text-pretty">
-              Weekly insights on observability, AI agents, and what I&apos;m
-              building. No spam, just signal.
-            </p>
-            <Link
-              href="/newsletter"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px]"
-            >
-              Subscribe →
-            </Link>
+          {/* Newsletter */}
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 mb-12 shadow-sm border border-neutral-200 dark:border-neutral-800">
+            <div className="flex items-start gap-4">
+              <div className="text-4xl">📮</div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold mb-2 text-neutral-900 dark:text-white text-balance">
+                  Weekly breakdown
+                </h2>
+                <p className="text-neutral-600 dark:text-neutral-400 mb-6 text-base leading-relaxed text-pretty">
+                  What I'm building, what's working, what isn't.
+                  <br />
+                  <span className="text-amber-600 dark:text-amber-500 font-medium">No spam. Unsubscribe anytime.</span>
+                </p>
+                <Link
+                  href="/newsletter"
+                  className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px]"
+                >
+                  Subscribe →
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Navigation */}
-      <nav className="max-w-4xl mx-auto px-6 py-6 border-t border-purple-200 dark:border-purple-800">
-        <ul className="flex flex-wrap gap-4 text-lg">
+      <nav className="max-w-4xl mx-auto px-6 py-8 border-t border-neutral-200 dark:border-neutral-800">
+        <ul className="flex flex-wrap gap-3">
           <li>
             <Link
               href="/blog"
-              className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px]"
+              className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px] min-w-[48px]"
             >
               Articles
             </Link>
@@ -109,7 +126,7 @@ export default async function HomePage() {
           <li>
             <Link
               href="/about"
-              className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] min-w-[44px]"
+              className="inline-flex items-center justify-center bg-white hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px] min-w-[48px]"
             >
               About
             </Link>
@@ -118,13 +135,13 @@ export default async function HomePage() {
       </nav>
 
       {/* Recent Posts Preview */}
-      <section className="max-w-4xl mx-auto px-6 py-8">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white text-balance">
-          Recent Articles
+      <section className="max-w-4xl mx-auto px-6 py-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-neutral-900 dark:text-white text-balance">
+          Writing
         </h2>
         {recentPosts.length === 0 ? (
-          <p className="text-gray-600 dark:text-gray-400 text-lg text-pretty">
-            No posts yet. Check back soon!
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg text-pretty">
+            Nothing yet. Check back soon.
           </p>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -132,11 +149,11 @@ export default async function HomePage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="bg-white dark:bg-purple-900 rounded-lg p-6 border border-purple-100 dark:border-purple-800 hover:shadow-md transition-shadow block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
+                className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-neutral-800 hover:border-amber-500 dark:hover:border-amber-500 hover:shadow-lg transition-all block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
               >
                 <time
                   dateTime={post.date}
-                  className="text-sm text-purple-500 dark:text-purple-400 mb-3 block font-medium"
+                  className="text-xs text-neutral-500 dark:text-neutral-500 mb-3 block font-semibold tracking-wide uppercase"
                 >
                   {new Date(post.date).toLocaleDateString("en-US", {
                     year: "numeric",
@@ -144,11 +161,11 @@ export default async function HomePage() {
                     day: "numeric",
                   })}
                 </time>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 transition-colors leading-tight mb-2 text-balance">
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors leading-tight mb-3 text-balance">
                   {post.title}
                 </h3>
                 {post.summary && (
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3 text-pretty">
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-3 text-pretty">
                     {post.summary}
                   </p>
                 )}
