@@ -5,7 +5,7 @@ export default async function HomePage() {
   const recentPosts = getRecentPosts(3);
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-purple-950 dark:via-purple-900 dark:to-purple-950">
       <section className="max-w-4xl mx-auto px-6 py-20 md:py-32">
         <div className="max-w-2xl">
           <div className="inline-block mb-6">
@@ -16,13 +16,13 @@ export default async function HomePage() {
           <p className="text-2xl md:text-3xl text-neutral-600 dark:text-neutral-400 mb-8 font-medium leading-tight text-pretty">
             AI that works for you.
             <br />
-            <span className="text-amber-600 dark:text-amber-500">Not the other way around.</span>
+            <span className="text-gold-600 dark:text-gold-400">Not the other way around.</span>
           </p>
 
           {/* Services Section */}
           <div className="bg-neutral-900 dark:bg-neutral-900 rounded-2xl p-8 md:p-10 mb-8 border border-neutral-800">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-8 bg-amber-500 rounded-full"></div>
+              <div className="w-1 h-8 bg-purple-600 rounded-full"></div>
               <p className="text-neutral-400 text-sm font-semibold tracking-wide uppercase">
                 Learn
               </p>
@@ -31,7 +31,7 @@ export default async function HomePage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-balance">
               How to leverage AI
               <br />
-              <span className="text-amber-500">for your business</span>
+              <span className="text-gold-600 dark:text-gold-400">for your business</span>
             </h2>
             
             <p className="text-neutral-300 mb-10 text-lg leading-relaxed max-w-2xl text-pretty">
@@ -60,7 +60,7 @@ export default async function HomePage() {
               ].map(({ emoji, title, desc }) => (
                 <div
                   key={title}
-                  className="bg-neutral-800/50 rounded-xl p-6 border border-neutral-700 hover:border-amber-500/50 transition-colors"
+                  className="bg-neutral-800/50 rounded-xl p-6 border border-neutral-700 hover:border-purple-500/50 transition-colors"
                 >
                   <div className="text-3xl mb-3">{emoji}</div>
                   <div className="text-white font-bold text-lg mb-2">{title}</div>
@@ -74,7 +74,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/get-started"
-                className="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-400 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[52px]"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[52px]"
               >
                 Let's talk →
               </Link>
@@ -88,7 +88,7 @@ export default async function HomePage() {
           </div>
 
           {/* Newsletter */}
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 mb-12 shadow-sm border border-neutral-200 dark:border-neutral-800">
+          <div className="bg-white dark:bg-purple-900 rounded-2xl p-8 mb-12 shadow-sm border border-purple-200 dark:border-purple-800">
             <div className="flex items-start gap-4">
               <div className="text-4xl">📮</div>
               <div className="flex-1">
@@ -98,11 +98,11 @@ export default async function HomePage() {
                 <p className="text-neutral-600 dark:text-neutral-400 mb-6 text-base leading-relaxed text-pretty">
                   What I'm building, what's working, what isn't.
                   <br />
-                  <span className="text-amber-600 dark:text-amber-500 font-medium">No spam. Unsubscribe anytime.</span>
+                  <span className="text-gold-600 dark:text-gold-400 font-medium">No spam. Unsubscribe anytime.</span>
                 </p>
                 <Link
                   href="/newsletter"
-                  className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px]"
+                  className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[48px]"
                 >
                   Subscribe →
                 </Link>
@@ -118,7 +118,7 @@ export default async function HomePage() {
           <li>
             <Link
               href="/blog"
-              className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px] min-w-[48px]"
+              className="inline-flex items-center justify-center bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[48px] min-w-[48px]"
             >
               Articles
             </Link>
@@ -126,7 +126,7 @@ export default async function HomePage() {
           <li>
             <Link
               href="/about"
-              className="inline-flex items-center justify-center bg-white hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 min-h-[48px] min-w-[48px]"
+              className="inline-flex items-center justify-center bg-white hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 px-6 py-3 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[48px] min-w-[48px]"
             >
               About
             </Link>
@@ -149,7 +149,7 @@ export default async function HomePage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-neutral-800 hover:border-amber-500 dark:hover:border-amber-500 hover:shadow-lg transition-all block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+                className="bg-white dark:bg-purple-900 rounded-xl p-6 border border-purple-200 dark:border-purple-800 hover:border-purple-500 dark:hover:border-purple-500 hover:shadow-lg transition-all block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
               >
                 <time
                   dateTime={post.date}
@@ -161,7 +161,7 @@ export default async function HomePage() {
                     day: "numeric",
                   })}
                 </time>
-                <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors leading-tight mb-3 text-balance">
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-tight mb-3 text-balance">
                   {post.title}
                 </h3>
                 {post.summary && (
