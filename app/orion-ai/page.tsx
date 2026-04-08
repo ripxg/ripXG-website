@@ -65,7 +65,7 @@ export default function OrionAIPage() {
       <section className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-neutral-900 dark:bg-neutral-900 rounded-2xl p-8 md:p-10 border border-neutral-800">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-balance">
-            Cloud AI is leaking your data.
+            Your business run by AI.
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             {[
@@ -106,12 +106,11 @@ export default function OrionAIPage() {
       <section className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 md:p-10 shadow-sm border border-neutral-200 dark:border-neutral-800">
           <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
-            Orion AI runs on{" "}
-            <span className="text-amber-600 dark:text-amber-500">YOUR</span>{" "}
-            servers.
+            Visualized on a single{" "}
+            <span className="text-amber-600 dark:text-amber-500">dashboard</span>.
           </h2>
           <p className="text-xl text-neutral-700 dark:text-neutral-300 font-semibold mb-8 text-balance">
-            Zero-trust architecture. Not marketing fluff.
+            Projects, tasks, agents and costs.
           </p>
           <div className="space-y-5 text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed text-pretty">
             <p>

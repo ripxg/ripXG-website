@@ -24,18 +24,18 @@ export default async function HomePage() {
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-amber-500 rounded-full"></div>
               <p className="text-neutral-400 text-sm font-semibold tracking-wide uppercase">
-                What I do
+                Learn
               </p>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-balance">
-              You tell me what needs doing.
+              How to leverage AI
               <br />
-              <span className="text-amber-500">I make AI do it.</span>
+              <span className="text-amber-500">for your business</span>
             </h2>
             
             <p className="text-neutral-300 mb-10 text-lg leading-relaxed max-w-2xl text-pretty">
-              Most AI tools are overpriced chatbots. I build actual systems —
+              Most AI tools are overpriced chatbots. Real leverage comes from systems —
               agents that connect to your tools, automate your workflows,
               and run on your own infrastructure. No vendor lock-in, no data leakage.
             </p>
