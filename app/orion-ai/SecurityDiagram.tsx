@@ -37,310 +37,188 @@ export default function SecurityDiagram() {
       {/* Managed Mode Diagram */}
       {deploymentMode === "managed" && (
         <svg
-          viewBox="0 0 800 480"
+          viewBox="0 0 800 400"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-auto"
           style={{ minWidth: 480 }}
-          aria-label="Fully managed Orion AI SaaS architecture showing service, user channels, support escalation"
+          aria-label="Fully managed Orion AI architecture"
           role="img"
         >
           <defs>
-            <marker id="arrow-gold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#ca8a04" />
+            <marker id="arrow-purple" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L10,4 z" fill="#a855f7" />
             </marker>
-            <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#10b981" />
+            <marker id="arrow-cyan" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L10,4 z" fill="#22d3ee" />
             </marker>
-            <marker id="arrow-indigo" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#6366f1" />
-            </marker>
-            <marker id="arrow-telegram" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8" />
-            </marker>
-            <marker id="arrow-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#a855f7" />
+            <marker id="arrow-green" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L10,4 z" fill="#10b981" />
             </marker>
           </defs>
 
-          {/* ── SaaS Platform outer boundary ── */}
+          {/* ── SaaS Platform Container ── */}
           <rect
-            x="10" y="8" width="780" height="265" rx="16"
-            fill="rgba(139,92,246,0.08)"
+            x="50" y="20" width="700" height="240"
+            rx="20"
+            fill="rgba(139,92,246,0.06)"
             stroke="#8b5cf6"
             strokeWidth="2"
           />
           <text
-            x="400" y="36"
+            x="400" y="50"
             textAnchor="middle"
             fill="#a855f7"
-            fontSize="13"
+            fontSize="14"
             fontWeight="700"
             letterSpacing="2"
-            fontFamily="sans-serif"
           >
-            ORION AI SAAS PLATFORM
+            ORION AI SAAS
           </text>
 
-          {/* ── User Dashboard UI box ── */}
+          {/* ── Dashboard Box ── */}
           <rect
-            x="28" y="52" width="200" height="160" rx="12"
-            fill="rgba(234,179,8,0.08)"
+            x="80" y="70" width="160" height="100"
+            rx="12"
+            fill="rgba(234,179,8,0.1)"
             stroke="#ca8a04"
-            strokeWidth="1.5"
-          />
-          <text x="128" y="80" textAnchor="middle" fill="#fbbf24" fontSize="13" fontWeight="700">
-            📊 Your Dashboard
-          </text>
-          {[
-            "View agents & tasks",
-            "Monitor progress",
-            "Manage integrations",
-            "Track costs",
-          ].map((item, i) => (
-            <text
-              key={i}
-              x="48"
-              y={104 + i * 22}
-              fill="#c4b5fd"
-              fontSize="11"
-              fontFamily="sans-serif"
-            >
-              • {item}
-            </text>
-          ))}
-
-          {/* ── Orion AI Service box ── */}
-          <rect
-            x="260" y="52" width="280" height="210" rx="12"
-            fill="rgba(139,92,246,0.15)"
-            stroke="#a855f7"
             strokeWidth="2"
           />
-          <text x="400" y="80" textAnchor="middle" fill="#e9d5ff" fontSize="14" fontWeight="700">
-            🤖 Orion AI Service
+          <text x="160" y="105" textAnchor="middle" fill="#fbbf24" fontSize="16" fontWeight="700">
+            📊
           </text>
-          <text x="400" y="100" textAnchor="middle" fill="#c4b5fd" fontSize="11" fontStyle="italic">
-            Your team of AI agents
+          <text x="160" y="128" textAnchor="middle" fill="#fbbf24" fontSize="12" fontWeight="600">
+            Your Dashboard
           </text>
-
-          {/* Agent Teams */}
-          <rect x="280" y="115" width="240" height="75" rx="8" fill="rgba(88,28,135,0.3)" stroke="#7c3aed" strokeWidth="1" />
-          <text x="400" y="135" textAnchor="middle" fill="#e9d5ff" fontSize="11" fontWeight="600">
-            Agent Teams
-          </text>
-          <text x="400" y="152" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-            • Backend Engineers
-          </text>
-          <text x="400" y="166" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-            • Frontend Engineers
-          </text>
-          <text x="400" y="180" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-            • Security Reviewers
+          <text x="160" y="148" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            Monitor & manage
           </text>
 
-          {/* Scoped Tool Access */}
-          <rect x="280" y="200" width="240" height="52" rx="8" fill="rgba(16,185,129,0.1)" stroke="#10b981" strokeWidth="1" />
-          <text x="400" y="220" textAnchor="middle" fill="#34d399" fontSize="11" fontWeight="600">
-            🔒 Scoped Tool Access
-          </text>
-          <text x="400" y="238" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-            Agents only access authorized integrations
-          </text>
-
-          {/* ── Integrations box ── */}
+          {/* ── AI Service Box ── */}
           <rect
-            x="572" y="52" width="200" height="210" rx="12"
-            fill="rgba(30,10,60,0.5)"
+            x="280" y="70" width="240" height="160"
+            rx="12"
+            fill="rgba(139,92,246,0.12)"
+            stroke="#a855f7"
+            strokeWidth="2.5"
+          />
+          <text x="400" y="105" textAnchor="middle" fill="#e9d5ff" fontSize="16" fontWeight="700">
+            🤖
+          </text>
+          <text x="400" y="128" textAnchor="middle" fill="#e9d5ff" fontSize="13" fontWeight="700">
+            AI Agents
+          </text>
+          <text x="400" y="148" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            Your automated team
+          </text>
+
+          {/* Scoped Access Badge */}
+          <rect x="310" y="165" width="180" height="50" rx="8" fill="rgba(16,185,129,0.15)" stroke="#10b981" strokeWidth="1.5" />
+          <text x="400" y="185" textAnchor="middle" fill="#34d399" fontSize="10" fontWeight="600">
+            🔒 Scoped Access
+          </text>
+          <text x="400" y="202" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+            Authorize per tool
+          </text>
+
+          {/* ── Integrations Box ── */}
+          <rect
+            x="560" y="70" width="160" height="160"
+            rx="12"
+            fill="rgba(30,10,60,0.6)"
             stroke="#4c1d95"
-            strokeWidth="1.5"
+            strokeWidth="2"
           />
-          <text x="672" y="80" textAnchor="middle" fill="#e9d5ff" fontSize="13" fontWeight="700">
-            🔌 Your Integrations
+          <text x="640" y="105" textAnchor="middle" fill="#e9d5ff" fontSize="16" fontWeight="700">
+            🔌
           </text>
-          {[
-            "Gmail • Slack",
-            "Notion • Airtable",
-            "HubSpot • Stripe",
-            "Shopify • QuickBooks",
-            "+ 20+ more tools",
-          ].map((item, i) => (
-            <text
-              key={i}
-              x="592"
-              y={104 + i * 22}
-              fill="#c4b5fd"
-              fontSize="11"
-              fontFamily="sans-serif"
-            >
-              • {item}
-            </text>
-          ))}
+          <text x="640" y="128" textAnchor="middle" fill="#e9d5ff" fontSize="12" fontWeight="600">
+            Your Tools
+          </text>
+          <text x="640" y="148" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            Gmail • Slack
+          </text>
+          <text x="640" y="163" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            Notion • HubSpot
+          </text>
+          <text x="640" y="178" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            Stripe • +20 more
+          </text>
 
-          {/* ── User Channel box ── */}
+          {/* ── User Channel Box ── */}
           <rect
-            x="28" y="295" width="200" height="90" rx="12"
-            fill="rgba(56,189,248,0.1)"
-            stroke="#38bdf8"
-            strokeWidth="1.5"
+            x="80" y="280" width="180" height="80"
+            rx="12"
+            fill="rgba(34,211,238,0.1)"
+            stroke="#22d3ee"
+            strokeWidth="2"
           />
-          <text x="128" y="323" textAnchor="middle" fill="#38bdf8" fontSize="13" fontWeight="700">
+          <text x="170" y="308" textAnchor="middle" fill="#22d3ee" fontSize="15" fontWeight="700">
             💬 Your Channel
           </text>
-          <text x="128" y="343" textAnchor="middle" fill="#c4b5fd" fontSize="11">
-    WhatsApp or Telegram
+          <text x="170" y="328" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+            WhatsApp / Telegram
           </text>
-          <text x="128" y="360" textAnchor="middle" fill="#c4b5fd" fontSize="11">
-            Authenticated • Direct
-          </text>
-          <text x="128" y="377" textAnchor="middle" fill="#c4b5fd" fontSize="10" fontStyle="italic">
-            Talk to your AI team
+          <text x="170" y="345" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+            Direct & authenticated
           </text>
 
-          {/* ── Tailscale Secure Channel box ── */}
+          {/* ── Support Box ── */}
           <rect
-            x="300" y="295" width="200" height="90" rx="12"
-            fill="rgba(16,185,129,0.1)"
-            stroke="#10b981"
-            strokeWidth="1.5"
-          />
-          <text x="400" y="323" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="700">
-            🔒 Secure Channel
-          </text>
-          <text x="400" y="343" textAnchor="middle" fill="#34d399" fontSize="11">
-            Tailscale Private Network
-          </text>
-          <text x="400" y="360" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-            Support escalation only
-          </text>
-          <text x="400" y="377" textAnchor="middle" fill="#c4b5fd" fontSize="10" fontStyle="italic">
-    Encrypted • Zero-trust
-          </text>
-
-          {/* ── Support Team box ── */}
-          <rect
-            x="572" y="295" width="200" height="90" rx="12"
+            x="540" y="280" width="180" height="80"
+            rx="12"
             fill="rgba(99,102,241,0.1)"
             stroke="#6366f1"
-            strokeWidth="1.5"
+            strokeWidth="2"
           />
-          <text x="672" y="323" textAnchor="middle" fill="#a5b4fc" fontSize="13" fontWeight="700">
-            🛠 Orion AI Support
+          <text x="630" y="308" textAnchor="middle" fill="#a5b4fc" fontSize="15" fontWeight="700">
+            🛠 Support
           </text>
-          <text x="672" y="343" textAnchor="middle" fill="#c4b5fd" fontSize="11">
+          <text x="630" y="328" textAnchor="middle" fill="#c4b5fd" fontSize="10">
             Technical issues only
           </text>
-          <text x="672" y="360" textAnchor="middle" fill="#c4b5fd" fontSize="10">
-    No data access • Stack only
-          </text>
-          <text x="672" y="377" textAnchor="middle" fill="#c4b5fd" fontSize="10" fontStyle="italic">
+          <text x="630" y="345" textAnchor="middle" fill="#c4b5fd" fontSize="9">
             Via secure channel
           </text>
 
-          {/* ── Arrow 1: Dashboard → SaaS (purple) ── */}
-          <line
-            x1="228" y1="132" x2="259" y2="132"
-            stroke="#a855f7"
-            strokeWidth="1.5"
-            markerEnd="url(#arrow-purple)"
-          />
-          <text x="235" y="125" fill="#a855f7" fontSize="9" fontStyle="italic">
-            access
-          </text>
+          {/* ── Arrows ── */}
+          {/* Dashboard → AI */}
+          <line x1="240" y1="120" x2="279" y2="120" stroke="#a855f7" strokeWidth="2" markerEnd="url(#arrow-purple)" />
 
-          {/* ── Arrow 2: SaaS → Integrations (purple) ── */}
-          <line
-            x1="540" y1="132" x2="571" y2="132"
-            stroke="#a855f7"
-            strokeWidth="1.5"
-            markerEnd="url(#arrow-purple)"
-          />
-          <text x="545" y="125" fill="#a855f7" fontSize="9" fontStyle="italic">
-            scoped
-          </text>
+          {/* AI → Tools */}
+          <line x1="520" y1="150" x2="559" y2="150" stroke="#a855f7" strokeWidth="2" markerEnd="url(#arrow-purple)" />
 
-          {/* ── Arrow 3: User Channel → SaaS (telegram) ── */}
-          <path
-            d="M 128,295 L 128,270 L 300,270 L 300,200 L 320,200"
-            fill="none"
-            stroke="#38bdf8"
-            strokeWidth="1.5"
-            markerEnd="url(#arrow-telegram)"
-          />
-          <text x="145" y="265" fill="#38bdf8" fontSize="9" fontStyle="italic">
-            Your messages
-          </text>
+          {/* User → AI */}
+          <path d="M 170,280 L 170,240 L 320,240 L 320,150 L 340,150" fill="none" stroke="#22d3ee" strokeWidth="2" markerEnd="url(#arrow-cyan)" />
 
-          {/* ── Arrow 4: SaaS → Secure Channel (indigo) ── */}
-          <path
-            d="M 400,262 L 400,294"
-            fill="none"
-            stroke="#6366f1"
-            strokeWidth="1.5"
-            markerEnd="url(#arrow-indigo)"
-          />
-          <text x="410" y="285" fill="#6366f1" fontSize="9" fontStyle="italic">
-    escalation
-          </text>
+          {/* AI → Support (via secure) */}
+          <path d="M 400,230 L 400,265 L 540,320 L 539,320" fill="none" stroke="#10b981" strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrow-green)" />
 
-          {/* ── Arrow 5: Secure Channel → Support (green) ── */}
-          <line
-            x1="500" y1="340" x2="571" y2="340"
-            stroke="#10b981"
-            strokeWidth="1.5"
-            markerEnd="url(#arrow-green)"
-          />
-          <text x="515" y="335" fill="#10b981" fontSize="9" fontStyle="italic">
-            encrypted
+          {/* Legend/Note */}
+          <rect x="290" y="285" width="220" height="70" rx="10" fill="rgba(139,92,246,0.04)" stroke="#8b5cf6" strokeWidth="1" />
+          <text x="400" y="308" textAnchor="middle" fill="#e9d5ff" fontSize="10" fontWeight="600">
+            ✨ Fully Managed
           </text>
-
-          {/* ── Note box ── */}
-          <rect
-            x="28" y="420" width="744" height="50" rx="8"
-            fill="rgba(139,92,246,0.05)"
-            stroke="#8b5cf6"
-            strokeWidth="1"
-          />
-          <text x="400" y="440" textAnchor="middle" fill="#c4b5fd" fontSize="11" fontWeight="600">
-            💡 Fully Managed: We handle infrastructure, updates, and security. You focus on your business.
+          <text x="400" y="326" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+            We handle infrastructure
           </text>
-          <text x="400" y="458" textAnchor="middle" fill="#a5b4fc" fontSize="10">
-    Your agents work within our secure SaaS platform with scoped access to your tools.
+          <text x="400" y="342" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+            You focus on your business
           </text>
         </svg>
       )}
 
-      {/* Self-Hosted Mode Diagram (placeholder) */}
+      {/* Self-Hosted Mode */}
       {deploymentMode === "self-hosted" && (
         <div className="text-center py-16">
           <svg
-            viewBox="0 0 800 480"
+            viewBox="0 0 800 400"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-auto opacity-50"
+            className="w-full h-auto opacity-40"
             style={{ minWidth: 480 }}
-            aria-label="Self-hosted deployment coming soon"
-            role="img"
           >
-            {/* Same diagram as original, but greyed out */}
-            <rect
-              x="10" y="8" width="780" height="265" rx="16"
-              fill="rgba(100,100,100,0.1)"
-              stroke="#666"
-              strokeWidth="1"
-              strokeDasharray="8,4"
-            />
-            <text
-              x="400" y="36"
-              textAnchor="middle"
-              fill="#666"
-              fontSize="12"
-              fontWeight="700"
-              letterSpacing="3"
-              fontFamily="monospace"
-            >
-              YOUR VPS / LINUX SERVER — SELF-HOSTED
-            </text>
-            <text x="400" y="240" textAnchor="middle" fill="#666" fontSize="16" fontWeight="600">
-              Self-hosted deployment option coming soon
+            <rect x="100" y="100" width="600" height="200" rx="16" fill="#666" stroke="#666" strokeWidth="2" strokeDasharray="8,4" />
+            <text x="400" y="210" textAnchor="middle" fill="#666" fontSize="18" fontWeight="600">
+              Self-hosted option coming soon
             </text>
           </svg>
         </div>
