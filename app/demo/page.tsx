@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SecurityDiagram from "./SecurityDiagram";
+import SecurityDiagram from "../orion-ai/SecurityDiagram";
 
 // Demo agents data
 const agents = [
@@ -182,7 +182,7 @@ const priorityColors = {
   low: "text-green-600 dark:text-green-400",
 };
 
-export default function OrionAIPage() {
+export default function DemoPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-purple-950 dark:via-purple-900 dark:to-purple-950">
       {/* Back nav */}
@@ -399,6 +399,10 @@ export default function OrionAIPage() {
         <div className="bg-neutral-900 rounded-2xl p-4 md:p-6 border border-purple-800 shadow-xl overflow-x-auto">
           <SecurityDiagram />
         </div>
+        <p className="mt-4 text-sm text-purple-500 dark:text-purple-600 text-center text-pretty max-w-3xl mx-auto">
+          The Isolated Agent has no access to your tools or data — its only function is escalating technical blockers to the Orion team.
+          Your production data never leaves your infrastructure.
+        </p>
       </section>
 
       {/* CTA Section */}
@@ -408,7 +412,7 @@ export default function OrionAIPage() {
             Ready to Build Your AI Team?
           </h2>
           <p className="text-xl text-neutral-300 mb-10 max-w-2xl mx-auto text-pretty leading-relaxed">
-            Start with a free consultation. We'll design the right agent setup for your business and deploy it on our secure infrastructure.
+            Start with a free consultation. We'll design the right agent setup for your business and deploy it on your infrastructure.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -427,7 +431,7 @@ export default function OrionAIPage() {
             </a>
           </div>
           <p className="mt-10 text-sm text-neutral-500">
-            Powered by Orion AI from ripXG. Fully managed. Secure.
+            Powered by Orion AI from ripXG. Open source. Self-hosted. Secure.
           </p>
         </div>
       </section>

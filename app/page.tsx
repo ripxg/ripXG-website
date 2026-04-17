@@ -50,7 +50,7 @@ export default async function HomePage() {
                 {
                   emoji: "🔐",
                   title: "Zero-Trust",
-                  desc: "Your data, your servers, your control",
+                  desc: "Highly secure, protected environment",
                 },
                 {
                   emoji: "⚙️",
