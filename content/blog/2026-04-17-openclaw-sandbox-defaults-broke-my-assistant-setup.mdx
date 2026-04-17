@@ -9,7 +9,7 @@ tweet: >
   Spent hours debugging sandboxed AI agents until I realized: proper infrastructure beats clever workarounds every time. Here's how I made secure agents actually useful.
 ---
 
-Last Friday I hit a wall. My AI agent Oliver could run [gws](https://github.com/Gearbox/gws) (Google Workspace CLI) perfectly when sandboxing was off. But the moment I enabled sandbox mode for security, everything broke.
+Last Friday I hit a wall. My AI agent Oliver could run [gws](https://github.com/googleworkspace/cli) (Google Workspace CLI) perfectly when sandboxing was off. But the moment I enabled sandbox mode for security, everything broke.
 
 Missing CA certificates. Read-only filesystem. Permission denied. I spent hours debugging error messages, trying different workarounds, watching container after container fail.
 
@@ -19,7 +19,7 @@ Then I tried mounting the gws binary from the host. OpenClaw's [sandbox security
 
 The breakthrough came when I stopped trying to fix it at runtime.
 
-I built a custom Docker image based on the standard OpenClaw sandbox, but with ca-certificates and Node.js baked in at build time. No runtime installation, no permission issues, no fragile workarounds. I copied the [gws binary](https://github.com/Gearbox/gws) directly into each agent's workspace instead of trying to mount from blocked system directories. I set environment variables so the container knew where to find everything.
+I built a custom Docker image based on the standard OpenClaw sandbox, but with ca-certificates and Node.js baked in at build time. No runtime installation, no permission issues, no fragile workarounds. I copied the [gws binary](https://github.com/googleworkspace/cli) directly into each agent's workspace instead of trying to mount from blocked system directories. I set environment variables so the container knew where to find everything.
 
 One container image restart later and Oliver was back. Only now running in a secure sandbox with full gws capabilities.
 
