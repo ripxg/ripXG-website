@@ -45,14 +45,14 @@ export default function SecurityDiagram() {
           role="img"
         >
           <defs>
-            <marker id="arrow-purple" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-              <path d="M0,0 L0,8 L10,4 z" fill="#a855f7" />
+            <marker id="arrow-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#a855f7" />
             </marker>
-            <marker id="arrow-cyan" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-              <path d="M0,0 L0,8 L10,4 z" fill="#22d3ee" />
+            <marker id="arrow-cyan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#22d3ee" />
             </marker>
-            <marker id="arrow-green" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-              <path d="M0,0 L0,8 L10,4 z" fill="#10b981" />
+            <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#10b981" />
             </marker>
           </defs>
 
@@ -144,7 +144,7 @@ export default function SecurityDiagram() {
             Stripe • +20 more
           </text>
 
-          {/* ── User Channel Box ── */}
+          {/* ── User Box ── */}
           <rect
             x="80" y="280" width="180" height="80"
             rx="12"
@@ -152,13 +152,13 @@ export default function SecurityDiagram() {
             stroke="#22d3ee"
             strokeWidth="2"
           />
-          <text x="170" y="308" textAnchor="middle" fill="#22d3ee" fontSize="15" fontWeight="700">
-            💬 Your Channel
+          <text x="170" y="315" textAnchor="middle" fill="#22d3ee" fontSize="15" fontWeight="700">
+            👤 You
           </text>
-          <text x="170" y="328" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+          <text x="170" y="338" textAnchor="middle" fill="#c4b5fd" fontSize="10">
             WhatsApp / Telegram
           </text>
-          <text x="170" y="345" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+          <text x="170" y="353" textAnchor="middle" fill="#c4b5fd" fontSize="9">
             Direct & authenticated
           </text>
 
@@ -170,28 +170,31 @@ export default function SecurityDiagram() {
             stroke="#6366f1"
             strokeWidth="2"
           />
-          <text x="630" y="308" textAnchor="middle" fill="#a5b4fc" fontSize="15" fontWeight="700">
+          <text x="630" y="315" textAnchor="middle" fill="#a5b4fc" fontSize="15" fontWeight="700">
             🛠 Support
           </text>
-          <text x="630" y="328" textAnchor="middle" fill="#c4b5fd" fontSize="10">
+          <text x="630" y="338" textAnchor="middle" fill="#c4b5fd" fontSize="10">
             Technical issues only
           </text>
-          <text x="630" y="345" textAnchor="middle" fill="#c4b5fd" fontSize="9">
+          <text x="630" y="353" textAnchor="middle" fill="#c4b5fd" fontSize="9">
             Via secure channel
           </text>
 
-          {/* ── Arrows ── */}
+          {/* ── Arrows (smaller, corrected directions) ── */}
           {/* Dashboard → AI */}
-          <line x1="240" y1="120" x2="279" y2="120" stroke="#a855f7" strokeWidth="2" markerEnd="url(#arrow-purple)" />
+          <line x1="240" y1="120" x2="279" y2="120" stroke="#a855f7" strokeWidth="1.5" markerEnd="url(#arrow-purple)" />
 
           {/* AI → Tools */}
-          <line x1="520" y1="150" x2="559" y2="150" stroke="#a855f7" strokeWidth="2" markerEnd="url(#arrow-purple)" />
+          <line x1="520" y1="150" x2="559" y2="150" stroke="#a855f7" strokeWidth="1.5" markerEnd="url(#arrow-purple)" />
 
-          {/* User → AI */}
-          <path d="M 170,280 L 170,240 L 320,240 L 320,150 L 340,150" fill="none" stroke="#22d3ee" strokeWidth="2" markerEnd="url(#arrow-cyan)" />
+          {/* You → Dashboard (straight up) */}
+          <line x1="170" y1="280" x2="170" y2="171" stroke="#22d3ee" strokeWidth="1.5" markerEnd="url(#arrow-cyan)" />
 
-          {/* AI → Support (via secure) */}
-          <path d="M 400,230 L 400,265 L 540,320 L 539,320" fill="none" stroke="#10b981" strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrow-green)" />
+          {/* You → AI (up and right) */}
+          <line x1="260" y1="280" x2="340" y2="231" stroke="#22d3ee" strokeWidth="1.5" markerEnd="url(#arrow-cyan)" />
+
+          {/* AI → Support (shortened, facing right) */}
+          <line x1="520" y1="320" x2="539" y2="320" stroke="#10b981" strokeWidth="1.5" strokeDasharray="4,3" markerEnd="url(#arrow-green)" />
 
           {/* Legend/Note */}
           <rect x="290" y="285" width="220" height="70" rx="10" fill="rgba(139,92,246,0.04)" stroke="#8b5cf6" strokeWidth="1" />
