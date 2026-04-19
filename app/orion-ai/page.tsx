@@ -132,6 +132,58 @@ export default function OrionAIPage() {
         </div>
       </section>
 
+      {/* Why Businesses Choose Orion AI */}
+      <section className="max-w-4xl mx-auto px-6 py-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+          Why businesses choose Orion AI
+        </h2>
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 text-pretty">
+          Five reasons why SMBs trust their operations to our agent platform.
+        </p>
+        <div className="grid gap-6 md:grid-cols-2">
+          {[
+            {
+              emoji: "🤖",
+              title: "Agency of agents at your fingertips",
+              desc: "Specialized AI agents that work autonomously on your behalf — from customer support to operations to finance. Each agent has a role, skills, and the ability to execute tasks independently.",
+            },
+            {
+              emoji: "📋",
+              title: "Use-cases ready to add to your backlog",
+              desc: "Pre-built automation scenarios for common business operations. Invoice processing, lead qualification, report generation — drop them into your workflow and watch them run.",
+            },
+            {
+              emoji: "📊",
+              title: "Track projects and BAU tasks on a board",
+              desc: "Visualize everything your agents are working on in real-time. See task status, progress updates, and completion metrics — all in one place. Full visibility into autonomous work.",
+            },
+            {
+              emoji: "🔒",
+              title: "Secure backend, battle-tested",
+              desc: "Deployed on your infrastructure with zero-trust architecture. Your data never leaves your environment. Proven across finance, legal, and e-commerce — security isn't an afterthought.",
+            },
+            {
+              emoji: "🛡️",
+              title: "Technical issues raised to the Orion team",
+              desc: "When agents encounter blockers beyond their scope, they escalate directly to our team. No endless troubleshooting — just rapid resolution from the people who built the system.",
+            },
+          ].map(({ emoji, title, desc }) => (
+            <div
+              key={title}
+              className="bg-gradient-to-br from-purple-50 to-white dark:from-purple-900/50 dark:to-purple-900 rounded-xl p-6 border border-purple-200 dark:border-purple-800 shadow-sm hover:shadow-md hover:border-gold-500 dark:hover:border-gold-500 transition-all"
+            >
+              <div className="text-3xl mb-3">{emoji}</div>
+              <div className="text-neutral-900 dark:text-white font-bold text-lg mb-2">
+                {title}
+              </div>
+              <div className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed text-pretty">
+                {desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="max-w-4xl mx-auto px-6 py-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
@@ -272,17 +324,28 @@ export default function OrionAIPage() {
       <section className="bg-neutral-900 dark:bg-neutral-900 mt-12">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white text-balance">
-            Ready to automate without compromise?
+            Ready to put AI to work in your business?
           </h2>
-          <p className="text-xl text-neutral-300 mb-10 max-w-2xl mx-auto text-pretty leading-relaxed">
-            Tell me about your workflow and I'll design the right agent setup for your business.
+          <p className="text-xl text-neutral-300 mb-4 max-w-2xl mx-auto text-pretty leading-relaxed">
+            Contact Jeff directly to discuss your automation needs.
           </p>
-          <Link
-            href="/get-started"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-10 py-5 rounded-xl font-bold text-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[60px]"
-          >
-            Let's Talk →
-          </Link>
+          <p className="text-lg text-gold-400 mb-10 max-w-2xl mx-auto text-pretty leading-relaxed font-semibold">
+            No sales pitch. No obligation. Just a conversation about what's possible.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="mailto:jeff@ripxg.com"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-10 py-5 rounded-xl font-bold text-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[60px]"
+            >
+              Contact Jeff →
+            </a>
+            <Link
+              href="/get-started"
+              className="inline-flex items-center justify-center bg-transparent border-2 border-purple-400 hover:border-gold-400 text-purple-300 hover:text-gold-300 px-10 py-5 rounded-xl font-bold text-xl transition-all min-h-[60px]"
+            >
+              Learn More
+            </Link>
+          </div>
           <p className="mt-10 text-sm text-neutral-500">
             Orion AI is a ripXG service.
           </p>
