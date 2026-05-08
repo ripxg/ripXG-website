@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { decodeHtmlEntities } from '@/lib/html-entities';
 import { markdownToHtml } from '@/lib/markdown';
+import ShareButtons from './ShareButtons';
 
 const blogDir = path.join(process.cwd(), 'content', 'blog');
 const SITE_URL = 'https://ripxg.com';
@@ -188,6 +189,10 @@ export default async function BlogPostPage({
               Original post on WordPress →
             </a>
           )}
+
+          <div className="mt-6">
+            <ShareButtons url={`${SITE_URL}/blog/${slug}`} title={post.title} />
+          </div>
         </header>
 
           <div className="article-content prose prose-lg prose-purple dark:prose-invert max-w-none
@@ -197,6 +202,10 @@ export default async function BlogPostPage({
             prose-blockquote:border-l-gold-500 prose-blockquote:bg-purple-50 dark:prose-blockquote:bg-purple-900
             prose-strong:font-bold">
             <div dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }} />
+          </div>
+
+          <div className="mt-10 pt-8 border-t border-purple-100 dark:border-purple-800">
+            <ShareButtons url={`${SITE_URL}/blog/${slug}`} title={post.title} />
           </div>
         </div>
       </article>
