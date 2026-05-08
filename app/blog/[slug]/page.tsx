@@ -83,6 +83,8 @@ function getBlogPost(slug: string) {
     slug,
     title: decodeHtmlEntities(data.title || ''),
     date: data.date,
+    dateModified: data.date_modified || data.date,
+    author: data.author || 'Jeff Chau',
     summary: data.summary ? decodeHtmlEntities(data.summary) : undefined,
     featuredImage: data.featured_image || null,
     tags: data.tags || [],
@@ -103,9 +105,47 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const description = post.summary
+    ? post.summary.replace(/\[&hellip;\]/g, '…').trim()
+    : `${post.title} — ripXG`;
+
+  const imageUrl = post.featuredImage
+    ? post.featuredImage.startsWith('http')
+      ? post.featuredImage
+      : `${SITE_URL}${post.featuredImage}`
+    : `${SITE_URL}/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(description.substring(0, 120))}`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description,
+    datePublished: new Date(post.date).toISOString(),
+    dateModified: new Date(post.dateModified).toISOString(),
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    image: imageUrl,
+    url: `${SITE_URL}/blog/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'ripXG',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/favicon.ico`,
+      },
+    },
+  };
+
   return (
-    <article className="min-h-screen bg-white dark:bg-purple-950">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article className="min-h-screen bg-white dark:bg-purple-950">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <Link href="/blog" className="text-purple-600 dark:text-purple-400 hover:text-gold-500 dark:hover:text-gold-400 mb-8 inline-block font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] inline-flex items-center">
           ← Back to articles
         </Link>
@@ -150,15 +190,16 @@ export default async function BlogPostPage({
           )}
         </header>
 
-        <div className="article-content prose prose-lg prose-purple dark:prose-invert max-w-none 
-          prose-headings:text-balance 
-          prose-p:text-pretty
-          prose-a:text-purple-600 dark:prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-gold-500 
-          prose-blockquote:border-l-gold-500 prose-blockquote:bg-purple-50 dark:prose-blockquote:bg-purple-900
-          prose-strong:font-bold">
-          <div dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }} />
+          <div className="article-content prose prose-lg prose-purple dark:prose-invert max-w-none
+            prose-headings:text-balance
+            prose-p:text-pretty
+            prose-a:text-purple-600 dark:prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-gold-500
+            prose-blockquote:border-l-gold-500 prose-blockquote:bg-purple-50 dark:prose-blockquote:bg-purple-900
+            prose-strong:font-bold">
+            <div dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }} />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   );
 }
