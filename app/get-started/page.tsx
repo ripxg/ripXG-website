@@ -31,6 +31,14 @@ const USE_CASES = [
     description:
       "Your AI manages inbound messages across email, WhatsApp, and social DMs. It qualifies leads, answers common questions, books meetings, and escalates when a human touch is needed.",
   },
+  {
+    id: "ai-observability",
+    emoji: "🔍",
+    title: "Observability & SRE",
+    subtitle: "Runtime security, AI incident response, digital experience",
+    description:
+      "Pilot runtime vulnerability detection, AI-assisted troubleshooting, and digital experience analytics. Get hands-on enablement with Splunk Secure Application, AI Troubleshooting Agent, and Digital Experience Analytics.",
+  },
 ];
 
 export default function GetStartedPage() {
