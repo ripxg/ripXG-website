@@ -153,6 +153,18 @@ export function markdownToHtml(markdown: string): string {
       continue;
     }
     
+    // Images: ![alt](src)
+    const imageMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (imageMatch) {
+      flushParagraph();
+      flushList();
+      flushBlockquote();
+      const alt = imageMatch[1];
+      const src = imageMatch[2];
+      result.push(`<figure><img src="${src}" alt="${alt}" loading="lazy" /><figcaption>${alt}</figcaption></figure>`);
+      continue;
+    }
+
     // Regular paragraph text
     flushList();
     flushBlockquote();
