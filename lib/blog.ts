@@ -39,3 +39,20 @@ export function getBlogPosts(): BlogPost[] {
 export function getRecentPosts(count: number = 3): BlogPost[] {
   return getBlogPosts().slice(0, count);
 }
+
+export function getRelatedPosts(currentSlug: string, tags: string[], count: number = 4): BlogPost[] {
+  const all = getBlogPosts().filter((p) => p.slug !== currentSlug);
+
+  if (tags.length === 0) {
+    return all.slice(0, count);
+  }
+
+  const scored = all.map((post) => ({
+    post,
+    score: post.tags.filter((t) => tags.includes(t)).length,
+  }));
+
+  scored.sort((a, b) => b.score - a.score || 0);
+
+  return scored.slice(0, count).map((s) => s.post);
+}
