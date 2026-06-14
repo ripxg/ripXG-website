@@ -58,7 +58,8 @@ function validateBlogPost(filePath: string): void {
     if (frontmatter.canonical_url) {
       const slug = filename.replace(/\.mdx?$/, '');
       const expectedUrl = `https://ripxg.com/blog/${slug}`;
-      if (frontmatter.canonical_url !== expectedUrl) {
+      const expectedUrlWww = `https://www.ripxg.com/blog/${slug}`;
+      if (frontmatter.canonical_url !== expectedUrl && frontmatter.canonical_url !== expectedUrlWww) {
         errors.push({
           file: filename,
           issue: `canonical_url mismatch: got "${frontmatter.canonical_url}", expected "${expectedUrl}"`,

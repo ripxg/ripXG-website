@@ -22,35 +22,40 @@ const integrations = [
 
 export default function OrionAIPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-white dark:from-purple-950 dark:via-purple-900 dark:to-purple-950">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-purple-950 dark:via-purple-900 dark:to-purple-950">
       {/* Back nav */}
       <div className="max-w-4xl mx-auto px-6 pt-12">
         <Link
           href="/"
-          className="text-purple-600 dark:text-purple-400 hover:text-gold-500 dark:hover:text-gold-400 mb-8 inline-flex items-center font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px]"
+          className="text-purple-600 dark:text-purple-400 hover:text-gold-500 dark:hover:text-gold-400 mb-8 inline-flex items-center font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[44px] transition-colors"
         >
-          ← Back to home
+          ← Back
         </Link>
       </div>
 
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 py-16 md:py-24">
-        <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mb-4">
-          Managed AI Service
-        </p>
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-900 dark:text-white text-balance">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-8 bg-purple-600 rounded-full"></div>
+          <p className="text-purple-600 dark:text-purple-400 text-sm font-semibold tracking-wide uppercase">
+            Managed AI Service
+          </p>
+        </div>
+        <h1 className="text-6xl md:text-8xl font-black mb-6 text-neutral-900 dark:text-white text-balance tracking-tight">
           Orion AI
         </h1>
-        <p className="text-2xl md:text-3xl text-purple-600 dark:text-purple-300 font-semibold mb-6 text-balance">
-          Your own AI team. Zero-trust secured. Fully managed.
+        <p className="text-2xl md:text-4xl text-neutral-700 dark:text-neutral-300 font-bold mb-6 text-balance leading-tight">
+          Your own AI team.
+          <br />
+          <span className="text-gold-600 dark:text-gold-400">Zero-trust secured.</span>
         </p>
-        <p className="text-lg text-gray-600 dark:text-purple-200 mb-10 max-w-2xl text-pretty leading-relaxed">
-          For business owners who want the power of AI without the complexity,
-          the risk, or the IT team.
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-10 max-w-2xl text-pretty leading-relaxed">
+          For business owners who want AI that actually works — without the
+          complexity, the risk, or the need for an IT team.
         </p>
         <Link
           href="/get-started"
-          className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
+          className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[52px]"
         >
           Get Started →
         </Link>
@@ -58,37 +63,37 @@ export default function OrionAIPage() {
 
       {/* The Problem */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-purple-900 dark:bg-purple-950 rounded-xl p-8 shadow-xl border-2 border-gold-500">
-          <h2 className="text-3xl font-bold mb-8 text-white text-balance">
-            Cloud AI isn&apos;t built for your data.
+        <div className="bg-neutral-900 dark:bg-neutral-900 rounded-2xl p-8 md:p-10 border border-neutral-800">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-balance">
+            Your business run by AI.
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
-                emoji: "🔒",
+                emoji: "🔓",
                 title: "Your data, their servers",
-                desc: "Most AI tools send your business data to third-party servers. Contracts, client details, financials — all of it.",
+                desc: "Every prompt you send to ChatGPT, Claude, or Copilot gets processed on external servers. Your business data is now their training data.",
               },
               {
-                emoji: "🤯",
-                title: "Complex to set up",
-                desc: "Connecting AI to your actual workflows requires technical expertise most businesses don't have.",
+                emoji: "🔗",
+                title: "Vendor lock-in",
+                desc: "Once you build workflows around one platform, switching costs massive time and money. They know it — that's the business model.",
               },
               {
-                emoji: "🕳️",
-                title: "No safety net",
-                desc: "When something breaks, you're on your own. No support, no accountability.",
+                emoji: "🚨",
+                title: "No accountability",
+                desc: "When AI hallucinates or leaks data, there's no support line. No contract. No one to blame. You're on your own.",
               },
             ].map(({ emoji, title, desc }) => (
               <div
                 key={title}
-                className="bg-purple-800/50 rounded-lg p-6 border border-purple-700/50"
+                className="bg-neutral-800/50 rounded-xl p-6 border border-neutral-700 hover:border-red-500/50 transition-colors"
               >
                 <div className="text-3xl mb-3">{emoji}</div>
-                <div className="text-white font-semibold text-lg mb-2">
+                <div className="text-white font-bold text-lg mb-2">
                   {title}
                 </div>
-                <div className="text-purple-300 text-sm leading-relaxed text-pretty">
+                <div className="text-neutral-400 text-sm leading-relaxed text-pretty">
                   {desc}
                 </div>
               </div>
@@ -99,83 +104,127 @@ export default function OrionAIPage() {
 
       {/* The Solution */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-white dark:bg-purple-900 rounded-xl p-8 shadow-lg border border-purple-100 dark:border-purple-800">
-          <h2 className="text-3xl font-bold mb-3 text-gray-900 dark:text-white text-balance">
-            Orion AI runs on{" "}
-            <span className="text-gold-500 dark:text-gold-400">YOUR</span>{" "}
-            infrastructure.
+        <div className="bg-white dark:bg-purple-900 rounded-2xl p-8 md:p-10 shadow-sm border border-purple-200 dark:border-purple-800">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+            Visualized on a single{" "}
+            <span className="text-gold-600 dark:text-gold-400">dashboard</span>.
           </h2>
-          <p className="text-xl text-purple-600 dark:text-purple-300 font-semibold mb-6 text-balance">
-            The zero-trust approach to AI agents.
+          <p className="text-xl text-neutral-700 dark:text-neutral-300 font-semibold mb-8 text-balance">
+            Projects, tasks, agents and costs.
           </p>
-          <div className="space-y-4 text-gray-700 dark:text-purple-200 text-lg leading-relaxed text-pretty">
+          <div className="space-y-5 text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed text-pretty">
             <p>
-              Zero-trust means no external service gets blanket access to your
-              business. Every tool connection is explicit, every permission is
-              scoped, and your data never leaves your environment. Orion AI
-              agents are deployed directly onto your own server — they don&apos;t
-              call home, they don&apos;t share your data, and they&apos;re not
-              accessible to anyone outside your network.
+              <strong className="text-neutral-900 dark:text-white font-bold">Zero-trust</strong> means no external service gets blanket access to your business. Every tool connection is explicit, every permission is scoped, and your data never leaves your environment.
             </p>
             <p>
-              This is the only architecture that can genuinely minimise AI data
-              exposure — because true security starts with controlling where
-              your data lives.
+              Orion AI agents deploy directly onto your infrastructure — your VPS, your network, your control. They don't call home, they don't train on your data, and they're not accessible to anyone outside your organization.
+            </p>
+            <p className="text-gold-600 dark:text-gold-400 font-semibold">
+              This is the only way to genuinely minimize AI data exposure.
             </p>
           </div>
-          <div className="mt-6 p-4 bg-purple-50 dark:bg-purple-800/50 rounded-lg border border-purple-200 dark:border-purple-700">
-            <p className="text-sm text-gray-500 dark:text-purple-400 italic leading-relaxed text-pretty">
-              <strong className="not-italic font-semibold text-gray-600 dark:text-purple-300">
-                Important:
-              </strong>{" "}
-              AI agents that connect to external tools (email, CRMs, APIs)
-              operate within those tools&apos; own security boundaries.
-              Zero-trust architecture minimises exposure, but it cannot
-              eliminate all risk inherent to connected workflows. We&apos;re
-              transparent about this because your trust depends on it.
+          <div className="mt-8 p-5 bg-purple-50 dark:bg-purple-950 rounded-xl border-l-4 border-gold-500">
+            <p className="text-sm text-purple-700 dark:text-purple-300 leading-relaxed text-pretty">
+              <strong className="font-bold text-purple-900 dark:text-white">Reality check:</strong>{" "}
+              AI agents that connect to external tools (email, CRMs, APIs) operate within those tools' own security boundaries. Zero-trust architecture minimizes exposure, but can't eliminate all risk from connected workflows. We're transparent about this because your trust depends on it.
             </p>
           </div>
         </div>
       </section>
 
+      {/* Why Businesses Choose Orion AI */}
+      <section className="max-w-4xl mx-auto px-6 py-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+          Why businesses choose Orion AI
+        </h2>
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 text-pretty">
+          Five reasons why SMBs trust their operations to our agent platform.
+        </p>
+        <div className="grid gap-6 md:grid-cols-2">
+          {[
+            {
+              emoji: "🤖",
+              title: "Agency of agents at your fingertips",
+              desc: "Specialized AI agents that work autonomously on your behalf — from customer support to operations to finance. Each agent has a role, skills, and the ability to execute tasks independently.",
+            },
+            {
+              emoji: "📋",
+              title: "Use-cases ready to add to your backlog",
+              desc: "Pre-built automation scenarios for common business operations. Invoice processing, lead qualification, report generation — drop them into your workflow and watch them run.",
+            },
+            {
+              emoji: "📊",
+              title: "Track projects and BAU tasks on a board",
+              desc: "Visualize everything your agents are working on in real-time. See task status, progress updates, and completion metrics — all in one place. Full visibility into autonomous work.",
+            },
+            {
+              emoji: "🔒",
+              title: "Secure backend, battle-tested",
+              desc: "Deployed on your infrastructure with zero-trust architecture. Your data never leaves your environment. Proven across finance, legal, and e-commerce — security isn't an afterthought.",
+            },
+            {
+              emoji: "🛡️",
+              title: "Technical issues raised to the Orion team",
+              desc: "When agents encounter blockers beyond their scope, they escalate directly to our team. No endless troubleshooting — just rapid resolution from the people who built the system.",
+            },
+          ].map(({ emoji, title, desc }) => (
+            <div
+              key={title}
+              className="bg-gradient-to-br from-purple-50 to-white dark:from-purple-900/50 dark:to-purple-900 rounded-xl p-6 border border-purple-200 dark:border-purple-800 shadow-sm hover:shadow-md hover:border-gold-500 dark:hover:border-gold-500 transition-all"
+            >
+              <div className="text-3xl mb-3">{emoji}</div>
+              <div className="text-neutral-900 dark:text-white font-bold text-lg mb-2">
+                {title}
+              </div>
+              <div className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed text-pretty">
+                {desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-3 text-gray-900 dark:text-white text-balance">
-          Simple for you. Powerful underneath.
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+          How it works
         </h2>
-        <div className="grid gap-6 md:grid-cols-3 mt-8">
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 text-pretty">
+          Three steps. No technical skills required.
+        </p>
+        <div className="grid gap-6 md:grid-cols-3">
           {[
             {
               step: "01",
-              emoji: "🗣️",
-              title: "Consult",
-              desc: "We learn your workflow, identify repetitive tasks, and design the right agent setup for your business.",
+              emoji: "💬",
+              title: "We talk",
+              desc: "You tell me what's repetitive, what's annoying, what you wish automated. I design a solution.",
             },
             {
               step: "02",
               emoji: "🚀",
-              title: "Deploy",
-              desc: "We set up Orion AI on your own infrastructure (or a dedicated server). You don't touch a line of code.",
+              title: "I build",
+              desc: "I deploy Orion AI on your infrastructure. You don't touch code. You don't configure servers.",
             },
             {
               step: "03",
-              emoji: "🛠️",
-              title: "Manage",
-              desc: "Ongoing monitoring, updates, and support. If something breaks, we fix it. That's what fully managed means.",
+              emoji: "✅",
+              title: "It runs",
+              desc: "Monitoring, updates, support — I handle it. When something breaks, I fix it. That's 'fully managed'.",
             },
           ].map(({ step, emoji, title, desc }) => (
             <div
               key={step}
-              className="bg-white dark:bg-purple-900 rounded-xl p-6 border border-purple-100 dark:border-purple-800 shadow-md relative overflow-hidden"
+              className="bg-white dark:bg-purple-900 rounded-xl p-6 border border-purple-200 dark:border-purple-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
             >
-              <div className="text-6xl font-black text-purple-100 dark:text-purple-800 absolute top-4 right-4 leading-none select-none">
+              <div className="text-7xl font-black text-purple-100 dark:text-purple-800 absolute top-3 right-4 leading-none select-none -z-10">
                 {step}
               </div>
               <div className="text-3xl mb-3">{emoji}</div>
-              <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
+              <div className="text-neutral-900 dark:text-white font-bold text-xl mb-2">
                 {title}
               </div>
-              <div className="text-gray-600 dark:text-purple-300 text-sm leading-relaxed text-pretty">
+              <div className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed text-pretty">
                 {desc}
               </div>
             </div>
@@ -185,17 +234,17 @@ export default function OrionAIPage() {
 
       {/* Integrations */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-3 text-gray-900 dark:text-white text-balance">
-          Works with your tools.
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+          Works with your tools
         </h2>
-        <p className="text-lg text-gray-600 dark:text-purple-300 mb-8 text-pretty">
-          Orion AI connects to the software your business already uses.
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 text-pretty">
+          Orion AI connects to the software you already use.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {integrations.map(({ slug, label }) => (
             <div
               key={slug}
-              className="bg-white dark:bg-purple-900 rounded-xl p-4 border border-purple-100 dark:border-purple-800 flex flex-col items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-purple-900 rounded-xl p-4 border border-purple-200 dark:border-purple-800 flex flex-col items-center gap-3 shadow-sm hover:border-gold-500 dark:hover:border-gold-500 transition-colors"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -203,31 +252,30 @@ export default function OrionAIPage() {
                 alt={label}
                 width={40}
                 height={40}
-                className="dark:invert"
+                className="dark:invert opacity-80 hover:opacity-100 transition-opacity"
               />
-              <span className="text-xs text-gray-600 dark:text-purple-300 font-medium text-center leading-tight">
+              <span className="text-xs text-purple-600 dark:text-purple-400 font-medium text-center leading-tight">
                 {label}
               </span>
             </div>
           ))}
         </div>
-        <p className="mt-6 text-sm text-gray-500 dark:text-purple-400 italic text-pretty">
-          + any tool with an API — if your workflow uses it, we can connect to
-          it.
+        <p className="mt-6 text-sm text-purple-600 dark:text-purple-500 text-pretty">
+          + any tool with an API — if your workflow uses it, we can connect to it.
         </p>
       </section>
 
       {/* Who It's For */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white text-balance">
-          Built for businesses that take security seriously.
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-neutral-900 dark:text-white text-balance">
+          Built for businesses that care about security
         </h2>
         <div className="grid gap-6 md:grid-cols-3">
           {[
             {
               emoji: "🏦",
               title: "Finance & Accounting",
-              desc: "Automate reconciliation, reporting, and client comms without sensitive data leaving your network.",
+              desc: "Automate reconciliation, reporting, and client communications without sensitive data leaving your network.",
             },
             {
               emoji: "⚖️",
@@ -235,20 +283,20 @@ export default function OrionAIPage() {
               desc: "Document processing, deadline tracking, and client updates — all within your control.",
             },
             {
-              emoji: "🛍️",
+              emoji: "🛒",
               title: "E-commerce & Operations",
-              desc: "Inventory alerts, order processing, supplier emails — handled automatically, 24/7.",
+              desc: "Inventory alerts, order processing, supplier coordination — handled automatically, 24/7.",
             },
           ].map(({ emoji, title, desc }) => (
             <div
               key={title}
-              className="bg-white dark:bg-purple-900 rounded-xl p-6 border border-purple-100 dark:border-purple-800 shadow-md"
+              className="bg-white dark:bg-purple-900 rounded-xl p-6 border border-purple-200 dark:border-purple-800 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="text-3xl mb-3">{emoji}</div>
-              <div className="text-gray-900 dark:text-white font-bold text-lg mb-2 text-balance">
+              <div className="text-neutral-900 dark:text-white font-bold text-lg mb-2 text-balance">
                 {title}
               </div>
-              <div className="text-gray-600 dark:text-purple-300 text-sm leading-relaxed text-pretty">
+              <div className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed text-pretty">
                 {desc}
               </div>
             </div>
@@ -258,37 +306,47 @@ export default function OrionAIPage() {
 
       {/* Security Architecture Diagram */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-3 text-gray-900 dark:text-white text-balance">
-          How the security works.
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-white text-balance">
+          How the security works
         </h2>
-        <p className="text-lg text-gray-600 dark:text-purple-300 mb-8 text-pretty">
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 text-pretty">
           Every component has a defined role. Every connection is explicit. Nothing operates outside its boundary.
         </p>
-        <div className="bg-purple-950 rounded-2xl p-4 md:p-6 border border-purple-800 shadow-xl overflow-x-auto">
+        <div className="bg-neutral-900 rounded-2xl p-4 md:p-6 border border-purple-800 shadow-xl overflow-x-auto">
           <SecurityDiagram />
         </div>
-        <p className="mt-4 text-xs text-gray-400 dark:text-purple-500 italic text-center text-pretty">
+        <p className="mt-4 text-xs text-purple-500 dark:text-purple-600 text-center text-pretty">
           The Isolated Agent has no access to your tools or data — its only function is escalating technical blockers to IT.
         </p>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-purple-900 dark:bg-purple-950 mt-12">
+      <section className="bg-neutral-900 dark:bg-neutral-900 mt-12">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white text-balance">
-            Ready to automate without compromise?
+            Ready to put AI to work in your business?
           </h2>
-          <p className="text-xl text-purple-200 mb-10 max-w-2xl mx-auto text-pretty leading-relaxed">
-            Tell us about your workflow and we&apos;ll design the right agent
-            setup for your business.
+          <p className="text-xl text-neutral-300 mb-4 max-w-2xl mx-auto text-pretty leading-relaxed">
+            Contact Jeff directly to discuss your automation needs.
           </p>
-          <Link
-            href="/get-started"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-purple-950 px-10 py-5 rounded-lg font-bold text-xl transition-all shadow-lg hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 min-h-[44px]"
-          >
-            Let&apos;s Talk →
-          </Link>
-          <p className="mt-10 text-sm text-purple-400 italic">
+          <p className="text-lg text-gold-400 mb-10 max-w-2xl mx-auto text-pretty leading-relaxed font-semibold">
+            No sales pitch. No obligation. Just a conversation about what's possible.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="mailto:jeff@ripxg.com"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-gold-500 hover:from-purple-700 hover:to-gold-600 text-white px-10 py-5 rounded-xl font-bold text-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 min-h-[60px]"
+            >
+              Contact Jeff →
+            </a>
+            <Link
+              href="/get-started"
+              className="inline-flex items-center justify-center bg-transparent border-2 border-purple-400 hover:border-gold-400 text-purple-300 hover:text-gold-300 px-10 py-5 rounded-xl font-bold text-xl transition-all min-h-[60px]"
+            >
+              Learn More
+            </Link>
+          </div>
+          <p className="mt-10 text-sm text-neutral-500">
             Orion AI is a ripXG service.
           </p>
         </div>

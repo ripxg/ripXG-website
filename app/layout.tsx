@@ -29,6 +29,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ripXG Blog RSS Feed"
+          href="/rss.xml"
+        />
+      </head>
       <body className="antialiased">
         {children}
       </body>

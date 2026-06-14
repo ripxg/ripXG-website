@@ -1,0 +1,138 @@
+---
+title: "The unsexy truth about AI agents: most of the work is plumbing"
+date: 2026-05-08
+summary: >
+  Everyone talks about AI prompts and smart models. Nobody talks about what actually makes agents work reliably: retry logic, error handling, failover chains, and the endless wiring that keeps everything from falling apart at 3 AM. Here's what I've learned running AI agents in production for months, and why most businesses shouldn't build this themselves.
+status: published
+canonical_url: https://ripxg.com/blog/2026-05-08-unsexy-truth-ai-agents-plumbing
+platforms:
+  blog:
+    enabled: true
+  twitter:
+    enabled: true
+  linkedin:
+    enabled: true
+  substack:
+    enabled: false
+featured_image: ""
+project_links:
+  - name: OpenClaw
+    url: https://github.com/openclaw/openclaw
+  - name: Orion AI
+    url: https://ripxg.com/orion-ai
+---
+
+I spend more time writing code for what happens when things fail than for what happens when they work.
+
+That sentence took me months to learn.
+
+## What people imagine
+
+When someone sees an AI agent that reads your emails, coordinates a team of sub-agents, manages your website, and sends you a morning briefing on Telegram, they imagine the magic is in the prompt. That somewhere, someone wrote a really clever instruction that makes the model behave like a competent employee.
+
+The prompt matters. But it's maybe 15% of the system.
+
+The other 85% is plumbing. Retry logic. Failover chains. Session management. Error classification. State persistence. Queue serialization. Rate limit handling. Authentication rotation. Credential expiry detection. The invisible infrastructure that prevents the whole thing from silently dying at 3 AM when you're asleep and won't notice until a customer asks why nobody replied to their email.
+
+## A real example: when your model goes down
+
+I run my agents on [OpenClaw](https://github.com/openclaw/openclaw), an open-source agent framework that connects AI models to messaging channels, tools, and automation. It's what powers the setup I described in my [AI business stack post](/blog/2026-04-05-ai-business-stack). My primary model is GLM-4.7, accessed through Zhipu AI's API. Fast, cheap, handles most of what I throw at it.
+
+But sometimes it goes down. The API returns a 429, too many requests. Or a 503, service unavailable. Or it just times out.
+
+Here's what happens in that moment, invisibly:
+
+1. OpenClaw catches the error. Not just "something broke" but it classifies the error type. Is it retryable? Is it a rate limit? Is it an auth failure?
+2. If it's retryable, it backs off and tries again. Not immediately. Exponential backoff with jitter. Random delay between retries so multiple agents hitting the same provider don't thundering-herd back in.
+3. If the same auth profile fails multiple times, it goes into cooldown. OpenClaw rotates to the next auth profile for that provider. Same model, different API key or OAuth token.
+4. If the provider itself is down, it walks the fallback chain. GLM-4.7, then Gemini Flash Lite, then a local Ollama model running on the VPS as last resort.
+5. Each fallback attempt is persisted before the retry starts. If the gateway restarts mid-failover, it picks up where it left off instead of starting over.
+6. If everything fails, it throws a `FallbackSummaryError` with the full per-attempt detail and the soonest cooldown expiry time, so the next heartbeat knows exactly how long to wait.
+
+That's one failure mode. One.
+
+The code that handles this is not a clever prompt. It's an engineering document with a seven-step runtime flow, selection-source policies, and rollback logic narrow enough to avoid clobbering unrelated session state during a failed retry.
+
+## The retry policy nobody wants to think about
+
+Every outbound request in my system has a retry policy. Model API calls. Telegram message sends. Discord webhooks. Slack API calls. Each one has:
+
+- **Attempt count** (default: 3)
+- **Delay floor** (Telegram: 400ms, Discord: 500ms, because those platforms rate limit differently)
+- **Delay cap** (30 seconds max)
+- **Jitter** (10%, to prevent synchronized retries)
+- **Provider-specific handling** (Discord uses `retry_after` headers. Telegram falls back to plain text if markdown parsing fails. Model SDKs get a 60-second `Retry-After` cap before OpenClaw forces them to surface the error and move to failover.)
+
+If you're a business owner reading this, your eyes are probably glazing over. Good. That's the point. This is the work. This is what makes an AI agent reliable enough to trust with real business tasks.
+
+Nobody's LinkedIn post about their "AI agent that sends emails" mentions any of this. They just say it works. It works because someone spent hours on the retry policy.
+
+## Coordinating multiple agents: the plumbing gets worse
+
+I wrote before about [coordinating AI agent teams](/blog/2026-02-08-coordinating-ai-agent-teams), using a coordinator agent (Orion) that delegates to specialist sub-agents. That post focused on the coordination pattern. What I didn't fully convey is the operational overhead of keeping that coordination running.
+
+Each sub-agent runs in an isolated session. They can't share state directly. When a backend engineer finishes building an API endpoint, it needs to somehow communicate the contract to the frontend engineer. That handoff is a git branch, a PR description, and an explicit notification. All of which can fail in different ways.
+
+Sub-agents can fail silently. A 401 authentication error mid-task doesn't always propagate cleanly. The agent just stops. No error message, no notification, just silence. I had to build a system where the coordinator checks on sub-agents after 30 minutes of silence, because otherwise I'd never know something was stuck.
+
+Sessions need to be serialized per-key. If two messages arrive for the same session simultaneously, they can't both spin up an agent turn at the same time. That would cause race conditions on the session transcript. OpenClaw queues them. But that means a second message waits while the first turn completes. For a user, that feels like the agent is slow. It's not slow. It's being safe.
+
+## Paperclip: when you need a whole control plane for your agents
+
+The plumbing scales up further than I expected. Once I had multiple agents running on different schedules (a coordinator, marketing agents, content writers, monitoring agents), I needed something to manage the work itself. The organizational layer, not just the technical infrastructure.
+
+[Paperclip](https://paperclip.ing) is an open-source "human control plane for AI labor." It gives you an org chart, goals, tasks, budgets, and governance over your agent team. The framing is sharp: OpenClaw is the employee. Paperclip is the company.
+
+Here's what that plumbing looks like in practice.
+
+Each agent runs in heartbeats: short execution windows triggered by Paperclip. The agent wakes up, checks its inbox, picks up the highest-priority task, does the work, reports back, and exits. It doesn't run continuously. That's by design. Continuous agents burn tokens. Heartbeat agents do exactly what's needed and stop.
+
+But heartbeats have their own plumbing. The agent needs to check in (checkout the task), understand context (fetch issue details and comment history), do the work, update the status, and handle edge cases. What if another agent already checked out the same task? What if the task is blocked? What if a comment mentions you but you don't own the task? Each of those interactions is an API call that can fail, timeout, or return unexpected data.
+
+The governance layer adds more. Every action is traced. Every decision has an audit trail. Agents have monthly budgets. When they hit the limit, they stop. That's not a feature you think about when you're watching a demo. It's a feature you think about when you get a $200 API bill because an agent got stuck in a loop at 2 AM.
+
+The org chart itself is plumbing. Agents report to other agents. Delegation flows up and down. The CEO agent creates a strategy, breaks it into goals, assigns goals to department heads, who break them into tasks for individual agents. Every piece of work traces back to the company mission. That context injection, "you're doing this because the company goal is X, the project goal is Y, and your personal goal is Z," is what makes agents coherent instead of chaotic.
+
+None of that is a prompt. It's infrastructure.
+
+## The monitoring that monitors the monitoring
+
+I wrote about this before: I asked my agent to set up [synthetic health checks](/blog/2026-03-29-synthetic-tests-openclaw) for my web app. It worked. Then I realized the monitoring itself was expensive and fragile. Two cron jobs, each spawning an isolated agent every five minutes. 576 agent turns per day to confirm nothing was wrong.
+
+The fix was to stop using agents for steady-state polling. A bash daemon loops in the background, checks endpoints, and only calls an agent when something actually breaks. At steady state, the cost is zero.
+
+But then I needed to monitor the daemon. So I added a systemd service with `Restart=always`. Then a watchdog cron that checks if the daemon is running. The watchdog is an agent turn. One every 30 minutes. If the daemon dies, the agent restarts it and alerts me.
+
+Three layers of plumbing to reliably monitor a website. The daemon checks the site. Systemd restarts the daemon. The agent watches systemd. Somewhere in there is a lesson about recursive reliability.
+
+## The model selection is also plumbing
+
+I use multiple models for different purposes. GLM-4.7 for most tasks. Claude Sonnet for complex reasoning. Gemini Flash Lite as a fallback. A local Ollama instance as absolute last resort.
+
+Each model has different strengths, different costs, different rate limits. OpenClaw handles the routing: which model to use for which task, when to fall back, how to track usage costs across providers. There's a daily cron job that sends me a token usage report at 8 PM CET. I can see exactly what each session cost, which model it used, whether it fell back.
+
+That tracking is infrastructure. The model is the brain, the plumbing is the circulatory system. You need both. Most people only see the brain.
+
+## What this means for business owners
+
+The gap between "an AI agent that kind of works in a demo" and "an AI agent you can trust with real business operations" is not a gap in intelligence. It's a gap in plumbing.
+
+The model vendors (Anthropic, OpenAI, Google, Zhipu) are all building smarter models. That's their job. Smarter models don't fix retry logic. A genius model that silently fails on a rate limit is less useful than a mediocre model with proper error handling.
+
+When I talk to business owners about AI, the conversation usually starts with: "I want AI to handle my admin, marketing, reporting, website." My response: great, that's achievable. But the question isn't whether AI *can* do those things. It can. The question is whether the system around the AI is robust enough that you can stop checking on it.
+
+That's the bar. Can it do the task reliably, recover from failures, and tell me when it can't.
+
+Most businesses shouldn't build this themselves. The plumbing is complex, boring, and critical. The worst combination. Exactly the kind of thing you want someone else to manage so you can focus on your actual business.
+
+That's why I built [Orion AI](/orion-ai). You get the same infrastructure I've described in this post, the failover chains, the retry policies, the multi-model routing, the monitoring, the session management, without touching any of it.
+
+You tell us what you need: website management, admin automation, marketing content, reporting, inbound communications. We configure the agents, wire the integrations, and keep the system running. Your data stays on infrastructure you control. The AI connects to your accounts, your Gmail, your Google Calendar, your website. Not ours.
+
+If something breaks at 3 AM, we see it before you do.
+
+The models will keep getting smarter. The plumbing will keep getting more complex. You shouldn't have to care about either.
+
+---
+
+Want to explore what an AI agent could handle for your business? [Get started with Orion AI](/orion-ai) or [reach out](/get-started) and tell us what you need.
