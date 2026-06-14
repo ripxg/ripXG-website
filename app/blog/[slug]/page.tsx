@@ -6,7 +6,9 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { decodeHtmlEntities } from '@/lib/html-entities';
 import { markdownToHtml } from '@/lib/markdown';
+import { getRelatedPosts } from '@/lib/blog';
 import ShareButtons from './ShareButtons';
+import RelatedPosts from './RelatedPosts';
 
 const blogDir = path.join(process.cwd(), 'content', 'blog');
 const SITE_URL = 'https://ripxg.com';
@@ -106,6 +108,7 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const relatedPosts = getRelatedPosts(slug, post.tags);
   const description = post.summary
     ? post.summary.replace(/\[&hellip;\]/g, '…').trim()
     : `${post.title} — ripXG`;
@@ -207,6 +210,8 @@ export default async function BlogPostPage({
           <div className="mt-10 pt-8 border-t border-purple-100 dark:border-purple-800">
             <ShareButtons url={`${SITE_URL}/blog/${slug}`} title={post.title} />
           </div>
+
+          <RelatedPosts posts={relatedPosts} />
         </div>
       </article>
     </>
