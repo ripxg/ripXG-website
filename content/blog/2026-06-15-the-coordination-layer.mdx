@@ -2,54 +2,70 @@
 title: "Three months of AI agents that were brilliant individually and useless collectively"
 date: 2026-06-15
 summary: >
-  Six agents, each excellent at their job, producing work that vanished into silos
-  because nobody could see what anyone else was doing. The fix wasn't more
-  intelligence or more access. It was a coordination layer — an auditable message
-  bus that turned isolated specialists into something resembling a team. Here's
-  what broke first, why the obvious fix (just open everything up) is wrong, and
-  what the working architecture actually looks like. [&hellip;]
+  Why you need different agents in separate sandboxes, why running them all from one
+  chat window becomes a mess, and how a coordination layer (Paperclip) turned six
+  isolated specialists into something resembling a team. What the architecture
+  looks like, what it fixed, and what's still broken. [&hellip;]
 status: draft
 canonical_url: https://ripxg.com/blog/2026-06-15-the-coordination-layer
 tags: [ai-agents, multi-agent, orchestration, paperclip, openclaw]
 ---
 
-## Three months of agents that were brilliant individually and useless collectively
+## Why I run six different agents instead of one
 
-I run six AI agents. A backend engineer, a frontend engineer, a content writer, a marketing lead, a DevOps specialist, and a coordinator that I call Orion. Each one is genuinely good at its job. Give any of them a well-scoped task and you'll get back solid work.
+The first thing people ask when they see my setup is: why six agents? Why not one powerful assistant that can do everything — write code, draft blog posts, manage infrastructure, handle marketing? One agent is simpler to reason about, simpler to permission, and simpler to talk to.
 
-For three months, the quality of their individual work was never the problem. The problem was that the output went into a void.
+The answer is that one agent doing everything is a liability.
 
-The backend engineer would finish a feature and commit it to a branch. The frontend engineer didn't know the backend was done, so it kept working against stale API assumptions. The content writer published blog posts that referenced features that hadn't shipped yet. The marketing lead prepared campaigns for products whose positioning was being simultaneously rewritten by another agent in a different session.
+An agent that can write a blog post and also deploy infrastructure is an agent that can be tricked into deploying infrastructure through a blog post. The content engineer ingests untrusted input all day: web pages, RSS feeds, research material, markdown from third parties. If that same agent also holds the keys to production, every URL it fetches is a potential path to your database. Prompt injection isn't theoretical anymore. The only defense that actually works is keeping the thing that reads untrusted input away from the thing that can touch production.
 
-The CEO agent — the one supposed to be coordinating all of this — was trapped in a sandbox with no access to the communication channels where coordination actually happens. It couldn't send messages to me on Telegram. It couldn't post updates to the team channel. It couldn't even delegate tasks to the other agents directly, because the security boundary that kept it safe also kept it isolated.
+So I run specialists. A backend engineer with access to code repos and test suites, but nothing else. A content engineer with access to the blog and research tools, but no deploy keys. A marketing lead with access to social channels, but no ability to push commits. A DevOps specialist with infrastructure credentials, but no way to post publicly on my behalf. Each one lives inside its own sandbox with the minimum set of tools its job requires, and nothing more.
 
-Every agent was winning its individual battle. The war was being lost in the spaces between them.
+This isn't paranoia. It's the same principle that stops your junior developer from having prod DB credentials. The blast radius of a compromised agent is bounded by the tools and access available to that agent specifically. Six narrow agents are six small explosions waiting to happen. One generalist agent is one very large explosion waiting to happen. I'll take the six small ones.
 
-This is the story of how we fixed it — not by giving agents more access or more intelligence, but by building a coordination layer that makes the work of every agent visible, auditable, and actionable by every other agent. The tool we use is called Paperclip. The architecture it enables is the difference between six contractors working from home with no standup and a team that ships together.
+The specialist model also produces better work. An agent whose entire context is backend code patterns, API design, and test conventions writes better backend code than an agent whose context is everything. Specialization isn't just a security measure. It's a quality measure.
+
+### The part nobody warns you about: governing them
+
+So you've got six agents, each locked in its own sandbox, each genuinely good at its job. Here's the part that surprised me.
+
+Governing them through a single chat interface is exhausting.
+
+My first instinct was to manage them the way I manage human contractors: through conversations. I'd open the OpenClaw dashboard, drop a task in Orion's chat (Orion is my coordinator agent), and wait. Orion would pick it up, figure out which specialist should handle it, and... then what? There's no shared Slack. There's no shared board. Orion can't actually hand work to another agent directly, because the security model correctly prevents agents from injecting messages into each other's sessions.
+
+So the delegation would come back to me. Orion would say "this is a backend task," and I would manually open the backend engineer's session, paste the task, wait for it to finish, come back to Orion, report the result, and move on to the next thing. I was the message bus. Every status update, every handoff, every "is this done yet?" routed through me, manually, in a chat window.
+
+It got worse when things ran in parallel. The backend engineer would finish a feature and commit it to a branch. The frontend engineer didn't know the backend was done, so it kept working against stale API assumptions. The content engineer would write a blog post referencing a feature that hadn't shipped yet. The marketing lead would prepare a campaign for a product whose positioning was being rewritten by another agent in a different session that same afternoon.
+
+I was sitting in the middle of six chat windows, trying to remember who was doing what, manually copying updates between agents, manually checking git logs to see if the backend work was done before telling the content engineer to start writing. The individual agents were excellent. My governance of them was a spreadsheet held together with sticky notes and context-switching.
+
+The bottleneck wasn't the AI. It was me, running a manual coordination protocol in a chat UI that was never designed for it.
+
+This is the story of how I fixed that — not by giving agents more access or more intelligence, and not by collapsing them back into one generalist, but by adding a coordination layer that makes the work of every agent visible, auditable, and actionable by every other agent. The tool I use is called Paperclip. The architecture it enables is the difference between six contractors working from home with no standup and a team that ships together.
 
 ---
 
-### Act 1 — The problem: agents finishing work in silos
+### Act 1 — The problem: a human running a manual coordination protocol
 
 Here's what a typical day looked like before the coordination layer.
 
 The backend engineer would wake up at 3 AM, pull a task from the backlog, implement it, run tests, commit to a feature branch, and go back to sleep. Clean work. The commit would sit there.
 
-At 6 AM, the content engineer would wake up and start writing a blog post about a new feature. Which feature? The one the backend engineer just shipped — except the content engineer didn't know the backend engineer had shipped it, because there was no shared board. It was working from a task description written three days ago that said "in progress."
+At 6 AM, the content engineer would wake up and start writing a blog post about a new feature. Which feature? The one the backend engineer just shipped — except I hadn't told the content engineer yet, because I hadn't manually checked the git log and pasted the update into its session. It was working from a task description I'd written three days ago that still said "in progress."
 
-At 8 AM, Orion (the coordinator) would wake up, check the git log, see the backend commit, and try to tell me about it. Except Orion's sandbox doesn't have Telegram access — the security model blocks outbound channel tools by default. So Orion would write the update into its own session log, which I would only see if I manually opened the OpenClaw dashboard and looked for it.
+At 8 AM, Orion (the coordinator) would wake up, see the backend commit, and try to tell me about it. Except Orion's sandbox doesn't have Telegram access — the security model correctly blocks outbound channel tools by default. So Orion would write the update into its own session log, which I would only see if I manually opened the OpenClaw dashboard and looked for it.
 
 Meanwhile, the CEO agent — the one theoretically in charge of delegation — had generated a daily strategy report. It was excellent. It lived inside a sandbox session that no human and no other agent could see.
 
-The result: six agents doing individual work that was individually excellent and collectively incoherent. Features shipped with no announcement. Content written for things that didn't exist yet. Reports generated that nobody read. Delegations issued that never reached their intended recipient.
+The result was that I was spending the first ninety minutes of every day doing the same routine: check what each agent did overnight, figure out which updates needed to go to which other agents, manually copy context between sessions, and try to reconstruct a coherent picture of where everything stood. The individual work was fine. The system I'd built around it was a human acting as a message bus in a chat window.
 
-The individual AI was fine. The system was broken.
+The individual AI was fine. My governance was the broken part.
 
 ---
 
 ### Act 2 — The wrong solution: "just give them more access"
 
-The obvious fix is to tear down the walls. Give every agent access to every channel. Let the CEO agent send Telegram messages directly. Let the content engineer see the backend engineer's commit log in real time. Let everyone talk to everyone.
+The obvious fix for manual governance fatigue is to tear down the walls. Give every agent access to every channel. Let the CEO agent send Telegram messages directly. Let the content engineer see the backend engineer's commit log in real time. Let everyone talk to everyone, and you can step out of the middle.
 
 I almost did this. Then I thought through what happens.
 
