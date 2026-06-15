@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef } from "react";
+import { sendLeadEmail } from "@/lib/emailjs";
 
 
 type FormState = "idle" | "submitting" | "success" | "error";
@@ -72,13 +73,11 @@ export default function GetStartedPage() {
     );
 
     try {
-      const res = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.name, email: form.email, useCases: selectedLabels }),
+      await sendLeadEmail({
+        name: form.name,
+        email: form.email,
+        useCases: selectedLabels,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Something went wrong.');
       setState("success");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
