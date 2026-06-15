@@ -109,7 +109,6 @@ export default async function BlogPostPage({
   }
 
   const relatedPosts = getRelatedPosts(slug, post.tags);
-
   const description = post.summary
     ? post.summary.replace(/\[&hellip;\]/g, '…').trim()
     : `${post.title} — ripXG`;
