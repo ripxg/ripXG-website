@@ -4,8 +4,7 @@ date: 2026-06-15
 summary: >
   Why you need different agents in separate sandboxes, why running them all from one
   chat window becomes a mess, and how a coordination layer (Paperclip) turned six
-  isolated specialists into something resembling a team. What the architecture
-  looks like, what it fixed, and what's still broken. [&hellip;]
+  isolated specialists into something resembling a team. [&hellip;]
 status: draft
 canonical_url: https://ripxg.com/blog/2026-06-15-the-coordination-layer
 tags: [ai-agents, multi-agent, orchestration, paperclip, openclaw]
@@ -81,7 +80,7 @@ The lesson I learned the hard way: the isolation isn't a bug to be fixed. It's a
 
 ### Act 3 — The right solution: a coordination layer that's centrally auditable
 
-The fix was to stop trying to connect agents directly and instead build a single shared coordination layer that all agents can read from and write to. We use [Paperclip](https://github.com/paperclip/paperclip) for this, but the principle applies to any shared issue-tracking system that supports API access and structured data.
+The fix was to stop trying to connect agents directly and instead build a single shared coordination layer that all agents can read from and write to. We use [Paperclip](https://paperclip.ing) for this, but the principle applies to any shared issue-tracking system that supports API access and structured data.
 
 Here's how it works.
 
@@ -117,43 +116,21 @@ Now compare this to the old way: the content engineer writes the draft, commits 
 
 ### The architecture, in plain terms
 
-```
-┌─────────────────────────────────────────────────────┐
-│                   Paperclip Board                     │
-│         (single source of truth, auditable)           │
-│                                                       │
-│  Issues · Assignments · Status · Priority · History   │
-└───────┬───────┬───────┬───────┬───────┬───────────────┘
-        │       │       │       │       │
-   ┌────┴──┐ ┌──┴───┐ ┌─┴────┐ ┌┴─────┐ ┌┴──────┐
-   │Orion  │ │ CEO  │ │Backend│ │Content│ │Marketing│
-   │Coord  │ │Strat │ │Eng   │ │Eng   │ │Lead    │
-   └───┬───┘ └──────┘ └──────┘ └──────┘ └────────┘
-       │
-       │ Telegram / Email / Notifications
-       ▼
-   ┌────────┐
-   │  Jeff  │
-   └────────┘
-```
+At the top sits the **Paperclip Board** — the single source of truth. Every task, assignment, status change, and priority update lives there. It's fully auditable: who did what, when, and why.
 
-- **Each agent** runs in its own sandbox with only the tools its role requires.
-- **Paperclip** is the only shared surface — every agent can read and write issues, nothing more.
-- **Orion** is the bridge agent: it has channel access (Telegram, email) and serves as the delivery layer for agents that don't.
-- **Heartbeats** keep everyone in sync without direct messaging.
-- **Jeff** stays in the loop via Orion's proactive updates, and can intervene through the same board.
+Connected to the board are five specialist agents, each in its own sandbox:
+
+- **Orion** (Coordinator) — the bridge agent with channel access (Telegram, email)
+- **CEO** (Strategy) — runs daily reviews and delegation
+- **Backend Engineer** — code repos and test suites only
+- **Content Engineer** — blog and research tools only
+- **Marketing Lead** — social channels and campaign tools only
+
+Orion is the only agent that can reach me directly. When another agent needs to get a message to me, it creates a Paperclip issue assigned to Orion. Orion's heartbeat picks it up and forwards it via Telegram. Every other agent communicates only through the board.
+
+**Heartbeats** keep everyone in sync — each agent wakes on a schedule, checks the board, does the work or stands down. No direct messaging, no shared file systems, no cross-sandbox access.
 
 The security model is intact: a compromised content engineer can write a bad blog post, but it can't send messages, touch infrastructure, or exfiltrate data. The audit trail is intact: every step is a Paperclip record. The coordination works: agents stay in sync through a shared board, not through direct access.
-
----
-
-### What's still broken
-
-I'm not going to pretend this is solved. Two agents — Nova (content) and Atlas (devops) — still have stale delivery instructions from the CEO. Their work gets done but the output doesn't reach me because the CEO's delegation logic hasn't been updated to route through Paperclip correctly. The bus works, but not everyone's connected to it yet.
-
-More fundamentally, the coordination layer introduces latency. A direct message is instant. A heartbeat-issued-issue-delivered-on-next-cycle flow takes minutes to hours. For most work this is fine — blog posts and feature branches don't need sub-second coordination. But for incident response, the latency matters. We're still figuring out the right priority escalation path.
-
-And there's the human cost. I still have to maintain the Paperclip board, triage issues, and make judgment calls that agents can't make themselves. The coordination layer didn't eliminate the need for a human in the loop. It changed the shape of the work — from "manually route every message" to "review and decide on exceptions." That's a better use of my time, but it's still work.
 
 ---
 
@@ -169,22 +146,12 @@ And there's the human cost. I still have to maintain the Paperclip board, triage
 
 ---
 
-### Try it with my stack
+### Try my stack
 
-The stack I'm running is [OpenClaw](https://openclaw.ai) for the agent runtime (sandboxes, sessions, tool routing, heartbeats), [Paperclip](https://github.com/paperclip/paperclip) for the coordination layer (issues, assignments, audit trail), and a Telegram bot for human-facing delivery through Orion.
+This is exactly what I build for clients through [Orion AI](/orion-ai) — isolated specialist agents, a coordination layer, and a human in the loop. If you're running multiple AI agents and they keep producing work that doesn't connect, the problem isn't the agents. It's the coordination layer.
 
-If you want to try this architecture yourself:
-
-1. **Set up OpenClaw** — install it, configure your agents, and give each one a role-specific sandbox with only the tools it needs. Resist the urge to give any agent broad access.
-2. **Deploy Paperclip** (or any shared issue tracker with an API) — this becomes your single source of truth. Make sure every agent can read and write issues via API.
-3. **Wire up heartbeats** — each agent should wake on a schedule, check the board for assigned issues, and take action or stand down. This is your sync mechanism.
-4. **Designate a bridge agent** — give one agent (in my case, Orion) channel access (Telegram, Slack, email) and make it responsible for human-facing delivery. All other agents route external communication through it.
-5. **Push your real work through the board** — not through DMs, not through direct agent-to-agent messaging. Everything goes through the coordination layer. This is what makes it auditable.
-
-The setup took me about a weekend. The tuning — figuring out heartbeat frequencies, escalation paths, role boundaries — took another three weeks of daily use. It's still evolving. But the core insight hasn't changed: isolate your agents into roles, coordinate them through a shared auditable layer, and keep a human in the loop for judgment calls.
-
-If you're running multiple AI agents and they keep producing work that doesn't quite connect, the problem probably isn't the agents. It's the coordination layer you haven't built yet.
+[**Get started with Orion AI →**](/orion-ai)
 
 ---
 
-*I'm Jeff. I build AI agent teams at [ripXG](https://ripxg.com). The coordination architecture described here runs on [OpenClaw](https://openclaw.ai) and [Paperclip](https://github.com/paperclip/paperclip). The agents are real. The problems are real. The silo problem is the one nobody talks about until they have six agents and zero coherence.*
+*I'm Jeff. I build AI agent teams at [ripXG](https://ripxg.com). The agents are real. The problems are real. The silo problem is the one nobody talks about until they have six agents and zero coherence.*
