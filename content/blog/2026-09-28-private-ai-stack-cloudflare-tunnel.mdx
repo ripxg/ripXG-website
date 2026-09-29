@@ -1,0 +1,91 @@
+---
+title: "Setting Up a Private AI Stack on Cloud Infrastructure, Secured by Cloudflare Tunnel"
+date: 2026-09-28
+summary: >
+  I moved my AI orchestration gateway from a Tailscale funnel to Cloudflare Tunnel,
+  locked it down with Access, and made Railway the only client that can reach it.
+  The things that cost me time weren't in the docs. [&hellip;]
+status: draft
+canonical_url: https://ripxg.com/blog/2026-09-28-private-ai-stack-cloudflare-tunnel
+tags: [cloudflare, cloudflare-tunnel, zero-trust, security, infrastructure, ai-agents, self-hosting]
+---
+
+I run an AI orchestration gateway on a VPS. It manages agent runtimes, routes models, and connects to various clients — one of which is a backend service on Railway. For a while the gateway was exposed via Tailscale funnel. It worked but it wasn't the right long-term answer. I wanted to move it to Cloudflare Tunnel, lock it down with Access, and make Railway the only client that can reach it.
+
+Here's how that went.
+
+## The Tunnel
+
+Cloudflare Tunnel runs a local daemon (cloudflared) that connects outbound to Cloudflare's edge. No inbound ports, no firewall rules. Traffic comes in through Cloudflare and gets proxied to whatever local service you point it at.
+
+The routing UI has changed a lot recently. There are now three route types — CIDR, hostname, and published application. If you're trying to expose something to the public internet, you want published application routes. The other two are WARP-only and will have your CNAME resolving to fd10:aec2:5dae::, which is a private Cloudflare IP range that isn't reachable from the internet. Took me a while to figure that out.
+
+The other thing: your domain needs to be on Cloudflare DNS for the tunnel to work properly. The cfargotunnel.com CNAME only proxies traffic for records in the same Cloudflare account. If you're on an external DNS provider, move the domain over first. I should have done that step one.
+
+## Proxy Attribution
+
+Once traffic is going through the tunnel, your local service sees 127.0.0.1 as the source — it's cloudflared on the same host making the connection, not Cloudflare's edge. The real client IP comes in via forwarded headers.
+
+My gateway requires explicit proxy trust before it'll handle requests. You configure it with trustedProxies — loopback plus Cloudflare's published IP ranges:
+
+```json
+"trustedProxies": [ "127.0.0.1", "::1", "173.245.48.0/20", "103.21.244.0/22", ... ]
+```
+
+Full list at https://www.cloudflare.com/ips/. Without this the gateway throws proxy_attribution_required on every request.
+
+## Cloudflare Access
+
+The tunnel routes traffic. Access controls who gets through.
+
+For a service-to-service setup you use a service token — a client ID and secret that the calling service sends as request headers. Cloudflare exchanges those for a JWT, which is what gets validated going forward.
+
+Setup in Zero Trust:
+
+- Create a Self-hosted Access Application for your hostname
+- Add a policy: Allow / Service Token / your token
+- Make sure there are no other allow rules
+
+That last one matters. If you leave a default allow-everyone rule in there, nothing changes. Once you have only the service token policy active, unauthenticated requests get a 403.
+
+## Enforcing at the Tunnel Layer
+
+You can also enforce Access inside cloudflared itself, before requests hit your origin. Add this to your ingress rule:
+
+```yaml
+ingress:
+- hostname: gateway.yourdomain.com
+  service: http://localhost:18789
+  originRequest:
+    access:
+      required: true
+      teamName: yourteam
+      audTag:
+      - <aud-tag-from-your-access-application>
+```
+
+Note: this config must be on the ingress rule itself, not at the top level. If you put it at the top level, cloudflared silently ignores it. https://github.com/cloudflare/cloudflare-docs/issues/32006, easy to miss.
+
+With this in place cloudflared validates the JWT before proxying anything. Two layers — edge and tunnel — both rejecting requests that don't have valid credentials.
+
+## Testing It
+
+No headers:
+
+```bash
+curl https://gateway.yourdomain.com
+```
+
+403.
+
+With service token:
+
+```bash
+curl -H "CF-Access-Client-Id: ..." -H "CF-Access-Client-Secret: ..." https://gateway.yourdomain.com
+```
+
+200.
+
+The gateway only ever sees authenticated traffic. Railway holds the service token. Everything else gets dropped at the edge.
+
+Things that cost me time: DNS not being on Cloudflare, using the wrong route type (hostname vs published application), and assuming originRequest.access at the top level of the config was doing something. None of these are obvious from the docs.
